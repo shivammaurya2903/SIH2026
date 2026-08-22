@@ -1,0 +1,75 @@
+.challenge-row {
+    padding: 14px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.challenge-row:last-child {
+    border-bottom: 0;
+}
+
+.challenge-row-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.challenge-row-main strong {
+    overflow: hidden;
+    color: var(--dark);
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.challenge-row-main span {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.status-badge {
+    flex-shrink: 0;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.status-submitted,
+.status-ai_analyzed,
+.status-under_review {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.status-approved,
+.status-matched,
+.status-assigned {
+    color: #1d4ed8;
+    background: #dbeafe;
+}
+
+.status-in_progress,
+.status-prototype,
+.status-testing,
+.status-pilot {
+    color: #6d28d9;
+    background: #ede9fe;
+}
+
+.status-deployed,
+.status-completed {
+    color: #047857;
+    background: #d1fae5;
+}
+
+.status-rejected,
+.status-cancelled {
+    color: #b91c1c;
+    background: #fee2e2;
+}

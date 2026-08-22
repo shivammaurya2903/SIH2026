@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Dashboard | Societal Innovation</title>
+
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <link rel="stylesheet" href="../../assets/css/dashboard.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+</head>
+
+<body class="dashboard-page">
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+            <a href="../../index.html" class="brand">
+                <div class="brand-mark">SI</div>
+                <div class="brand-text">
+                    <strong>Societal Innovation</strong>
+                    <span>Jharkhand</span>
+                </div>
+            </a>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-section-title">Workspace</div>
+
+            <a href="dashboard.html" class="sidebar-link active">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="submit-challenge.html" class="sidebar-link">
+                <span>＋</span>
+                Submit Challenge
+            </a>
+
+            <a href="my-challenges.html" class="sidebar-link">
+                <span>▣</span>
+                My Challenges
+            </a>
+
+            <div class="nav-section-title">Account</div>
+
+            <a href="#" class="sidebar-link">
+                <span>◉</span>
+                Notifications
+                <span class="notification-count">0</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <span>⚙</span>
+                Profile
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="sidebar-logout" data-logout>
+                <span>↪</span>
+                Sign Out
+            </button>
+        </div>
+
+    </aside>
+
+    <div class="dashboard-wrapper">
+
+        <header class="dashboard-header">
+
+            <button
+                type="button"
+                class="dashboard-menu"
+                id="dashboardMenu"
+            >
+                ☰
+            </button>
+
+            <div class="dashboard-header-title">
+                <span>Citizen Workspace</span>
+                <h1>Dashboard</h1>
+            </div>
+
+            <div class="dashboard-user">
+
+                <button class="notification-button">
+                    ♢
+                    <span>0</span>
+                </button>
+
+                <div class="user-avatar" id="userAvatar">
+                    C
+                </div>
+
+                <div class="user-info">
+                    <strong id="userName">Citizen</strong>
+                    <span>Community Contributor</span>
+                </div>
+
+            </div>
+
+        </header>
+
+        <main class="dashboard-main">
+
+            <section class="welcome-card">
+
+                <div>
+                    <span class="eyebrow">
+                        <span></span>
+                        Community Innovation
+                    </span>
+
+                    <h2>
+                        Welcome back,
+                        <span id="welcomeName">Citizen</span>
+                    </h2>
+
+                    <p>
+                        Your community insights can become the starting point
+                        for meaningful solutions.
+                    </p>
+                </div>
+
+                <a
+                    href="submit-challenge.html"
+                    class="btn btn-primary"
+                >
+                    + Submit a Challenge
+                </a>
+
+            </section>
+
+            <section class="dashboard-stats">
+
+                <div class="dashboard-stat">
+                    <div class="stat-icon purple">◉</div>
+                    <div>
+                        <span>Total Submitted</span>
+                        <strong id="totalChallenges">0</strong>
+                    </div>
+                </div>
+
+                <div class="dashboard-stat">
+                    <div class="stat-icon blue">◷</div>
+                    <div>
+                        <span>Under Review</span>
+                        <strong id="reviewChallenges">0</strong>
+                    </div>
+                </div>
+
+                <div class="dashboard-stat">
+                    <div class="stat-icon green">✓</div>
+                    <div>
+                        <span>Active Projects</span>
+                        <strong id="activeProjects">0</strong>
+                    </div>
+                </div>
+
+                <div class="dashboard-stat">
+                    <div class="stat-icon orange">↗</div>
+                    <div>
+                        <span>Completed</span>
+                        <strong id="completedChallenges">0</strong>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="dashboard-content-grid">
+
+                <div class="dashboard-panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-label">Recent Activity</span>
+                            <h3>Your Challenges</h3>
+                        </div>
+
+                        <a href="my-challenges.html">
+                            View all
+                        </a>
+                    </div>
+
+                    <div id="recentChallenges" class="challenge-list">
+
+                        <div class="empty-state">
+                            <div class="empty-icon">◉</div>
+                            <h4>No challenges yet</h4>
+                            <p>
+                                Submit your first community challenge
+                                to get started.
+                            </p>
+
+                            <a
+                                href="submit-challenge.html"
+                                class="btn btn-primary"
+                            >
+                                Submit Challenge
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="dashboard-panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-label">Quick Actions</span>
+                            <h3>Get Started</h3>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+
+                        <a
+                            href="submit-challenge.html"
+                            class="quick-action"
+                        >
+                            <div class="quick-action-icon">＋</div>
+                            <div>
+                                <strong>Report a Problem</strong>
+                                <span>
+                                    Tell us about a challenge
+                                    in your community.
+                                </span>
+                            </div>
+                        </a>
+
+                        <a
+                            href="my-challenges.html"
+                            class="quick-action"
+                        >
+                            <div class="quick-action-icon">▣</div>
+                            <div>
+                                <strong>Track Challenges</strong>
+                                <span>
+                                    Check the progress of your submissions.
+                                </span>
+                            </div>
+                        </a>
+
+                        <a
+                            href="../../index.html#how-it-works"
+                            class="quick-action"
+                        >
+                            <div class="quick-action-icon">?</div>
+                            <div>
+                                <strong>How It Works</strong>
+                                <span>
+                                    Understand the innovation workflow.
+                                </span>
+                            </div>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="../../assets/js/config.js"></script>
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/common.js"></script>
+    <script src="../../assets/js/citizen-dashboard.js"></script>
+
+</body>
+</html>
