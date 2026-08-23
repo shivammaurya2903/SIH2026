@@ -14,10 +14,34 @@ const createImpactMetric = async (req, res) => {
       return errorResponse(res, 'Project not found', 404);
     }
 
-    const metric = await ImpactMetric.create({
-      ...req.body,
+    const allowedFields = [
+      'beneficiaries',
+      'districtsImpacted',
+      'villagesImpacted',
+      'costSaved',
+      'timeSaved',
+      'citizenSatisfaction',
+      'environmentalImpact',
+      'scalabilityScore',
+      'sustainabilityScore',
+      'impactScore',
+      'patents',
+      'startupsCreated',
+      'jobsCreated',
+      'remarks'
+    ];
+
+    const payload = {
       project: projectId
+    };
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        payload[field] = req.body[field];
+      }
     });
+
+    const metric = await ImpactMetric.create(payload);
 
     return successResponse(res, metric, 'Impact metric recorded successfully', 201);
   } catch (error) {

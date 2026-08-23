@@ -1,13 +1,71 @@
 const Project = require('../models/Project');
 const Challenge = require('../models/Challenge');
+const University = require('../models/University');
+const Industry = require('../models/Industry');
 const { successResponse, errorResponse } = require('../utils/response');
+
+const ALLOWED_PROJECT_FIELDS = [
+  'title',
+  'description',
+  'challenge',
+  'university',
+  'industry',
+  'team',
+  'facultyMentor',
+  'status',
+  'objectives',
+  'technologies',
+  'startDate',
+  'expectedEndDate',
+  'actualEndDate',
+  'budget',
+  'documents'
+];
+
+const canUserAccessProject = async (project, user) => {
+  if (['government', 'admin'].includes(user.role)) return true;
+
+  if (project.createdBy && project.createdBy.toString() === user._id.toString()) return true;
+  if (project.facultyMentor && project.facultyMentor.toString() === user._id.toString()) return true;
+
+  if (user.role === 'university' && project.university) {
+    const uni = await University.findById(project.university);
+    if (
+      uni &&
+      ((uni.email && uni.email.toLowerCase() === user.email.toLowerCase()) ||
+        (user.organization && uni.name.toLowerCase() === user.organization.toLowerCase()))
+    ) {
+      return true;
+    }
+  }
+
+  if (user.role === 'industry' && project.industry) {
+    const ind = await Industry.findById(project.industry);
+    if (
+      ind &&
+      ((ind.email && ind.email.toLowerCase() === user.email.toLowerCase()) ||
+        (user.organization && ind.name.toLowerCase() === user.organization.toLowerCase()))
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 const createProject = async (req, res) => {
   try {
-    const project = await Project.create({
-      ...req.body,
+    const payload = {
       createdBy: req.user._id
+    };
+
+    ALLOWED_PROJECT_FIELDS.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        payload[field] = req.body[field];
+      }
     });
+
+    const project = await Project.create(payload);
 
     if (project.challenge) {
       await Challenge.findByIdAndUpdate(project.challenge, {
@@ -65,21 +123,44 @@ const getProject = async (req, res) => {
 
 const updateProject = async (req, res) => {
   try {
-    const project = await Project.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        returnDocument: 'after',
-        runValidators: true
-      }
-    );
+    const project = await Project.findById(req.params.id);
 
     if (!project) {
       return errorResponse(res, 'Project not found', 404);
     }
 
+    const isAuthorized = await canUserAccessProject(project, req.user);
+    if (!isAuthorized) {
+      return errorResponse(res, 'Forbidden: You are not authorized to update this project', 403);
+    }
+
+    const updatableFields = [
+      'title',
+      'description',
+      'university',
+      'industry',
+      'team',
+      'facultyMentor',
+      'status',
+      'objectives',
+      'technologies',
+      'startDate',
+      'expectedEndDate',
+      'actualEndDate',
+      'budget',
+      'documents'
+    ];
+
+    updatableFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        project[field] = req.body[field];
+      }
+    });
+
+    await project.save();
+
     if (req.body.status && project.challenge) {
-      const challengeStatus = req.body.status.toLowerCase();
+      const challengeStatus = String(req.body.status).toLowerCase();
       const validChallengeStatuses = [
         'in_progress',
         'prototype',
@@ -111,9 +192,11 @@ const deleteProject = async (req, res) => {
       return errorResponse(res, 'Project not found', 404);
     }
 
-    if (!['government', 'admin'].includes(req.user.role) && 
-        project.createdBy.toString() !== req.user._id.toString()) {
-      return errorResponse(res, 'You are not authorized to delete this project', 403);
+    if (
+      !['government', 'admin'].includes(req.user.role) &&
+      (!project.createdBy || project.createdBy.toString() !== req.user._id.toString())
+    ) {
+      return errorResponse(res, 'Forbidden: You are not authorized to delete this project', 403);
     }
 
     await project.deleteOne();

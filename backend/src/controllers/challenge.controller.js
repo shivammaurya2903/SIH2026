@@ -7,11 +7,30 @@ const { successResponse, errorResponse } = require('../utils/response');
 
 const createChallenge = async (req, res) => {
   try {
-    const challenge = await Challenge.create({
-      ...req.body,
+    const allowedFields = [
+      'title',
+      'description',
+      'category',
+      'subCategory',
+      'location',
+      'attachments',
+      'expectedOutcome'
+    ];
+
+    const payload = {
       submittedBy: req.user._id,
-      status: 'submitted'
+      status: 'submitted',
+      priority: 'medium',
+      severity: 'medium'
+    };
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        payload[field] = req.body[field];
+      }
     });
+
+    const challenge = await Challenge.create(payload);
 
     return successResponse(res, challenge, 'Challenge submitted successfully', 201);
   } catch (error) {

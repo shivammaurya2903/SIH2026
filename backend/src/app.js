@@ -25,14 +25,24 @@ const app = express();
 app.use(helmet());
 
 const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+const allowedOrigins = [
+  clientUrl,
+  'http://localhost:3000',
+  'http://localhost:5500',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:5500'
+].filter(Boolean);
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || origin === clientUrl || process.env.NODE_ENV === 'development') {
-        callback(null, true);
-      } else {
-        callback(null, true);
+      if (!origin) {
+        return callback(null, true);
       }
+      if (allowedOrigins.includes(origin) || (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost:'))) {
+        return callback(null, true);
+      }
+      return callback(new Error('Not allowed by CORS'));
     },
     credentials: true
   })

@@ -30,12 +30,35 @@ const createProposal = async (req, res) => {
       }
     }
 
-    const proposal = await Proposal.create({
-      ...req.body,
+    const allowedFields = [
+      'challenge',
+      'university',
+      'title',
+      'problemStatement',
+      'proposedSolution',
+      'methodology',
+      'expectedImpact',
+      'requiredResources',
+      'technologies',
+      'estimatedBudget',
+      'durationInMonths',
+      'documents'
+    ];
+
+    const payload = {
+      challenge: challengeId,
       university: targetUniId || req.body.university,
       submittedBy: req.user._id,
       status: 'submitted'
+    };
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        payload[field] = req.body[field];
+      }
     });
+
+    const proposal = await Proposal.create(payload);
 
     return successResponse(res, proposal, 'Proposal submitted successfully', 201);
   } catch (error) {

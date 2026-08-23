@@ -1,14 +1,77 @@
 const Collaboration = require('../models/Collaboration');
 const Project = require('../models/Project');
 const Challenge = require('../models/Challenge');
+const University = require('../models/University');
+const Industry = require('../models/Industry');
 const { successResponse, errorResponse } = require('../utils/response');
+
+const canRespondToCollaboration = async (collaboration, user) => {
+  if (['government', 'admin'].includes(user.role)) return true;
+
+  if (collaboration.requestedBy.toString() === user._id.toString()) return false;
+
+  if (collaboration.university) {
+    const uni = await University.findById(collaboration.university);
+    if (
+      uni &&
+      ((uni.email && uni.email.toLowerCase() === user.email.toLowerCase()) ||
+        (uni.contactPerson && uni.contactPerson.email && uni.contactPerson.email.toLowerCase() === user.email.toLowerCase()) ||
+        (user.organization && uni.name.toLowerCase() === user.organization.toLowerCase()))
+    ) {
+      return true;
+    }
+  }
+
+  if (collaboration.industry) {
+    const ind = await Industry.findById(collaboration.industry);
+    if (
+      ind &&
+      ((ind.email && ind.email.toLowerCase() === user.email.toLowerCase()) ||
+        (ind.contactPerson && ind.contactPerson.email && ind.contactPerson.email.toLowerCase() === user.email.toLowerCase()) ||
+        (user.organization && ind.name.toLowerCase() === user.organization.toLowerCase()))
+    ) {
+      return true;
+    }
+  }
+
+  if (collaboration.project) {
+    const project = await Project.findById(collaboration.project);
+    if (
+      project &&
+      (project.createdBy.toString() === user._id.toString() ||
+        (project.facultyMentor && project.facultyMentor.toString() === user._id.toString()))
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 const createCollaboration = async (req, res) => {
   try {
-    const collaboration = await Collaboration.create({
-      ...req.body,
-      requestedBy: req.user._id
+    const allowedFields = [
+      'project',
+      'challenge',
+      'university',
+      'industry',
+      'type',
+      'message',
+      'proposedContribution'
+    ];
+
+    const payload = {
+      requestedBy: req.user._id,
+      status: 'pending'
+    };
+
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        payload[field] = req.body[field];
+      }
     });
+
+    const collaboration = await Collaboration.create(payload);
 
     return successResponse(
       res,
@@ -52,6 +115,11 @@ const acceptCollaboration = async (req, res) => {
       return errorResponse(res, 'Collaboration request not found', 404);
     }
 
+    const isAuthorized = await canRespondToCollaboration(collaboration, req.user);
+    if (!isAuthorized) {
+      return errorResponse(res, 'Forbidden: You are not authorized to accept this collaboration request', 403);
+    }
+
     collaboration.status = 'accepted';
     collaboration.respondedBy = req.user._id;
     collaboration.respondedAt = new Date();
@@ -77,19 +145,21 @@ const acceptCollaboration = async (req, res) => {
 
 const rejectCollaboration = async (req, res) => {
   try {
-    const collaboration = await Collaboration.findByIdAndUpdate(
-      req.params.id,
-      {
-        status: 'rejected',
-        respondedBy: req.user._id,
-        respondedAt: new Date()
-      },
-      { returnDocument: 'after' }
-    );
+    const collaboration = await Collaboration.findById(req.params.id);
 
     if (!collaboration) {
       return errorResponse(res, 'Collaboration request not found', 404);
     }
+
+    const isAuthorized = await canRespondToCollaboration(collaboration, req.user);
+    if (!isAuthorized) {
+      return errorResponse(res, 'Forbidden: You are not authorized to reject this collaboration request', 403);
+    }
+
+    collaboration.status = 'rejected';
+    collaboration.respondedBy = req.user._id;
+    collaboration.respondedAt = new Date();
+    await collaboration.save();
 
     return successResponse(res, collaboration, 'Collaboration request rejected', 200);
   } catch (error) {
