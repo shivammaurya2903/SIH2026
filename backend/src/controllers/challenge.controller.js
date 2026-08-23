@@ -191,7 +191,7 @@ const approveChallenge = async (req, res) => {
     const challenge = await Challenge.findByIdAndUpdate(
       req.params.id,
       { status: 'approved' },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!challenge) {
@@ -213,7 +213,7 @@ const rejectChallenge = async (req, res) => {
     const challenge = await Challenge.findByIdAndUpdate(
       req.params.id,
       { status: 'rejected' },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!challenge) {

@@ -90,13 +90,11 @@ const projectSchema = new mongoose.Schema(
   }
 );
 
-projectSchema.pre('save', async function (next) {
+projectSchema.pre('save', async function () {
   if (!this.projectId) {
     const count = await mongoose.model('Project').countDocuments();
     this.projectId = `PRJ-${String(count + 1).padStart(5, '0')}`;
   }
-
-  next();
 });
 
 module.exports = mongoose.model('Project', projectSchema);

@@ -174,13 +174,11 @@ const challengeSchema = new mongoose.Schema(
   }
 );
 
-challengeSchema.pre('save', async function (next) {
+challengeSchema.pre('save', async function () {
   if (!this.challengeId) {
     const count = await mongoose.model('Challenge').countDocuments();
     this.challengeId = `CH-${String(count + 1).padStart(5, '0')}`;
   }
-
-  next();
 });
 
 challengeSchema.index({
