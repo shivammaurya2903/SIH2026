@@ -4,7 +4,7 @@ const { successResponse, errorResponse } = require('../utils/response');
 
 const createImpactMetric = async (req, res) => {
   try {
-    const { projectId } = req.body;
+    const projectId = req.body.projectId || req.body.project;
     if (!projectId) {
       return errorResponse(res, 'Project ID is required', 400);
     }

@@ -64,11 +64,12 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre('save', async function () {
-  if (!this.isModified('password')) {
+  if (!this.isModified('password') || this.password.startsWith('$2a$') || this.password.startsWith('$2b$')) {
     return;
   }
 
-  this.password = await bcrypt.hash(this.password, 12);
+  const rounds = process.env.NODE_ENV === 'test' ? 1 : 12;
+  this.password = await bcrypt.hash(this.password, rounds);
 });
 
 userSchema.methods.comparePassword = async function (candidatePassword) {

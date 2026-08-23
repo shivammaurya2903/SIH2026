@@ -3,12 +3,11 @@ const dns = require('dns');
 
 try {
   dns.setDefaultResultOrder('ipv4first');
-  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
 } catch (e) {
-  // Ignore if unsupported
+  // Ignore
 }
 
-let isDnsFallbackSet = true;
+let isDnsFallbackSet = false;
 
 const connectDB = async () => {
   const uri = process.env.MONGODB_URI;
@@ -43,18 +42,13 @@ const connectDB = async () => {
     console.log(`MongoDB connected successfully: ${connection.connection.host}`);
     return connection;
   } catch (error) {
-    if (
-      !isDnsFallbackSet &&
-      (error.code === 'ECONNREFUSED' ||
-        (error.message && error.message.includes('querySrv')) ||
-        error.name === 'MongoServerSelectionError')
-    ) {
-      console.warn(`MongoDB SRV DNS resolution warning (${error.message}). Applying fallback DNS resolvers (8.8.8.8, 1.1.1.1)...`);
+    if (!isDnsFallbackSet) {
+      console.warn(`MongoDB SRV resolution warning (${error.message}). Applying fallback DNS resolvers (8.8.8.8, 1.1.1.1)...`);
       try {
-        dns.setServers(['8.8.8.8', '1.1.1.1']);
+        dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
         isDnsFallbackSet = true;
         const connection = await mongoose.connect(uri, {
-          serverSelectionTimeoutMS: 5000
+          serverSelectionTimeoutMS: 15000
         });
 
         console.log(`MongoDB connected successfully via fallback DNS: ${connection.connection.host}`);

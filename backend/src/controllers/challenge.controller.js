@@ -356,6 +356,38 @@ const getMatches = async (req, res) => {
   }
 };
 
+const getDuplicates = async (req, res) => {
+  try {
+    const challenge = await Challenge.findById(req.params.id);
+    if (!challenge) {
+      return errorResponse(res, 'Challenge not found', 404);
+    }
+
+    const existingChallenges = await Challenge.find({
+      _id: { $ne: challenge._id }
+    }).limit(100);
+
+    const duplicateInfo = await detectDuplicates(challenge, existingChallenges);
+
+    const relatedList = await Challenge.find({
+      _id: { $in: duplicateInfo.relatedChallenges }
+    }).select('title category location status');
+
+    const result = relatedList.map((item) => {
+      return {
+        _id: item._id,
+        title: item.title,
+        category: item.category,
+        similarityScore: duplicateInfo.similarityScore
+      };
+    });
+
+    return successResponse(res, result, 'Duplicates computed successfully', 200);
+  } catch (error) {
+    return errorResponse(res, error.message, 500);
+  }
+};
+
 module.exports = {
   createChallenge,
   getChallenges,
@@ -365,5 +397,6 @@ module.exports = {
   analyzeChallenge,
   approveChallenge,
   rejectChallenge,
-  getMatches
+  getMatches,
+  getDuplicates
 };

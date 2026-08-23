@@ -255,7 +255,7 @@ const removeMember = async (req, res) => {
 
 const assignFacultyMentor = async (req, res) => {
   try {
-    const { facultyMentor: facultyMentorId } = req.body;
+    const facultyMentorId = req.body.facultyMentor || req.body.facultyMentorId || req.body.mentorId;
     if (!facultyMentorId) {
       return errorResponse(res, 'Faculty Mentor User ID is required', 400);
     }

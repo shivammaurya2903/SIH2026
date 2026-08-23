@@ -19,7 +19,7 @@ const canUserAccessProjectMilestones = async (project, user) => {
     if (
       uni &&
       ((uni.email && uni.email.toLowerCase() === user.email.toLowerCase()) ||
-        (user.organization && uni.name.toLowerCase() === user.organization.toLowerCase()))
+        (uni.contactPerson && uni.contactPerson.email && uni.contactPerson.email.toLowerCase() === user.email.toLowerCase()))
     ) {
       return true;
     }
@@ -30,7 +30,7 @@ const canUserAccessProjectMilestones = async (project, user) => {
     if (
       ind &&
       ((ind.email && ind.email.toLowerCase() === user.email.toLowerCase()) ||
-        (user.organization && ind.name.toLowerCase() === user.organization.toLowerCase()))
+        (ind.contactPerson && ind.contactPerson.email && ind.contactPerson.email.toLowerCase() === user.email.toLowerCase()))
     ) {
       return true;
     }
@@ -248,6 +248,10 @@ const updateMilestoneStatus = async (req, res) => {
     const milestone = await Milestone.findById(req.params.id);
     if (!milestone) {
       return errorResponse(res, 'Milestone not found', 404);
+    }
+
+    if (req.params.projectId && milestone.project.toString() !== req.params.projectId.toString()) {
+      return errorResponse(res, 'Milestone does not belong to the specified project', 400);
     }
 
     const project = await Project.findById(milestone.project);
