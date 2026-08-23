@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentorship & CSR | Industry Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="industry" data-active="mentorship"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Mentorship & CSR Commitments"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Mentorship & CSR Initiatives</h2>
+          <p class="page-subtitle">Pledge technical mentorship, lab prototyping resources, or CSR funding to student & university teams</p>
+        </div>
+      </div>
+
+      <div class="card" style="max-width: 640px;">
+        <h3 class="card-title" style="margin-bottom:16px;">Pledge Corporate Support</h3>
+        <form id="csrPledgeForm">
+          <div class="form-group">
+            <label class="form-label">Support Category</label>
+            <select id="csrCategory" class="form-select" required>
+              <option value="csr_funding">CSR Innovation Funding</option>
+              <option value="mentorship">Industry Mentorship for Student Teams</option>
+              <option value="prototyping">R&D & Prototyping Facility Access</option>
+              <option value="testing">Field Testing & Pilot Deployment</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Target Problem Category</label>
+            <select id="targetCategory" class="form-select" required>
+              <option value="water">Water & Sanitation</option>
+              <option value="agriculture">Agriculture & Smart Irrigation</option>
+              <option value="healthcare">Rural Healthcare</option>
+              <option value="energy">Clean Energy & Environment</option>
+              <option value="education">Education & Digital Literacy</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Committed Funding Amount (INR) / Resource Capacity</label>
+            <input type="text" id="capacityInput" class="form-control" placeholder="e.g. ₹5,00,000 CSR Grant or 10 Hours/Week Mentorship" required />
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="margin-top:10px;">Submit Support Pledge</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Common.requireRole(['industry', 'admin'])) return;
+      document.getElementById('csrPledgeForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        Common.showToast('Corporate support pledge recorded successfully!', 'success');
+      });
+    });
+  </script>
+</body>
+</html>

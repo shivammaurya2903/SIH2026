@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>University Dashboard | Societal Innovation Jharkhand</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="university" data-active="dashboard"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="University Portal"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">University Innovation Workspace</h2>
+          <p class="page-subtitle">Discover matched societal challenges, submit solution proposals, build multidisciplinary student teams, and manage projects</p>
+        </div>
+        <a href="challenges.html" class="btn btn-primary">Browse Marketplace</a>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">🎯</div>
+          <div>
+            <div class="kpi-value" id="kpiMatchedChal">0</div>
+            <div class="kpi-label">Matched Challenges</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">📝</div>
+          <div>
+            <div class="kpi-value" id="kpiSubmittedProp">0</div>
+            <div class="kpi-label">Submitted Proposals</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">👥</div>
+          <div>
+            <div class="kpi-value" id="kpiResearchTeams">0</div>
+            <div class="kpi-label">Student & Faculty Teams</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">🚀</div>
+          <div>
+            <div class="kpi-value" id="kpiActiveProjects">0</div>
+            <div class="kpi-label">Active R&D Projects</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bento-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Top Matched Challenges for Your Institution</h3>
+            <a href="challenges.html" class="btn btn-sm btn-outline">Explore Marketplace</a>
+          </div>
+          <div id="uniMatchedList">
+            <div style="text-align:center; padding:20px;">Loading matched challenges...</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title" style="margin-bottom:16px;">Quick Actions</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <a href="challenges.html" class="btn btn-primary" style="justify-content:flex-start;">🔎 Explore Challenges</a>
+            <a href="proposals.html" class="btn btn-secondary" style="justify-content:flex-start;">📋 Manage Proposals</a>
+            <a href="teams.html" class="btn btn-secondary" style="justify-content:flex-start;">👥 Form Research Teams</a>
+            <a href="projects.html" class="btn btn-secondary" style="justify-content:flex-start;">🚀 Active Projects Workspace</a>
+            <a href="collaborations.html" class="btn btn-secondary" style="justify-content:flex-start;">🤝 Industry Collaborations</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['university', 'faculty', 'student', 'admin'])) return;
+      try {
+        const [chalRes, propRes, prjRes] = await Promise.all([
+          API.get('/challenges?status=approved'),
+          API.get('/proposals'),
+          API.get('/projects')
+        ]);
+
+        if (chalRes.success && chalRes.data) {
+          document.getElementById('kpiMatchedChal').textContent = chalRes.data.length;
+          const list = document.getElementById('uniMatchedList');
+          if (chalRes.data.length > 0) {
+            list.innerHTML = chalRes.data.slice(0, 5).map(ch => `
+              <div class="challenge-row">
+                <div class="challenge-row-main">
+                  <a href="challenge-details.html?id=${ch._id}">
+                    <strong style="color:var(--text-main); font-size:0.95rem;">${Common.escapeHTML(ch.title)}</strong>
+                  </a>
+                  <span style="font-size:0.8rem; color:var(--text-muted);">${Common.escapeHTML(ch.location?.district || 'Jharkhand')} • ${Common.escapeHTML(ch.category)}</span>
+                </div>
+                <a href="challenge-details.html?id=${ch._id}" class="btn btn-sm btn-outline">Propose Solution</a>
+              </div>
+            `).join('');
+          } else {
+            list.innerHTML = Components.renderEmptyState('No Challenges Available', 'Government-approved challenges will appear here.');
+          }
+        }
+
+        if (propRes.success && propRes.data) {
+          document.getElementById('kpiSubmittedProp').textContent = propRes.data.length;
+        }
+
+        if (prjRes.success && prjRes.data) {
+          document.getElementById('kpiActiveProjects').textContent = prjRes.data.length;
+        }
+
+        const teamsRes = await API.get('/teams').catch(() => ({ data: [] }));
+        if (teamsRes.success && teamsRes.data) {
+          document.getElementById('kpiResearchTeams').textContent = teamsRes.data.length;
+        }
+      } catch (err) {
+        console.warn('Uni dashboard error:', err.message);
+      }
+    });
+  </script>
+</body>
+</html>

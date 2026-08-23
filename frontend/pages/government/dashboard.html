@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Government Dashboard | Societal Innovation Jharkhand</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="government" data-active="dashboard"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Government Review Portal"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Government Officers Dashboard</h2>
+          <p class="page-subtitle">Review incoming citizen challenges, AI severity scores, university matches, and approve state projects</p>
+        </div>
+        <a href="challenges.html" class="btn btn-primary">Review Pending Challenges</a>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">⏳</div>
+          <div>
+            <div class="kpi-value" id="kpiPendingReview">0</div>
+            <div class="kpi-label">Pending Approval</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">✅</div>
+          <div>
+            <div class="kpi-value" id="kpiApproved">0</div>
+            <div class="kpi-label">Approved Challenges</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">🎓</div>
+          <div>
+            <div class="kpi-value" id="kpiMatchedUniversities">0</div>
+            <div class="kpi-label">Matched Institutions</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">🚀</div>
+          <div>
+            <div class="kpi-value" id="kpiActiveProjects">0</div>
+            <div class="kpi-label">State Projects Active</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bento-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Submissions Requiring Review</h3>
+            <a href="challenges.html" class="btn btn-sm btn-outline">View All</a>
+          </div>
+          <div id="govPendingList">
+            <div style="text-align:center; padding:20px;">Loading challenges...</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title" style="margin-bottom:16px;">Quick Review Navigation</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <a href="challenges.html" class="btn btn-primary" style="justify-content:flex-start;">📋 Review Challenges</a>
+            <a href="universities.html" class="btn btn-secondary" style="justify-content:flex-start;">🎓 Academic Partners</a>
+            <a href="industries.html" class="btn btn-secondary" style="justify-content:flex-start;">🏢 Industry Partners</a>
+            <a href="projects.html" class="btn btn-secondary" style="justify-content:flex-start;">🚀 Active Projects</a>
+            <a href="analytics.html" class="btn btn-secondary" style="justify-content:flex-start;">📊 Analytics Overview</a>
+            <a href="impact.html" class="btn btn-secondary" style="justify-content:flex-start;">📈 Social Impact Log</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['government', 'admin'])) return;
+      try {
+        const [chalRes, overviewRes] = await Promise.all([
+          API.get('/challenges'),
+          API.get('/analytics/overview')
+        ]);
+
+        if (overviewRes.success && overviewRes.data) {
+          const d = overviewRes.data;
+          document.getElementById('kpiPendingReview').textContent = d.byStatus?.submitted || d.byStatus?.ai_analyzed || 0;
+          document.getElementById('kpiApproved').textContent = d.byStatus?.approved || 0;
+          document.getElementById('kpiMatchedUniversities').textContent = d.totalUniversities || 0;
+          document.getElementById('kpiActiveProjects').textContent = d.totalProjects || 0;
+        }
+
+        const list = document.getElementById('govPendingList');
+        if (chalRes.success && chalRes.data && chalRes.data.length > 0) {
+          list.innerHTML = chalRes.data.slice(0, 5).map(ch => `
+            <div class="challenge-row">
+              <div class="challenge-row-main">
+                <a href="challenge-review.html?id=${ch._id}">
+                  <strong style="color:var(--text-main); font-size:0.95rem;">${Common.escapeHTML(ch.title)}</strong>
+                </a>
+                <span style="font-size:0.8rem; color:var(--text-muted);">${Common.escapeHTML(ch.location?.district || 'Jharkhand')} • Score: ${ch.aiAnalysis?.priorityScore || 50}/100</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                ${Components.renderStatusBadge(ch.status)}
+                <a href="challenge-review.html?id=${ch._id}" class="btn btn-sm btn-outline">Review</a>
+              </div>
+            </div>
+          `).join('');
+        } else {
+          list.innerHTML = Components.renderEmptyState('No Challenges Found', 'All incoming citizen challenges have been reviewed!');
+        }
+      } catch (err) {
+        console.warn('Gov dashboard error:', err.message);
+      }
+    });
+  </script>
+</body>
+</html>

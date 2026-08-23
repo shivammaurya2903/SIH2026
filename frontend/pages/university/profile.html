@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>University Profile | Societal Innovation Jharkhand</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="university" data-active="profile"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Institutional Profile"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">University Institutional Profile</h2>
+          <p class="page-subtitle">Departments, faculty expertise, research areas, and innovation facilities</p>
+        </div>
+      </div>
+
+      <div class="card" style="max-width: 640px;">
+        <form id="uniProfileForm">
+          <div class="form-group">
+            <label class="form-label">Institution Name</label>
+            <input type="text" id="uniName" class="form-control" placeholder="e.g. Birla Institute of Technology Mesra" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">District in Jharkhand</label>
+            <input type="text" id="uniDistrict" class="form-control" placeholder="e.g. Ranchi" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Departments (comma-separated)</label>
+            <input type="text" id="departments" class="form-control" placeholder="Civil Engineering, Environmental Engineering, Computer Science" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Key Research & Tech Expertise (comma-separated)</label>
+            <input type="text" id="expertise" class="form-control" placeholder="water purification, solar filtration, IoT monitoring" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top:10px;">Save Institutional Profile</button>
+        </form>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Common.requireRole(['university', 'faculty', 'student', 'admin'])) return;
+      const user = Common.getUser();
+      if (user) {
+        document.getElementById('uniName').value = user.organization || user.name || '';
+      }
+
+      document.getElementById('uniProfileForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        Common.showToast('Institutional profile saved successfully!', 'success');
+      });
+    });
+  </script>
+</body>
+</html>

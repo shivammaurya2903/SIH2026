@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management | Admin Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="admin" data-active="users"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="User Management"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">User Accounts Directory</h2>
+          <p class="page-subtitle">Manage accounts, roles, and status for citizens, government officers, universities, and industry representatives</p>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Organization / District</th>
+              <th>Account Status</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <tr>
+              <td colspan="5" style="text-align:center; padding:30px;">Loading users...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Common.requireRole(['admin', 'government'])) return;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | University Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="university" data-active="settings"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Account Settings"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">University Portal Settings</h2>
+          <p class="page-subtitle">Notification triggers and student team permission rules</p>
+        </div>
+      </div>
+
+      <div class="card" style="max-width: 640px;">
+        <h3 class="card-title" style="margin-bottom:16px;">Preferences</h3>
+        <div class="form-group" style="flex-direction:row; align-items:center; justify-content:space-between;">
+          <div>
+            <strong style="font-size:0.9rem;">Auto-Match Alerts</strong>
+            <p style="font-size:0.8rem; color:var(--text-muted);">Receive notifications when new challenges match institution expertise</p>
+          </div>
+          <input type="checkbox" checked style="width:20px; height:20px; accent-color:var(--primary);" />
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Common.requireRole(['university', 'faculty', 'student', 'admin'])) return;
+    });
+  </script>
+</body>
+</html>

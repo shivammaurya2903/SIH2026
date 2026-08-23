@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposal Details | University Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="university" data-active="proposals"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Proposal Details"></header>
+    <main class="app-content">
+      <div id="breadcrumbContainer"></div>
+      <div id="proposalDetailCard">
+        <div style="text-align:center; padding:40px;">Loading proposal details...</div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['university', 'faculty', 'student', 'admin'])) return;
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (!id) {
+        window.location.href = 'proposals.html';
+        return;
+      }
+
+      document.getElementById('breadcrumbContainer').innerHTML = Components.renderBreadcrumb([
+        { label: 'Proposals', href: 'proposals.html' },
+        { label: 'Proposal View' }
+      ]);
+
+      try {
+        const res = await API.get(`/proposals/${id}`);
+        const card = document.getElementById('proposalDetailCard');
+        if (res.success && res.data) {
+          const prop = res.data;
+          card.innerHTML = `
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2 style="font-size:1.3rem;">${Common.escapeHTML(prop.title)}</h2>
+                  <p style="font-size:0.85rem; color:var(--text-muted);">Target Challenge: ${Common.escapeHTML(prop.challenge?.title || 'Challenge')}</p>
+                </div>
+                <div>${Components.renderStatusBadge(prop.status)}</div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:16px;">
+                <div>
+                  <strong style="font-size:0.85rem; color:var(--text-muted);">Problem Statement:</strong>
+                  <p style="font-size:0.95rem; margin-top:4px;">${Common.escapeHTML(prop.problemStatement)}</p>
+                </div>
+                <div>
+                  <strong style="font-size:0.85rem; color:var(--text-muted);">Proposed Methodology & Solution:</strong>
+                  <p style="font-size:0.95rem; margin-top:4px;">${Common.escapeHTML(prop.proposedSolution)}</p>
+                </div>
+                <div class="kpi-grid" style="margin-top:12px;">
+                  <div class="kpi-card">
+                    <div class="kpi-icon">💰</div>
+                    <div>
+                      <div class="kpi-value" style="font-size:1.2rem;">₹${Common.formatNumber(prop.estimatedBudget || 0)}</div>
+                      <div class="kpi-label">Estimated Budget</div>
+                    </div>
+                  </div>
+                  <div class="kpi-card">
+                    <div class="kpi-icon">⏱️</div>
+                    <div>
+                      <div class="kpi-value" style="font-size:1.2rem;">${prop.durationInMonths || 1} Months</div>
+                      <div class="kpi-label">Project Duration</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      } catch (err) {
+        Common.showToast(err.message, 'error');
+      }
+    });
+  </script>
+</body>
+</html>

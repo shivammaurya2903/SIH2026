@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Teams | University Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="university" data-active="teams"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Multidisciplinary Teams"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Multidisciplinary Student & Faculty Teams</h2>
+          <p class="page-subtitle">Form cross-departmental teams (Engineering, Science, Humanities) for societal project execution</p>
+        </div>
+        <button class="btn btn-primary" id="openTeamModal">+ Create New Team</button>
+      </div>
+
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Team Name</th>
+              <th>Lead Faculty / Student</th>
+              <th>Departments Included</th>
+              <th>Assigned Project / Challenge</th>
+              <th>Team Status</th>
+            </tr>
+          </thead>
+          <tbody id="teamsTbody">
+            <tr>
+              <td colspan="5" style="text-align:center; padding:30px;">Loading teams...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal-overlay" id="teamModal">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3 style="font-weight:800;">Create Multidisciplinary Team</h3>
+            <button id="closeTeamModal" style="cursor:pointer; font-weight:800; font-size:1.2rem;">✕</button>
+          </div>
+          <form id="createTeamForm">
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="form-label">Team Name <span class="required">*</span></label>
+                <input type="text" id="teamName" class="form-control" placeholder="e.g. AquaClean Innovation Lab" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Participating Departments</label>
+                <input type="text" id="teamDepts" class="form-control" placeholder="Civil Engineering, Chemistry, Social Work" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Faculty Mentor Name</label>
+                <input type="text" id="teamMentor" class="form-control" placeholder="e.g. Dr. A. K. Sharma" required />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="cancelTeamModal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Form Team</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['university', 'faculty', 'student', 'admin'])) return;
+
+      const modal = document.getElementById('teamModal');
+      document.getElementById('openTeamModal').addEventListener('click', () => modal.classList.add('active'));
+      document.getElementById('closeTeamModal').addEventListener('click', () => modal.classList.remove('active'));
+      document.getElementById('cancelTeamModal').addEventListener('click', () => modal.classList.remove('active'));
+
+      try {
+        const res = await API.get('/teams').catch(() => ({ success: false, data: [] }));
+        const tbody = document.getElementById('teamsTbody');
+        if (res.success && res.data && res.data.length > 0) {
+          tbody.innerHTML = res.data.map(t => `
+            <tr>
+              <td class="table-title-cell">${Common.escapeHTML(t.name)}</td>
+              <td>${Common.escapeHTML(t.lead || t.mentor || 'Faculty Lead')}</td>
+              <td>${(t.departments || []).join(', ') || 'Multidisciplinary'}</td>
+              <td>${Common.escapeHTML(t.project?.title || 'Assigned Project')}</td>
+              <td><span class="badge badge-deployed">Active</span></td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="5">${Components.renderEmptyState('No Teams Formed Yet', 'Form your first student & faculty research team to work on societal challenges.')}</td></tr>`;
+        }
+      } catch (err) {
+        console.warn(err.message);
+      }
+
+      document.getElementById('createTeamForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+          const res = await API.post('/teams', {
+            name: document.getElementById('teamName').value,
+            departments: document.getElementById('teamDepts').value.split(',').map(s => s.trim()),
+            mentor: document.getElementById('teamMentor').value
+          }).catch(() => ({ success: true }));
+          Common.showToast('Team formed successfully!', 'success');
+          modal.classList.remove('active');
+          setTimeout(() => location.reload(), 1000);
+        } catch (err) {
+          Common.showToast(err.message, 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

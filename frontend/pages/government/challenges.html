@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Challenges | Government Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="government" data-active="challenges"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Challenge Review & Approval"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Citizen Challenge Submissions</h2>
+          <p class="page-subtitle">Inspect AI analysis, priority scores, duplicate detection, and issue government approvals</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <input type="search" id="searchInput" class="form-control" placeholder="Search challenges by title or district..." style="max-width:300px;" />
+          <select id="statusFilter" class="form-select" style="max-width:200px;">
+            <option value="">All Statuses</option>
+            <option value="submitted">Submitted</option>
+            <option value="ai_analyzed">AI Analyzed</option>
+            <option value="under_review">Under Review</option>
+            <option value="approved">Approved</option>
+            <option value="matched">Matched</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Challenge Title</th>
+              <th>Category</th>
+              <th>District</th>
+              <th>Groq AI Priority Score</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="govChallengesTbody">
+            <tr>
+              <td colspan="6" style="text-align:center; padding:30px;">Loading challenges...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['government', 'admin'])) return;
+
+      try {
+        const res = await API.get('/challenges');
+        const tbody = document.getElementById('govChallengesTbody');
+
+        if (res.success && res.data) {
+          const challenges = res.data;
+
+          const render = (items) => {
+            if (!items || items.length === 0) {
+              tbody.innerHTML = `<tr><td colspan="6">${Components.renderEmptyState('No Challenges Found', 'No citizen challenge submissions match the selected filters.')}</td></tr>`;
+              return;
+            }
+
+            tbody.innerHTML = items.map(ch => `
+              <tr>
+                <td class="table-title-cell">
+                  <a href="challenge-review.html?id=${ch._id}" style="color:var(--text-main); font-weight:700;">
+                    ${Common.escapeHTML(ch.title)}
+                  </a>
+                </td>
+                <td><span class="badge badge-assigned">${Common.escapeHTML(ch.category)}</span></td>
+                <td>${Common.escapeHTML(ch.location?.district || 'Jharkhand')}</td>
+                <td><strong>${ch.aiAnalysis?.priorityScore || 50}</strong> / 100</td>
+                <td>${Components.renderStatusBadge(ch.status)}</td>
+                <td>
+                  <a href="challenge-review.html?id=${ch._id}" class="btn btn-sm btn-primary">Review & Approve</a>
+                </td>
+              </tr>
+            `).join('');
+          };
+
+          render(challenges);
+
+          document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            render(challenges.filter(c => c.title.toLowerCase().includes(query) || (c.location?.district || '').toLowerCase().includes(query)));
+          });
+
+          document.getElementById('statusFilter').addEventListener('change', (e) => {
+            const st = e.target.value;
+            render(st ? challenges.filter(c => c.status === st) : challenges);
+          });
+        }
+      } catch (err) {
+        console.warn('Error loading challenges for review:', err.message);
+      }
+    });
+  </script>
+</body>
+</html>

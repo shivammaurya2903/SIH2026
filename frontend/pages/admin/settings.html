@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | Admin Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="admin" data-active="settings"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="System Settings"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Platform Administration Settings</h2>
+          <p class="page-subtitle">Configure Groq AI model parameters and global system rules</p>
+        </div>
+      </div>
+
+      <div class="card" style="max-width: 640px;">
+        <h3 class="card-title" style="margin-bottom:16px;">Groq AI Configuration</h3>
+        <div class="form-group">
+          <label class="form-label">Active Groq Model</label>
+          <input type="text" value="llama-3.3-70b-versatile" class="form-control" readonly style="background-color:var(--bg-app);" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Duplicate Detection Jaccard Threshold (%)</label>
+          <input type="number" value="60" class="form-control" />
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Common.requireRole(['admin', 'government'])) return;
+    });
+  </script>
+</body>
+</html>

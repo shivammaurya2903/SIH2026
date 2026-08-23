@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Impact Assessment | Government Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="government" data-active="impact"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Measurable Social Impact"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Measurable Social Impact Metrics</h2>
+          <p class="page-subtitle">Quantifiable beneficiaries, cost saved, jobs created, and district reach</p>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">👥</div>
+          <div>
+            <div class="kpi-value" id="totalBeneficiaries">0</div>
+            <div class="kpi-label">Total Beneficiaries Impacted</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">📍</div>
+          <div>
+            <div class="kpi-value" id="districtsImpacted">0</div>
+            <div class="kpi-label">Districts Reached</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">💰</div>
+          <div>
+            <div class="kpi-value" id="costSaved">₹0</div>
+            <div class="kpi-label">Public Expenditure Saved</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">💼</div>
+          <div>
+            <div class="kpi-value" id="jobsCreated">0</div>
+            <div class="kpi-label">Jobs & Livelihoods Created</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title" style="margin-bottom:16px;">Impact Record Entry</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:20px;">Log official impact statistics evaluated for completed deployment projects.</p>
+        <form id="impactForm" class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Project ID</label>
+            <input type="text" id="projectId" class="form-control" placeholder="Target Project ObjectId" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Beneficiaries Reached</label>
+            <input type="number" id="beneficiaries" class="form-control" placeholder="e.g. 5000" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Districts Impacted</label>
+            <input type="number" id="districtsCount" class="form-control" placeholder="e.g. 3" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Villages Reached</label>
+            <input type="number" id="villagesCount" class="form-control" placeholder="e.g. 15" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cost Saved (INR)</label>
+            <input type="number" id="costSavedInput" class="form-control" placeholder="e.g. 250000" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jobs Created</label>
+            <input type="number" id="jobsInput" class="form-control" placeholder="e.g. 12" />
+          </div>
+          <div style="grid-column: span 2;">
+            <button type="submit" class="btn btn-primary">Record Impact Metric</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['government', 'admin'])) return;
+      try {
+        const res = await API.get('/impact/overview');
+        if (res.success && res.data) {
+          document.getElementById('totalBeneficiaries').textContent = Common.formatNumber(res.data.totalBeneficiaries || 0);
+          document.getElementById('districtsImpacted').textContent = Common.formatNumber(res.data.totalDistricts || 0);
+          document.getElementById('costSaved').textContent = '₹' + Common.formatNumber(res.data.totalCostSaved || 0);
+          document.getElementById('jobsCreated').textContent = Common.formatNumber(res.data.totalJobsCreated || 0);
+        }
+      } catch (err) {
+        console.warn('Impact overview warning:', err.message);
+      }
+
+      document.getElementById('impactForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+          const res = await API.post('/impact', {
+            projectId: document.getElementById('projectId').value,
+            beneficiaries: Number(document.getElementById('beneficiaries').value),
+            districtsImpacted: Number(document.getElementById('districtsCount').value),
+            villagesImpacted: Number(document.getElementById('villagesCount').value),
+            costSaved: Number(document.getElementById('costSavedInput').value),
+            jobsCreated: Number(document.getElementById('jobsInput').value)
+          });
+          if (res.success) {
+            Common.showToast('Impact metric recorded successfully!', 'success');
+            setTimeout(() => location.reload(), 1000);
+          }
+        } catch (err) {
+          Common.showToast(err.message, 'error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

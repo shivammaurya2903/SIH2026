@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opportunity Details | Industry Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="industry" data-active="opportunities"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Opportunity Details"></header>
+    <main class="app-content">
+      <div id="breadcrumbContainer"></div>
+      <div id="oppDetailCard">
+        <div style="text-align:center; padding:40px;">Loading opportunity details...</div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['industry', 'admin'])) return;
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (!id) {
+        window.location.href = 'opportunities.html';
+        return;
+      }
+
+      document.getElementById('breadcrumbContainer').innerHTML = Components.renderBreadcrumb([
+        { label: 'Opportunities', href: 'opportunities.html' },
+        { label: 'Opportunity View' }
+      ]);
+
+      try {
+        const res = await API.get(`/challenges/${id}`);
+        const card = document.getElementById('oppDetailCard');
+        if (res.success && res.data) {
+          const ch = res.data;
+          card.innerHTML = `
+            <div class="card" style="margin-bottom:20px;">
+              <div class="card-header">
+                <div>
+                  <h2 style="font-size:1.3rem;">${Common.escapeHTML(ch.title)}</h2>
+                  <p style="font-size:0.85rem; color:var(--text-muted);">Location: ${Common.escapeHTML(ch.location?.district || 'Jharkhand')}</p>
+                </div>
+                <div>${Components.renderStatusBadge(ch.status)}</div>
+              </div>
+              <p style="font-size:0.95rem; line-height:1.6; margin-bottom:20px;">${Common.escapeHTML(ch.description)}</p>
+
+              <div class="card" style="background:var(--primary-soft); border-color:var(--primary-border); margin-bottom:20px;">
+                <h4 style="color:var(--primary-dark); font-weight:800; margin-bottom:10px;">Collaborate on Solution</h4>
+                <p style="font-size:0.85rem; color:var(--text-body); margin-bottom:16px;">Request collaboration to provide funding, mentorship, prototyping, or technology deployment support.</p>
+                <form id="collabReqForm" style="display:flex; gap:10px;">
+                  <select id="collabType" class="form-select" style="max-width:200px;" required>
+                    <option value="mentorship">Mentorship</option>
+                    <option value="funding">CSR Funding</option>
+                    <option value="technology">Technology Support</option>
+                    <option value="prototyping">Prototyping</option>
+                    <option value="deployment">Statewide Deployment</option>
+                  </select>
+                  <input type="text" id="proposedContribution" class="form-control" placeholder="Describe your contribution" required />
+                  <button type="submit" class="btn btn-primary">Send Collaboration Request</button>
+                </form>
+              </div>
+            </div>
+
+            ${Components.renderAIAnalysisCard(ch.aiAnalysis)}
+          `;
+
+          document.getElementById('collabReqForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+              const collabRes = await API.post('/collaborations', {
+                challenge: ch._id,
+                type: document.getElementById('collabType').value,
+                proposedContribution: document.getElementById('proposedContribution').value
+              });
+              if (collabRes.success) {
+                Common.showToast('Collaboration request sent successfully!', 'success');
+              }
+            } catch (err) {
+              Common.showToast(err.message, 'error');
+            }
+          });
+        }
+      } catch (err) {
+        Common.showToast(err.message, 'error');
+      }
+    });
+  </script>
+</body>
+</html>

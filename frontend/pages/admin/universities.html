@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universities | Admin Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="admin" data-active="universities"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Institutional Directory"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">University Partners Directory</h2>
+          <p class="page-subtitle">Higher Education Institutions in Jharkhand registered on the platform</p>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Institution</th>
+              <th>District</th>
+              <th>Expertise</th>
+              <th>Departments</th>
+            </tr>
+          </thead>
+          <tbody id="uniTableBody">
+            <tr>
+              <td colspan="4" style="text-align:center; padding:30px;">Loading universities...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['admin', 'government'])) return;
+      try {
+        const res = await API.get('/universities');
+        const tbody = document.getElementById('uniTableBody');
+        if (res.success && res.data && res.data.length > 0) {
+          tbody.innerHTML = res.data.map(u => `
+            <tr>
+              <td class="table-title-cell">${Common.escapeHTML(u.name)}</td>
+              <td>${Common.escapeHTML(u.district || 'Jharkhand')}</td>
+              <td>${(u.expertise || []).join(', ') || 'N/A'}</td>
+              <td>${(u.departments || []).join(', ') || 'N/A'}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="4">${Components.renderEmptyState('No Universities Registered', 'No university records found.')}</td></tr>`;
+        }
+      } catch (err) {
+        console.warn(err.message);
+      }
+    });
+  </script>
+</body>
+</html>

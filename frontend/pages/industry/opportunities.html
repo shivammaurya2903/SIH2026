@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opportunities | Industry Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="industry" data-active="opportunities"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Industry Match Opportunities"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Matching Innovation Opportunities</h2>
+          <p class="page-subtitle">Approved societal challenges matching your domain expertise and CSR interests</p>
+        </div>
+      </div>
+
+      <div id="opportunitiesContainer">
+        <div style="text-align:center; padding:40px;">Loading opportunities...</div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['industry', 'admin'])) return;
+      try {
+        const res = await API.get('/challenges?status=approved');
+        const container = document.getElementById('opportunitiesContainer');
+        if (res.success && res.data && res.data.length > 0) {
+          container.innerHTML = `
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:20px;">
+              ${res.data.map(ch => `
+                <div class="card">
+                  <div class="card-header">
+                    <span class="badge badge-approved">${Common.escapeHTML(ch.category || 'General')}</span>
+                    <span style="font-weight:700; color:var(--primary); font-size:0.85rem;">88% Match</span>
+                  </div>
+                  <h3 style="font-size:1.1rem; margin-bottom:8px;">${Common.escapeHTML(ch.title)}</h3>
+                  <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:16px;">${Common.escapeHTML(ch.description.substring(0, 120))}...</p>
+                  <a href="opportunity-details.html?id=${ch._id}" class="btn btn-sm btn-outline">Explore & Partner</a>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        } else {
+          container.innerHTML = Components.renderEmptyState('No Opportunities Found', 'Approved societal challenges will appear here once matched by the AI algorithm.');
+        }
+      } catch (err) {
+        console.warn('Error loading opportunities:', err.message);
+      }
+    });
+  </script>
+</body>
+</html>

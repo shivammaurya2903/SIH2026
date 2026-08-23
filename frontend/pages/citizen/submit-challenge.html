@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Challenge | Citizen Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="citizen" data-active="submit-challenge"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Submit Societal Challenge"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Submit a Societal Challenge</h2>
+          <p class="page-subtitle">Report real-world problems in your district to trigger Groq AI analysis & university research solutions</p>
+        </div>
+      </div>
+
+      <div class="card" style="max-width: 760px;">
+        <form id="challengeForm">
+          <!-- Step 1: Problem Overview -->
+          <div style="margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border-light);">
+            <h3 style="font-size:1.1rem; color:var(--primary); margin-bottom:4px;">1. Problem Definition</h3>
+            <p style="font-size:0.82rem; color:var(--text-muted);">Provide a clear title and description of the community issue.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="title">Challenge Title <span class="required">*</span></label>
+            <input type="text" id="title" class="form-control" placeholder="e.g. Water Contamination & Summer Scarcity in Murhu Schools" required />
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="category">Category Domain <span class="required">*</span></label>
+              <select id="category" class="form-select" required>
+                <option value="water">Water Management & Quality</option>
+                <option value="education">Education & Digital Access</option>
+                <option value="healthcare">Healthcare & Community Health</option>
+                <option value="agriculture">Agriculture & Smart Farming</option>
+                <option value="environment">Environment & Waste Management</option>
+                <option value="energy">Clean Energy & Microgrids</option>
+                <option value="urban_development">Urban Development</option>
+                <option value="rural_livelihoods">Rural Livelihoods & Micro-Enterprises</option>
+                <option value="infrastructure">Public Infrastructure</option>
+                <option value="other">Other Domain</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="subCategory">Specific Sub-Category</label>
+              <input type="text" id="subCategory" class="form-control" placeholder="e.g. Solar Filtration Units" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="description">Detailed Description <span class="required">*</span></label>
+            <textarea id="description" class="form-textarea" placeholder="Explain the root causes, current impact on citizens, and affected population size..." required></textarea>
+          </div>
+
+          <!-- Step 2: Location in Jharkhand -->
+          <div style="margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border-light); margin-top:28px;">
+            <h3 style="font-size:1.1rem; color:var(--primary); margin-bottom:4px;">2. Location Details (Jharkhand)</h3>
+            <p style="font-size:0.82rem; color:var(--text-muted);">Specify district, block, and village location.</p>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label" for="district">District <span class="required">*</span></label>
+              <select id="district" class="form-select" required>
+                <option value="Ranchi">Ranchi</option>
+                <option value="Khunti">Khunti</option>
+                <option value="Dhanbad">Dhanbad</option>
+                <option value="East Singhbhum (Jamshedpur)">East Singhbhum (Jamshedpur)</option>
+                <option value="Hazaribagh">Hazaribagh</option>
+                <option value="Bokaro">Bokaro</option>
+                <option value="Giridih">Giridih</option>
+                <option value="Deoghar">Deoghar</option>
+                <option value="Dumka">Dumka</option>
+                <option value="Palamu">Palamu</option>
+                <option value="Gumla">Gumla</option>
+                <option value="Lohardaga">Lohardaga</option>
+                <option value="West Singhbhum">West Singhbhum</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="block">Block / Tehsil</label>
+              <input type="text" id="block" class="form-control" placeholder="e.g. Murhu Block" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="expectedOutcome">Expected Outcome</label>
+            <textarea id="expectedOutcome" class="form-textarea" style="min-height:80px;" placeholder="What deployment result do you hope to see in your community?"></textarea>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:20px;">
+            <a href="my-challenges.html" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Submit Challenge for AI Analysis</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Common.requireRole(['citizen', 'admin'])) return;
+
+      const form = document.getElementById('challengeForm');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting & Triggering AI Analysis...';
+
+        try {
+          const payload = {
+            title: document.getElementById('title').value,
+            category: document.getElementById('category').value,
+            subCategory: document.getElementById('subCategory').value,
+            description: document.getElementById('description').value,
+            location: {
+              district: document.getElementById('district').value,
+              block: document.getElementById('block').value,
+              state: 'Jharkhand'
+            },
+            expectedOutcome: document.getElementById('expectedOutcome').value
+          };
+
+          const res = await API.post('/challenges', payload);
+          if (res.success && res.data) {
+            const challengeId = res.data._id;
+            Common.showToast('Challenge submitted! Running Groq AI Analysis...', 'info');
+
+            // Trigger AI Analysis
+            try {
+              await API.post(`/challenges/${challengeId}/analyze`);
+              Common.showToast('Groq AI Analysis Complete!', 'success');
+            } catch (aiErr) {
+              console.warn('AI analysis notice:', aiErr.message);
+            }
+
+            setTimeout(() => {
+              window.location.href = `challenge-details.html?id=${challengeId}`;
+            }, 1200);
+          }
+        } catch (err) {
+          Common.showToast(err.message, 'error');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit Challenge for AI Analysis';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

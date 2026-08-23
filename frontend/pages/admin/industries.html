@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Industries | Admin Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="admin" data-active="industries"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Industry Partners"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Industry Partners Directory</h2>
+          <p class="page-subtitle">Startups, MSMEs, CSR units, and innovation labs</p>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Organization</th>
+              <th>Type</th>
+              <th>District</th>
+              <th>Domains</th>
+            </tr>
+          </thead>
+          <tbody id="indTableBody">
+            <tr>
+              <td colspan="4" style="text-align:center; padding:30px;">Loading industries...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['admin', 'government'])) return;
+      try {
+        const res = await API.get('/industries');
+        const tbody = document.getElementById('indTableBody');
+        if (res.success && res.data && res.data.length > 0) {
+          tbody.innerHTML = res.data.map(ind => `
+            <tr>
+              <td class="table-title-cell">${Common.escapeHTML(ind.name)}</td>
+              <td><span class="badge badge-assigned">${Common.escapeHTML(ind.type || 'Industry')}</span></td>
+              <td>${Common.escapeHTML(ind.district || 'Jharkhand')}</td>
+              <td>${(ind.domains || []).join(', ') || 'N/A'}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="4">${Components.renderEmptyState('No Industry Partners', 'No industry records found.')}</td></tr>`;
+        }
+      } catch (err) {
+        console.warn(err.message);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications | Government Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="government" data-active="notifications"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Notifications & Alerts"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Government Alerts Inbox</h2>
+          <p class="page-subtitle">Notifications regarding new challenge submissions, university proposals, and project milestones</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div id="notificationsList">
+          <div class="empty-state">
+            <div class="empty-icon">🔔</div>
+            <h3 class="empty-title">No Pending Alerts</h3>
+            <p class="empty-desc">System alerts and milestone updates from active deployment projects will appear here.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Common.requireRole(['government', 'admin'])) return;
+    });
+  </script>
+</body>
+</html>

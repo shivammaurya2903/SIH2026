@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collaborations | Industry Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="industry" data-active="collaborations"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Industry Collaborations"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">University Research Collaborations</h2>
+          <p class="page-subtitle">Track collaboration requests sent to universities and student research teams</p>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Project / Challenge</th>
+              <th>Type</th>
+              <th>Proposed Contribution</th>
+              <th>Status</th>
+              <th>Sent Date</th>
+            </tr>
+          </thead>
+          <tbody id="indCollabsTbody">
+            <tr>
+              <td colspan="5" style="text-align:center; padding:30px;">Loading collaborations...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['industry', 'admin'])) return;
+      try {
+        const res = await API.get('/collaborations');
+        const tbody = document.getElementById('indCollabsTbody');
+        if (res.success && res.data && res.data.length > 0) {
+          tbody.innerHTML = res.data.map(c => `
+            <tr>
+              <td class="table-title-cell">${Common.escapeHTML(c.project?.title || c.challenge?.title || 'Challenge')}</td>
+              <td><span class="badge badge-assigned">${Common.escapeHTML(c.type)}</span></td>
+              <td>${Common.escapeHTML(c.proposedContribution || 'N/A')}</td>
+              <td>${Components.renderStatusBadge(c.status)}</td>
+              <td>${Common.formatDate(c.createdAt)}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="5">${Components.renderEmptyState('No Active Collaborations', 'Explore opportunities to send your first collaboration request to university teams.')}</td></tr>`;
+        }
+      } catch (err) {
+        console.warn('Industry collabs error:', err.message);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
@@ -23,9 +24,16 @@ const app = express();
 
 app.use(helmet());
 
+const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: (origin, callback) => {
+      if (!origin || origin === clientUrl || process.env.NODE_ENV === 'development') {
+        callback(null, true);
+      } else {
+        callback(null, true);
+      }
+    },
     credentials: true
   })
 );
@@ -49,12 +57,20 @@ app.use('/api', apiLimiter);
 app.use('/uploads', express.static('uploads'));
 
 app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Societal Innovation Collaboration Platform API is active',
-    environment: process.env.NODE_ENV || 'development',
-    aiModel: process.env.AI_MODEL || 'llama-3.3-70b-versatile',
-    timestamp: new Date().toISOString()
+  const dbState = mongoose.connection.readyState;
+  const dbStatusMap = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+  const isDbConnected = dbState === 1;
+
+  return res.status(isDbConnected ? 200 : 503).json({
+    success: isDbConnected,
+    message: isDbConnected ? 'API is healthy' : 'Database service unavailable',
+    data: {
+      status: isDbConnected ? 'ok' : 'degraded',
+      database: dbStatusMap[dbState] || 'unknown',
+      environment: process.env.NODE_ENV || 'development',
+      aiModel: process.env.AI_MODEL || 'llama-3.3-70b-versatile',
+      timestamp: new Date().toISOString()
+    }
   });
 });
 

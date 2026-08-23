@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Citizen Dashboard | Societal Innovation Jharkhand</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="citizen" data-active="dashboard"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Citizen Dashboard"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Welcome Back, Citizen</h2>
+          <p class="page-subtitle">Track your submitted challenges, Groq AI analysis results, and active deployment projects</p>
+        </div>
+        <a href="submit-challenge.html" class="btn btn-primary">Submit New Challenge</a>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">📋</div>
+          <div>
+            <div class="kpi-value" id="kpiSubmitted">0</div>
+            <div class="kpi-label">Submitted Challenges</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">⏳</div>
+          <div>
+            <div class="kpi-value" id="kpiUnderReview">0</div>
+            <div class="kpi-label">Under Gov Review</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">🤝</div>
+          <div>
+            <div class="kpi-value" id="kpiMatched">0</div>
+            <div class="kpi-label">Matched & Assigned</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">✅</div>
+          <div>
+            <div class="kpi-value" id="kpiDeployed">0</div>
+            <div class="kpi-label">Deployed Projects</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bento-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">My Recent Challenges</h3>
+            <a href="my-challenges.html" class="btn btn-sm btn-outline">View All</a>
+          </div>
+          <div id="citizenRecentList">
+            <div style="text-align:center; padding:20px;">Loading your challenges...</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title" style="margin-bottom:16px;">Quick Actions</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <a href="submit-challenge.html" class="btn btn-primary" style="justify-content:flex-start;">➕ Submit New Challenge</a>
+            <a href="my-challenges.html" class="btn btn-secondary" style="justify-content:flex-start;">📂 Track Submitted Problems</a>
+            <a href="notifications.html" class="btn btn-secondary" style="justify-content:flex-start;">🔔 Check Notifications</a>
+            <a href="profile.html" class="btn btn-secondary" style="justify-content:flex-start;">👤 Update Profile</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['citizen', 'admin'])) return;
+      try {
+        const res = await API.get('/challenges');
+        const user = Common.getUser();
+        const list = document.getElementById('citizenRecentList');
+
+        if (res.success && res.data) {
+          const myChallenges = res.data.filter(c => c.submittedBy?._id === user?.id || c.submittedBy === user?.id);
+          
+          document.getElementById('kpiSubmitted').textContent = myChallenges.length;
+          document.getElementById('kpiUnderReview').textContent = myChallenges.filter(c => ['submitted', 'ai_analyzed', 'under_review'].includes(c.status)).length;
+          document.getElementById('kpiMatched').textContent = myChallenges.filter(c => ['approved', 'matched', 'assigned', 'in_progress'].includes(c.status)).length;
+          document.getElementById('kpiDeployed').textContent = myChallenges.filter(c => ['deployed', 'completed'].includes(c.status)).length;
+
+          if (myChallenges.length > 0) {
+            list.innerHTML = myChallenges.slice(0, 5).map(ch => `
+              <div class="challenge-row">
+                <div class="challenge-row-main">
+                  <a href="challenge-details.html?id=${ch._id}">
+                    <strong style="color:var(--text-main); font-size:0.95rem;">${Common.escapeHTML(ch.title)}</strong>
+                  </a>
+                  <span style="font-size:0.8rem; color:var(--text-muted);">${Common.escapeHTML(ch.location?.district || 'Jharkhand')} • Submitted ${Common.formatDate(ch.createdAt)}</span>
+                </div>
+                <div>${Components.renderStatusBadge(ch.status)}</div>
+              </div>
+            `).join('');
+          } else {
+            list.innerHTML = Components.renderEmptyState(
+              'No Challenges Submitted Yet',
+              'Report a societal problem in your district to connect with university research teams.',
+              '<a href="submit-challenge.html" class="btn btn-primary btn-sm">Submit First Challenge</a>'
+            );
+          }
+        }
+      } catch (err) {
+        console.warn('Citizen dashboard error:', err.message);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications | Citizen Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="citizen" data-active="notifications"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Notifications"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Notifications Inbox</h2>
+          <p class="page-subtitle">Stay updated on your challenge reviews, AI analysis, and project progress</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Recent Alerts</h3>
+          <button class="btn btn-sm btn-outline" id="markAllReadBtn">Mark All as Read</button>
+        </div>
+        <div id="notificationsList">
+          <div class="empty-state">
+            <div class="empty-icon">🔔</div>
+            <h3 class="empty-title">No new notifications</h3>
+            <p class="empty-desc">You are all caught up! Updates regarding your submitted challenges will appear here.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['citizen'])) return;
+      try {
+        const res = await API.get('/notifications');
+        const list = document.getElementById('notificationsList');
+        if (res.success && res.data && res.data.length > 0) {
+          list.innerHTML = res.data.map(n => `
+            <div class="challenge-row" style="padding:16px 0; border-bottom:1px solid var(--border-light);">
+              <div class="challenge-row-main">
+                <strong style="font-size:0.95rem;">${Common.escapeHTML(n.title)}</strong>
+                <span style="font-size:0.85rem; color:var(--text-body);">${Common.escapeHTML(n.message)}</span>
+                <span style="font-size:0.75rem; color:var(--text-light);">${Common.formatDate(n.createdAt)}</span>
+              </div>
+              <div>${n.isRead ? '<span class="badge" style="background:var(--bg-subtle);">Read</span>' : '<span class="badge badge-in_progress">Unread</span>'}</div>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.warn('Notifications fetch warning:', err.message);
+      }
+    });
+  </script>
+</body>
+</html>

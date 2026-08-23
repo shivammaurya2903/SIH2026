@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supported Projects | Industry Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="industry" data-active="projects"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="Industry Supported Projects"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Industry-Partnered Projects</h2>
+          <p class="page-subtitle">Track project progress for solutions backed by your company's CSR, mentorship, or tech support</p>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Project Title</th>
+              <th>Lead University</th>
+              <th>Status</th>
+              <th>Allocated Budget (INR)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="indProjectsTbody">
+            <tr>
+              <td colspan="5" style="text-align:center; padding:30px;">Loading projects...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['industry', 'admin'])) return;
+      try {
+        const res = await API.get('/projects');
+        const tbody = document.getElementById('indProjectsTbody');
+        if (res.success && res.data && res.data.length > 0) {
+          tbody.innerHTML = res.data.map(p => `
+            <tr>
+              <td class="table-title-cell">${Common.escapeHTML(p.title)}</td>
+              <td>${Common.escapeHTML(p.university?.name || 'Lead University')}</td>
+              <td>${Components.renderStatusBadge(p.status)}</td>
+              <td>₹${Common.formatNumber(p.budget?.allocated || 0)}</td>
+              <td>
+                <a href="project-details.html?id=${p._id}" class="btn btn-sm btn-outline">Project Workspace</a>
+              </td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="5">${Components.renderEmptyState('No Projects Supported Yet', 'Partner with universities on open opportunities to begin supporting state innovation projects.')}</td></tr>`;
+        }
+      } catch (err) {
+        console.warn(err.message);
+      }
+    });
+  </script>
+</body>
+</html>

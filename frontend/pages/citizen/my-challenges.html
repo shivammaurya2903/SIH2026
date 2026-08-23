@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Submitted Challenges | Citizen Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="citizen" data-active="my-challenges"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="My Submitted Challenges"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">My Submitted Challenges</h2>
+          <p class="page-subtitle">Track the complete lifecycle of challenges you have submitted across Jharkhand</p>
+        </div>
+        <a href="submit-challenge.html" class="btn btn-primary">+ Submit Challenge</a>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <input type="search" id="searchInput" class="form-control" placeholder="Search by title or keyword..." style="max-width:300px;" />
+          <select id="statusFilter" class="form-select" style="max-width:200px;">
+            <option value="">All Statuses</option>
+            <option value="submitted">Submitted</option>
+            <option value="ai_analyzed">AI Analyzed</option>
+            <option value="under_review">Under Review</option>
+            <option value="approved">Approved</option>
+            <option value="matched">Matched</option>
+            <option value="assigned">Assigned</option>
+            <option value="in_progress">In Progress</option>
+            <option value="deployed">Deployed</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Challenge Title</th>
+              <th>Category</th>
+              <th>Location</th>
+              <th>Priority Score</th>
+              <th>Status</th>
+              <th>Submitted Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="myChallengesTbody">
+            <tr>
+              <td colspan="7" style="text-align:center; padding:30px;">Loading your challenges...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['citizen', 'admin'])) return;
+      const user = Common.getUser();
+
+      try {
+        const res = await API.get('/challenges');
+        const tbody = document.getElementById('myChallengesTbody');
+
+        if (res.success && res.data) {
+          const myChallenges = res.data.filter(c => c.submittedBy?._id === user?.id || c.submittedBy === user?.id);
+
+          const render = (items) => {
+            if (!items || items.length === 0) {
+              tbody.innerHTML = `<tr><td colspan="7">${Components.renderEmptyState('No Challenges Found', 'You have not submitted any challenges yet.', '<a href="submit-challenge.html" class="btn btn-primary btn-sm">Submit a Challenge</a>')}</td></tr>`;
+              return;
+            }
+            tbody.innerHTML = items.map(ch => `
+              <tr>
+                <td class="table-title-cell">
+                  <a href="challenge-details.html?id=${ch._id}" style="color:var(--text-main); font-weight:700;">
+                    ${Common.escapeHTML(ch.title)}
+                  </a>
+                </td>
+                <td><span class="badge badge-assigned">${Common.escapeHTML(ch.category)}</span></td>
+                <td>${Common.escapeHTML(ch.location?.district || 'Jharkhand')}</td>
+                <td><strong>${ch.aiAnalysis?.priorityScore || 50}</strong> / 100</td>
+                <td>${Components.renderStatusBadge(ch.status)}</td>
+                <td>${Common.formatDate(ch.createdAt)}</td>
+                <td>
+                  <a href="challenge-details.html?id=${ch._id}" class="btn btn-sm btn-outline">View Details</a>
+                </td>
+              </tr>
+            `).join('');
+          };
+
+          render(myChallenges);
+
+          document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            render(myChallenges.filter(c => c.title.toLowerCase().includes(query)));
+          });
+
+          document.getElementById('statusFilter').addEventListener('change', (e) => {
+            const st = e.target.value;
+            render(st ? myChallenges.filter(c => c.status === st) : myChallenges);
+          });
+        }
+      } catch (err) {
+        console.warn('Error loading my challenges:', err.message);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics | Admin Portal</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="../../assets/js/config.js"></script>
+  <script src="../../assets/js/api.js"></script>
+  <script src="../../assets/js/common.js"></script>
+  <script src="../../assets/js/components.js"></script>
+</head>
+<body class="app-layout">
+  <aside class="app-sidebar" id="appSidebar" data-role="admin" data-active="analytics"></aside>
+  <div class="app-main">
+    <header class="app-header" id="appHeader" data-title="System Analytics"></header>
+    <main class="app-content">
+      <div class="page-header-block">
+        <div>
+          <h2 class="page-title">Ecosystem Analytics & Aggregations</h2>
+          <p class="page-subtitle">Real-time system statistics generated via MongoDB aggregation pipelines</p>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">📊</div>
+          <div>
+            <div class="kpi-value" id="totalChal">0</div>
+            <div class="kpi-label">Total Challenges</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">🎓</div>
+          <div>
+            <div class="kpi-value" id="totalUni">0</div>
+            <div class="kpi-label">Registered Universities</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">🏢</div>
+          <div>
+            <div class="kpi-value" id="totalInd">0</div>
+            <div class="kpi-label">Registered Industries</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">👥</div>
+          <div>
+            <div class="kpi-value" id="totalBen">0</div>
+            <div class="kpi-label">Beneficiaries Impacted</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Common.requireRole(['admin', 'government'])) return;
+      try {
+        const res = await API.get('/analytics/overview');
+        if (res.success && res.data) {
+          document.getElementById('totalChal').textContent = Common.formatNumber(res.data.totalChallenges || 0);
+          document.getElementById('totalUni').textContent = Common.formatNumber(res.data.totalUniversities || 0);
+          document.getElementById('totalInd').textContent = Common.formatNumber(res.data.totalIndustries || 0);
+          document.getElementById('totalBen').textContent = Common.formatNumber(res.data.impact?.totalBeneficiaries || 0);
+        }
+      } catch (err) {
+        console.warn(err.message);
+      }
+    });
+  </script>
+</body>
+</html>
