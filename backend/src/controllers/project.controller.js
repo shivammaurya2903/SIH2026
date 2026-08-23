@@ -2,6 +2,8 @@ const Project = require('../models/Project');
 const University = require('../models/University');
 const Industry = require('../models/Industry');
 const projectService = require('../services/project.service');
+const { createNotification, safeNotify } = require('../services/notification.service');
+const { extractUploadedFiles } = require('../services/file.service');
 const { successResponse, errorResponse } = require('../utils/response');
 
 const ALLOWED_PROJECT_FIELDS = [
@@ -64,6 +66,11 @@ const createProject = async (req, res) => {
         payload[field] = req.body[field];
       }
     });
+
+    const fileDocs = extractUploadedFiles(req, 'documents', req.body.documents);
+    if (fileDocs.length > 0) {
+      payload.documents = fileDocs;
+    }
 
     const project = await projectService.createProject(payload);
 
@@ -129,8 +136,7 @@ const updateProject = async (req, res) => {
       'startDate',
       'expectedEndDate',
       'actualEndDate',
-      'budget',
-      'documents'
+      'budget'
     ];
 
     const updates = {};
@@ -140,7 +146,26 @@ const updateProject = async (req, res) => {
       }
     });
 
+    const fileDocs = extractUploadedFiles(req, 'documents', req.body.documents);
+    if (fileDocs.length > 0) {
+      updates.documents = [...(rawProject.documents || []), ...fileDocs];
+    }
+
+    const oldStatus = rawProject.status;
     const updatedProject = await projectService.updateProject(req.params.id, updates, rawProject);
+
+    await safeNotify(async () => {
+      if (updates.status && updates.status !== oldStatus && updatedProject.createdBy) {
+        await createNotification({
+          recipient: updatedProject.createdBy,
+          sender: req.user._id,
+          type: 'project_status_changed',
+          title: 'Project Lifecycle Update',
+          message: `Project "${updatedProject.title}" status changed from ${oldStatus} to ${updatedProject.status.toUpperCase()}.`,
+          relatedId: updatedProject._id
+        });
+      }
+    });
 
     return successResponse(res, updatedProject, 'Project updated successfully', 200);
   } catch (error) {

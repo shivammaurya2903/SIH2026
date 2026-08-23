@@ -3,11 +3,12 @@ const dns = require('dns');
 
 try {
   dns.setDefaultResultOrder('ipv4first');
+  dns.setServers(['8.8.8.8', '1.1.1.1', '8.8.4.4']);
 } catch (e) {
   // Ignore if unsupported
 }
 
-let isDnsFallbackSet = false;
+let isDnsFallbackSet = true;
 
 const connectDB = async () => {
   const uri = process.env.MONGODB_URI;
@@ -36,7 +37,7 @@ const connectDB = async () => {
 
   try {
     const connection = await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 5000
+      serverSelectionTimeoutMS: 15000
     });
 
     console.log(`MongoDB connected successfully: ${connection.connection.host}`);

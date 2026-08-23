@@ -1,1430 +1,468 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="JharInnovate - Societal Innovation Collaboration Portal. Transform local challenges into real solutions through AI classification, university matching, and industry collaboration.">
+    <title>JharInnovate | Societal Innovation Collaboration Portal</title>
 
-    <meta name="description"content="Jharkhand Societal Innovation Portal — Connecting communities, universities, government and industry to solve real-world challenges.">
-    <meta name="theme-color" content="#155EEF">
-
-    <title>
-        JharInnovate | Societal Innovation Portal
-    </title>
-
-    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Global Styles -->
     <link rel="stylesheet" href="css/variables.css">
-
     <link rel="stylesheet" href="css/main.css">
-
     <link rel="stylesheet" href="css/components.css">
-
     <link rel="stylesheet" href="css/layout.css">
-
     <link rel="stylesheet" href="css/responsive.css">
-
-    <!-- Landing Page Styles -->
     <link rel="stylesheet" href="css/pages/landing.css">
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+<body class="landing-page">
 
-<body>
-
-    <!-- =====================================================
-         NAVIGATION
-    ====================================================== -->
-
-    <header class="site-header">
-
-        <nav class="navbar container">
-
-            <!-- Logo -->
-            <a href="index.html" class="brand" aria-label="JharInnovate Home">
-
-                <span class="brand-mark">
-                    <i data-lucide="zap"></i>
-                </span>
-
-                <span class="brand-text">
-                    <strong>Jhar</strong>Innovate
-                </span>
-
+    <!-- Header Navigation -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-mark"><i data-lucide="zap"></i></span>
+                <span class="brand-text"><strong>Jhar</strong>Innovate</span>
             </a>
 
+            <nav class="nav-links desktop-only" aria-label="Main Navigation">
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#domains" class="nav-link">Domains</a>
+                <a href="#ai-intelligence" class="nav-link">AI Intelligence</a>
+                <a href="#ecosystem" class="nav-link">Ecosystem</a>
+                <a href="#impact" class="nav-link">Impact</a>
+            </nav>
 
-            <!-- Desktop Navigation -->
-
-            <div class="nav-links">
-
-                <a href="#how-it-works">
-                    How It Works
-                </a>
-
-                <a href="#challenges">
-                    Challenges
-                </a>
-
-                <a href="#solutions">
-                    Solutions
-                </a>
-
-                <a href="#impact">
-                    Impact
-                </a>
-
+            <div class="nav-actions desktop-only">
+                <a href="pages/auth/login.html" class="btn btn-secondary">Login</a>
+                <a href="pages/auth/login.html?mode=signup" class="btn btn-primary">Join Platform</a>
             </div>
 
-
-            <!-- Navigation Actions -->
-
-            <div class="nav-actions">
-
-                <a href="pages/auth/login.html" class="btn btn-outline">
-                    Login
-                </a>
-
-                <a href="pages/auth/register.html" class="btn btn-primary">
-                    Join Platform
-                </a>
-
-            </div>
-
-
-            <!-- Mobile Menu -->
-
-            <button class="mobile-menu-btn" type="button" aria-label="Open navigation" aria-expanded="false">
+            <button class="mobile-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" type="button">
                 <i data-lucide="menu"></i>
             </button>
-
-        </nav>
-
-    </header>
-
-
-    <main>
-
-        <!-- =====================================================
-             HERO
-        ====================================================== -->
-
-        <section class="hero">
-
-            <div class="container hero-grid">
-
-                <!-- Hero Content -->
-
-                <div class="hero-content">
-
-                    <div class="eyebrow">
-
-                        <span class="eyebrow-dot"></span>
-
-                        Jharkhand's Societal Innovation Network
-
-                    </div>
-
-
-                    <h1>
-
-                        Turn Local Challenges
-
-                        <span>
-                            Into Real Solutions.
-                        </span>
-
-                    </h1>
-
-
-                    <p class="hero-description">
-
-                        A technology-enabled platform connecting
-                        citizens, universities, government and industry
-                        to transform real-world societal challenges
-                        into research, innovation and measurable impact.
-
-                    </p>
-
-
-                    <div class="hero-actions">
-
-                        <a href="pages/auth/login.html" class="btn btn-primary btn-large">
-
-                            <i data-lucide="plus-circle"></i>
-
-                            Report a Challenge
-
-                        </a>
-
-
-                        <a href="#solutions" class="btn btn-secondary btn-large">
-
-                            Explore Solutions
-
-                            <i data-lucide="arrow-right"></i>
-
-                        </a>
-
-                    </div>
-
-
-                    <!-- Trust -->
-
-                    <div class="hero-trust">
-
-                        <div class="trust-avatars">
-
-                            <span>CU</span>
-                            <span>HE</span>
-                            <span>IN</span>
-                            <span>GO</span>
-
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                Built for collaboration
-                            </strong>
-
-                            <p>
-                                Citizens • HEIs • Government • Industry
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Hero Visual -->
-
-                <div class="hero-visual">
-
-                    <div class="hero-map-card">
-
-                        <div class="map-card-header">
-
-                            <div>
-
-                                <span class="small-label">
-                                    LIVE NETWORK
-                                </span>
-
-                                <h3>
-                                    Jharkhand Innovation Map
-                                </h3>
-
-                            </div>
-
-                            <span class="live-status">
-                                <span></span>
-                                Live
-                            </span>
-
-                        </div>
-
-
-                        <!-- Map Placeholder -->
-
-                        <div class="jharkhand-map">
-
-                            <div class="map-grid"></div>
-
-
-                            <!-- Map Shape -->
-
-                            <div class="map-shape">
-
-                                <span class="map-point point-1"></span>
-                                <span class="map-point point-2"></span>
-                                <span class="map-point point-3"></span>
-                                <span class="map-point point-4"></span>
-                                <span class="map-point point-5"></span>
-                                <span class="map-point point-6"></span>
-
-                            </div>
-
-
-                            <!-- Floating District Card -->
-
-                            <div class="district-card">
-
-                                <div class="district-icon">
-                                    <i data-lucide="map-pin"></i>
-                                </div>
-
-                                <div>
-
-                                    <strong>
-                                        Ranchi
-                                    </strong>
-
-                                    <span>
-                                        284 challenges
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- Map Footer -->
-
-                        <div class="map-card-footer">
-
-                            <div>
-                                <span class="legend-dot healthcare"></span>
-                                Healthcare
-                            </div>
-
-                            <div>
-                                <span class="legend-dot agriculture"></span>
-                                Agriculture
-                            </div>
-
-                            <div>
-                                <span class="legend-dot education"></span>
-                                Education
-                            </div>
-
-                            <div>
-                                <span class="legend-dot water"></span>
-                                Water
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- Floating Impact Card -->
-
-                    <div class="floating-impact-card">
-
-                        <div class="impact-icon">
-                            <i data-lucide="trending-up"></i>
-                        </div>
-
-                        <div>
-
-                            <span>
-                                Community Impact
-                            </span>
-
-                            <strong>
-                                +23.4%
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             PLATFORM STATISTICS
-        ====================================================== -->
-
-        <section class="stats-section">
-
-            <div class="container">
-
-                <div class="stats-grid">
-
-                    <div class="stat-item">
-
-                        <strong>
-                            12,482
-                        </strong>
-
-                        <span>
-                            Challenges Received
-                        </span>
-
-                    </div>
-
-
-                    <div class="stat-item">
-
-                        <strong>
-                            1,842
-                        </strong>
-
-                        <span>
-                            Active Projects
-                        </span>
-
-                    </div>
-
-
-                    <div class="stat-item">
-
-                        <strong>
-                            32
-                        </strong>
-
-                        <span>
-                            Partner Universities
-                        </span>
-
-                    </div>
-
-
-                    <div class="stat-item">
-
-                        <strong>
-                            76
-                        </strong>
-
-                        <span>
-                            Industry Partners
-                        </span>
-
-                    </div>
-
-
-                    <div class="stat-item">
-
-                        <strong>
-                            2.8L+
-                        </strong>
-
-                        <span>
-                            People Impacted
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             HOW IT WORKS
-        ====================================================== -->
-
-        <section class="section how-section" id="how-it-works">
-
-            <div class="container">
-
-                <div class="section-heading">
-
-                    <span class="section-label">
-                        HOW IT WORKS
-                    </span>
-
-                    <h2>
-                        From a local problem
-                        <br>
-                        to a scalable solution.
-                    </h2>
-
-                    <p>
-                        Our platform connects every stakeholder
-                        throughout the innovation lifecycle.
-                    </p>
-
-                </div>
-
-
-                <div class="workflow">
-
-                    <!-- Step -->
-
-                    <div class="workflow-step">
-
-                        <div class="workflow-number">
-                            01
-                        </div>
-
-                        <div class="workflow-icon">
-                            <i data-lucide="message-square-plus"></i>
-                        </div>
-
-                        <h3>
-                            Report
-                        </h3>
-
-                        <p>
-                            Citizens and communities submit
-                            real-world challenges with evidence,
-                            location and supporting information.
-                        </p>
-
-                    </div>
-
-
-                    <div class="workflow-line"></div>
-
-
-                    <div class="workflow-step">
-
-                        <div class="workflow-number">
-                            02
-                        </div>
-
-                        <div class="workflow-icon">
-                            <i data-lucide="sparkles"></i>
-                        </div>
-
-                        <h3>
-                            Analyze
-                        </h3>
-
-                        <p>
-                            AI categorizes, prioritizes and identifies
-                            potentially related challenges.
-                        </p>
-
-                    </div>
-
-
-                    <div class="workflow-line"></div>
-
-
-                    <div class="workflow-step">
-
-                        <div class="workflow-number">
-                            03
-                        </div>
-
-                        <div class="workflow-icon">
-                            <i data-lucide="university"></i>
-                        </div>
-
-                        <h3>
-                            Match
-                        </h3>
-
-                        <p>
-                            Validated challenges are matched with
-                            universities based on expertise.
-                        </p>
-
-                    </div>
-
-
-                    <div class="workflow-line"></div>
-
-
-                    <div class="workflow-step">
-
-                        <div class="workflow-number">
-                            04
-                        </div>
-
-                        <div class="workflow-icon">
-                            <i data-lucide="handshake"></i>
-                        </div>
-
-                        <h3>
-                            Collaborate
-                        </h3>
-
-                        <p>
-                            Students, faculty and industry partners
-                            work together to develop solutions.
-                        </p>
-
-                    </div>
-
-
-                    <div class="workflow-line"></div>
-
-
-                    <div class="workflow-step">
-
-                        <div class="workflow-number">
-                            05
-                        </div>
-
-                        <div class="workflow-icon">
-                            <i data-lucide="rocket"></i>
-                        </div>
-
-                        <h3>
-                            Deploy
-                        </h3>
-
-                        <p>
-                            Tested solutions move into pilots,
-                            implementation and measurable impact.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             CHALLENGE DOMAINS
-        ====================================================== -->
-
-        <section class="section challenges-section" id="challenges">
-
-            <div class="container">
-
-                <div class="section-heading split-heading">
-
-                    <div>
-
-                        <span class="section-label">
-                            SOCIETAL CHALLENGES
-                        </span>
-
-                        <h2>
-                            Problems worth solving.
-                        </h2>
-
-                    </div>
-
-                    <a href="pages/citizen/my-challenges.html" class="text-link">
-
-                        Explore challenges
-
-                        <i data-lucide="arrow-up-right"></i>
-
-                    </a>
-
-                </div>
-
-
-                <div class="domain-grid">
-
-                    <article class="domain-card">
-
-                        <div class="domain-icon education">
-                            <i data-lucide="graduation-cap"></i>
-                        </div>
-
-                        <h3>
-                            Education
-                        </h3>
-
-                        <p>
-                            Digital learning, infrastructure,
-                            accessibility and skill development.
-                        </p>
-
-                        <span>
-                            2,184 challenges
-                        </span>
-
-                    </article>
-
-
-                    <article class="domain-card">
-
-                        <div class="domain-icon healthcare">
-                            <i data-lucide="heart-pulse"></i>
-                        </div>
-
-                        <h3>
-                            Healthcare
-                        </h3>
-
-                        <p>
-                            Rural healthcare, accessibility,
-                            diagnostics and public health.
-                        </p>
-
-                        <span>
-                            1,842 challenges
-                        </span>
-
-                    </article>
-
-
-                    <article class="domain-card">
-
-                        <div class="domain-icon agriculture">
-                            <i data-lucide="wheat"></i>
-                        </div>
-
-                        <h3>
-                            Agriculture
-                        </h3>
-
-                        <p>
-                            Smart farming, irrigation, productivity
-                            and rural livelihoods.
-                        </p>
-
-                        <span>
-                            3,104 challenges
-                        </span>
-
-                    </article>
-
-
-                    <article class="domain-card">
-
-                        <div class="domain-icon water">
-                            <i data-lucide="droplets"></i>
-                        </div>
-
-                        <h3>
-                            Water
-                        </h3>
-
-                        <p>
-                            Water management, conservation,
-                            sanitation and access.
-                        </p>
-
-                        <span>
-                            1,628 challenges
-                        </span>
-
-                    </article>
-
-
-                    <article class="domain-card">
-
-                        <div class="domain-icon environment">
-                            <i data-lucide="leaf"></i>
-                        </div>
-
-                        <h3>
-                            Environment
-                        </h3>
-
-                        <p>
-                            Climate resilience, waste management
-                            and environmental protection.
-                        </p>
-
-                        <span>
-                            1,294 challenges
-                        </span>
-
-                    </article>
-
-
-                    <article class="domain-card">
-
-                        <div class="domain-icon infrastructure">
-                            <i data-lucide="building-2"></i>
-                        </div>
-
-                        <h3>
-                            Infrastructure
-                        </h3>
-
-                        <p>
-                            Urban development, mobility and
-                            public infrastructure.
-                        </p>
-
-                        <span>
-                            1,076 challenges
-                        </span>
-
-                    </article>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             AI INTELLIGENCE
-        ====================================================== -->
-
-        <section class="section ai-section">
-
-            <div class="container ai-grid">
-
-                <div class="ai-content">
-
-                    <span class="section-label">
-                        AI-POWERED INTELLIGENCE
-                    </span>
-
-                    <h2>
-                        From thousands of problems
-                        to the right opportunities.
-                    </h2>
-
-                    <p>
-                        AI helps classify challenges, identify
-                        duplicates, prioritize urgent issues and
-                        connect them with institutions that have
-                        the right expertise to solve them.
-                    </p>
-
-
-                    <div class="ai-features">
-
-                        <div class="ai-feature">
-
-                            <span>
-                                <i data-lucide="tags"></i>
-                            </span>
-
-                            <div>
-
-                                <strong>
-                                    Smart Classification
-                                </strong>
-
-                                <p>
-                                    Automatically identify domains,
-                                    topics and priorities.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="ai-feature">
-
-                            <span>
-                                <i data-lucide="copy-check"></i>
-                            </span>
-
-                            <div>
-
-                                <strong>
-                                    Duplicate Detection
-                                </strong>
-
-                                <p>
-                                    Find similar challenges and
-                                    avoid fragmented efforts.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="ai-feature">
-
-                            <span>
-                                <i data-lucide="route"></i>
-                            </span>
-
-                            <div>
-
-                                <strong>
-                                    Intelligent Matching
-                                </strong>
-
-                                <p>
-                                    Route challenges to the most
-                                    suitable institutions.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="ai-preview">
-
-                    <div class="ai-window">
-
-                        <div class="ai-window-header">
-
-                            <span class="window-dot"></span>
-                            <span class="window-dot"></span>
-                            <span class="window-dot"></span>
-
-                            <span>
-                                Challenge Intelligence
-                            </span>
-
-                        </div>
-
-
-                        <div class="ai-window-body">
-
-                            <span class="ai-tag">
-                                AI ANALYSIS
-                            </span>
-
-                            <h3>
-                                Smart Irrigation for
-                                Rural Farmers
-                            </h3>
-
-                            <div class="confidence">
-
-                                <div class="confidence-header">
-
-                                    <span>
-                                        Classification confidence
-                                    </span>
-
-                                    <strong>
-                                        94%
-                                    </strong>
-
-                                </div>
-
-                                <div class="confidence-bar">
-
-                                    <span></span>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="ai-results">
-
-                                <div>
-                                    <span>
-                                        Primary Domain
-                                    </span>
-
-                                    <strong>
-                                        Agriculture
-                                    </strong>
-                                </div>
-
-                                <div>
-                                    <span>
-                                        Priority
-                                    </span>
-
-                                    <strong class="priority-high">
-                                        High
-                                    </strong>
-                                </div>
-
-                                <div>
-                                    <span>
-                                        District
-                                    </span>
-
-                                    <strong>
-                                        Ranchi
-                                    </strong>
-                                </div>
-
-                            </div>
-
-
-                            <div class="match-box">
-
-                                <div>
-
-                                    <span>
-                                        BEST INSTITUTION MATCH
-                                    </span>
-
-                                    <strong>
-                                        XYZ University
-                                    </strong>
-
-                                </div>
-
-                                <strong class="match-score">
-                                    94%
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             SOLUTIONS
-        ====================================================== -->
-
-        <section class="section solutions-section" id="solutions">
-
-            <div class="container">
-
-                <div class="section-heading">
-
-                    <span class="section-label">
-                        INNOVATION ECOSYSTEM
-                    </span>
-
-                    <h2>
-                        One challenge.
-                        <br>
-                        Many possibilities.
-                    </h2>
-
-                    <p>
-                        Bring together the people, knowledge and
-                        resources needed to create meaningful solutions.
-                    </p>
-
-                </div>
-
-
-                <div class="ecosystem-grid">
-
-                    <article class="ecosystem-card citizen-card">
-
-                        <div class="ecosystem-icon">
-                            <i data-lucide="users"></i>
-                        </div>
-
-                        <span class="ecosystem-label">
-                            CITIZENS
-                        </span>
-
-                        <h3>
-                            Raise the problems
-                            that matter.
-                        </h3>
-
-                        <p>
-                            Share challenges from your community
-                            and track their journey toward resolution.
-                        </p>
-
-                    </article>
-
-
-                    <article class="ecosystem-card university-card">
-
-                        <div class="ecosystem-icon">
-                            <i data-lucide="school"></i>
-                        </div>
-
-                        <span class="ecosystem-label">
-                            UNIVERSITIES
-                        </span>
-
-                        <h3>
-                            Turn knowledge
-                            into action.
-                        </h3>
-
-                        <p>
-                            Enable students and researchers to work
-                            on real-world problems.
-                        </p>
-
-                    </article>
-
-
-                    <article class="ecosystem-card industry-card">
-
-                        <div class="ecosystem-icon">
-                            <i data-lucide="building"></i>
-                        </div>
-
-                        <span class="ecosystem-label">
-                            INDUSTRY
-                        </span>
-
-                        <h3>
-                            Accelerate solutions
-                            at scale.
-                        </h3>
-
-                        <p>
-                            Provide mentorship, funding, technology
-                            and implementation capabilities.
-                        </p>
-
-                    </article>
-
-
-                    <article class="ecosystem-card government-card">
-
-                        <div class="ecosystem-icon">
-                            <i data-lucide="landmark"></i>
-                        </div>
-
-                        <span class="ecosystem-label">
-                            GOVERNMENT
-                        </span>
-
-                        <h3>
-                            Measure and multiply
-                            social impact.
-                        </h3>
-
-                        <p>
-                            Monitor challenges, projects and
-                            outcomes across Jharkhand.
-                        </p>
-
-                    </article>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             IMPACT
-        ====================================================== -->
-
-        <section class="section impact-section" id="impact">
-
-            <div class="container impact-container">
-
-                <div class="impact-content">
-
-                    <span class="section-label">
-                        MEASURABLE IMPACT
-                    </span>
-
-                    <h2>
-                        Innovation that reaches
-                        the people who need it.
-                    </h2>
-
-                    <p>
-                        Track the journey from community challenge
-                        to deployed solution and measure the
-                        difference it creates.
-                    </p>
-
-                    <a href="pages/auth/register.html" class="btn btn-primary btn-large">
-
-                        Join the Innovation Network
-
-                        <i data-lucide="arrow-right"></i>
-
-                    </a>
-
-                </div>
-
-
-                <div class="impact-metrics">
-
-                    <div class="impact-metric">
-
-                        <strong>
-                            428
-                        </strong>
-
-                        <span>
-                            Villages Reached
-                        </span>
-
-                    </div>
-
-
-                    <div class="impact-metric">
-
-                        <strong>
-                            126
-                        </strong>
-
-                        <span>
-                            Solutions Deployed
-                        </span>
-
-                    </div>
-
-
-                    <div class="impact-metric">
-
-                        <strong>
-                            4,821
-                        </strong>
-
-                        <span>
-                            Students Involved
-                        </span>
-
-                    </div>
-
-
-                    <div class="impact-metric">
-
-                        <strong>
-                            18
-                        </strong>
-
-                        <span>
-                            Patents Generated
-                        </span>
-
-                    </div>
-
-
-                    <div class="impact-metric">
-
-                        <strong>
-                            12
-                        </strong>
-
-                        <span>
-                            Startups Created
-                        </span>
-
-                    </div>
-
-
-                    <div class="impact-metric">
-
-                        <strong>
-                            2.8L+
-                        </strong>
-
-                        <span>
-                            People Impacted
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             FINAL CTA
-        ====================================================== -->
-
-        <section class="cta-section">
-
-            <div class="container">
-
-                <div class="cta-card">
-
-                    <div class="cta-content">
-
-                        <span class="section-label">
-                            BE PART OF THE CHANGE
-                        </span>
-
-                        <h2>
-                            Have a problem
-                            worth solving?
-                        </h2>
-
-                        <p>
-                            Your idea could become the next
-                            innovation that changes a community.
-                        </p>
-
-                        <div class="cta-actions">
-
-                            <a href="pages/auth/login.html" class="btn btn-white btn-large">
-
-                                Report a Challenge
-
-                                <i data-lucide="arrow-right"></i>
-
-                            </a>
-
-                            <a href="pages/auth/register.html" class="cta-text-link">
-
-                                Join as a partner
-
-                                <i data-lucide="arrow-up-right"></i>
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                    <div class="cta-decoration">
-
-                        <div class="cta-circle circle-one"></div>
-                        <div class="cta-circle circle-two"></div>
-                        <div class="cta-circle circle-three"></div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- =====================================================
-         FOOTER
-    ====================================================== -->
-
-    <footer class="site-footer">
-
-        <div class="container">
-
-            <div class="footer-grid">
-
-                <div class="footer-brand">
-
-                    <a href="index.html" class="brand">
-
-                        <span class="brand-mark">
-                            <i data-lucide="zap"></i>
-                        </span>
-
-                        <span class="brand-text">
-                            <strong>Jhar</strong>Innovate
-                        </span>
-
-                    </a>
-
-                    <p>
-                        Connecting communities, knowledge and
-                        innovation to build a better Jharkhand.
-                    </p>
-
-                </div>
-
-
-                <div class="footer-column">
-
-                    <h4>
-                        Platform
-                    </h4>
-
-                    <a href="#challenges">
-                        Challenges
-                    </a>
-
-                    <a href="#solutions">
-                        Solutions
-                    </a>
-
-                    <a href="#impact">
-                        Impact
-                    </a>
-
-                    <a href="#how-it-works">
-                        How It Works
-                    </a>
-
-                </div>
-
-
-                <div class="footer-column">
-
-                    <h4>
-                        Participate
-                    </h4>
-
-                    <a href="pages/auth/register.html">
-                        Citizens
-                    </a>
-
-                    <a href="pages/auth/register.html">
-                        Universities
-                    </a>
-
-                    <a href="pages/auth/register.html">
-                        Industry
-                    </a>
-
-                    <a href="pages/auth/register.html">
-                        Government
-                    </a>
-
-                </div>
-
-
-                <div class="footer-column">
-
-                    <h4>
-                        Resources
-                    </h4>
-
-                    <a href="#">
-                        About
-                    </a>
-
-                    <a href="#">
-                        Guidelines
-                    </a>
-
-                    <a href="#">
-                        Privacy
-                    </a>
-
-                    <a href="#">
-                        Contact
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <div class="footer-bottom">
-
-                <span>
-                    © 2026 JharInnovate. Built for Jharkhand.
-                </span>
-
-                <span>
-                    Societal Innovation Collaboration Portal
-                </span>
-
-            </div>
-
         </div>
 
+        <!-- Mobile Menu Drawer -->
+        <div class="mobile-drawer" id="mobileDrawer">
+            <div class="mobile-drawer-header">
+                <a href="index.html" class="brand">
+                    <span class="brand-mark"><i data-lucide="zap"></i></span>
+                    <span class="brand-text"><strong>Jhar</strong>Innovate</span>
+                </a>
+                <button class="mobile-close" id="mobileMenuClose" aria-label="Close navigation menu" type="button">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <nav class="mobile-nav-links">
+                <a href="#how-it-works" class="mobile-nav-link">How It Works</a>
+                <a href="#domains" class="mobile-nav-link">Domains</a>
+                <a href="#ai-intelligence" class="mobile-nav-link">AI Intelligence</a>
+                <a href="#ecosystem" class="mobile-nav-link">Ecosystem</a>
+                <a href="#impact" class="mobile-nav-link">Impact</a>
+            </nav>
+            <div class="mobile-nav-actions">
+                <a href="pages/auth/login.html" class="btn btn-secondary btn-full">Login</a>
+                <a href="pages/auth/login.html?mode=signup" class="btn btn-primary btn-full">Join Platform</a>
+            </div>
+        </div>
+        <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <span class="hero-badge">
+                        <i data-lucide="sparkles"></i> AI-POWERED SOCIETAL PORTAL
+                    </span>
+                    <h1>Turn Local Challenges Into Real Solutions.</h1>
+                    <p>
+                        Connecting Jharkhand's citizens, panchayati raj institutions, universities, and industries to transform community issues into deployed high-impact innovations.
+                    </p>
+                    <div class="hero-cta-group">
+                        <a href="pages/citizen/submit-challenge.html" class="btn btn-primary btn-large">
+                            Report a Challenge <i data-lucide="arrow-right"></i>
+                        </a>
+                        <a href="#domains" class="btn btn-outline btn-large">
+                            Explore Solutions <i data-lucide="compass"></i>
+                        </a>
+                    </div>
+                    <div class="hero-trust">
+                        <span>Trusted by government departments, R&D labs, and 80+ universities across Jharkhand</span>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="hero-card hero-map-card">
+                        <div class="hero-card-header">
+                            <div class="live-dot"></div>
+                            <span>Jharkhand Innovation Stream</span>
+                            <span class="badge badge-success">Live</span>
+                        </div>
+                        <div class="hero-feed">
+                            <div class="feed-item">
+                                <div class="feed-icon primary"><i data-lucide="lightbulb"></i></div>
+                                <div class="feed-text">
+                                    <strong>Smart Water Quality Monitor</strong>
+                                    <span>Deoghar · AI Score 96% Match</span>
+                                </div>
+                                <span class="feed-tag">Validated</span>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-icon green"><i data-lucide="cpu"></i></div>
+                                <div class="feed-text">
+                                    <strong>Solar IoT Irrigation Controller</strong>
+                                    <span>Ranchi · Assigned to BIT Mesra</span>
+                                </div>
+                                <span class="feed-tag success">In Progress</span>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-icon orange"><i data-lucide="book-open"></i></div>
+                                <div class="feed-text">
+                                    <strong>Offline Rural Learning Hub</strong>
+                                    <span>Dumka · EdTech Industry Partner Joined</span>
+                                </div>
+                                <span class="feed-tag warning">Review</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Counter Section -->
+        <section class="stats-section">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <strong class="stat-number" id="statChallenges">12,482+</strong>
+                    <span class="stat-label">Challenges Received</span>
+                </div>
+                <div class="stat-card">
+                    <strong class="stat-number" id="statProjects">1,842+</strong>
+                    <span class="stat-label">Active Projects</span>
+                </div>
+                <div class="stat-card">
+                    <strong class="stat-number" id="statUniversities">86+</strong>
+                    <span class="stat-label">Partner Universities</span>
+                </div>
+                <div class="stat-card">
+                    <strong class="stat-number" id="statPartners">214+</strong>
+                    <span class="stat-label">Industry Partners</span>
+                </div>
+                <div class="stat-card">
+                    <strong class="stat-number" id="statImpact">4,826+</strong>
+                    <span class="stat-label">Resolved Solutions</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="section" id="how-it-works">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-label">WORKFLOW</span>
+                    <h2>How JharInnovate Operates</h2>
+                    <p>From citizen complaint to ground-level deployment through structured collaboration.</p>
+                </div>
+
+                <div class="workflow-grid">
+                    <div class="workflow-step">
+                        <div class="step-number">01</div>
+                        <div class="step-icon"><i data-lucide="send"></i></div>
+                        <h3>01 Report</h3>
+                        <p>Citizens, Panchayats, or ULBs report local problems with location data and evidence photos.</p>
+                    </div>
+                    <div class="workflow-connector"></div>
+                    <div class="workflow-step">
+                        <div class="step-number">02</div>
+                        <div class="step-icon"><i data-lucide="cpu"></i></div>
+                        <h3>02 Analyze</h3>
+                        <p>AI engine classifies category, detects duplicate issues, and prioritizes urgent community needs.</p>
+                    </div>
+                    <div class="workflow-connector"></div>
+                    <div class="workflow-step">
+                        <div class="step-number">03</div>
+                        <div class="step-icon"><i data-lucide="git-merge"></i></div>
+                        <h3>03 Match</h3>
+                        <p>System automatically routes problem statements to matching university labs and faculty mentors.</p>
+                    </div>
+                    <div class="workflow-connector"></div>
+                    <div class="workflow-step">
+                        <div class="step-number">04</div>
+                        <div class="step-icon"><i data-lucide="handshake"></i></div>
+                        <h3>04 Collaborate</h3>
+                        <p>Student teams co-develop prototypes backed by industry mentors, MSMEs, and government funding.</p>
+                    </div>
+                    <div class="workflow-connector"></div>
+                    <div class="workflow-step">
+                        <div class="step-number">05</div>
+                        <div class="step-icon"><i data-lucide="rocket"></i></div>
+                        <h3>05 Deploy</h3>
+                        <p>Field testing, pilot validation, and scale deployment for tangible societal transformation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Challenge Domains Section -->
+        <section class="section section-alt" id="domains">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-label">FOCUS AREAS</span>
+                    <h2>Societal Innovation Domains</h2>
+                    <p>Addressing core developmental challenges across Jharkhand's rural and urban sectors.</p>
+                </div>
+
+                <div class="domain-grid">
+                    <div class="domain-card">
+                        <div class="domain-icon primary"><i data-lucide="book-open"></i></div>
+                        <h3>Education</h3>
+                        <p>Digital learning access, school infrastructure, and skill development for rural youth.</p>
+                        <span class="domain-count">2,480 Challenges</span>
+                    </div>
+                    <div class="domain-card">
+                        <div class="domain-icon green"><i data-lucide="sprout"></i></div>
+                        <h3>Agriculture</h3>
+                        <p>Smart irrigation, soil health diagnostics, storage solutions, and crop advisory systems.</p>
+                        <span class="domain-count">2,860 Challenges</span>
+                    </div>
+                    <div class="domain-card">
+                        <div class="domain-icon red"><i data-lucide="activity"></i></div>
+                        <h3>Healthcare</h3>
+                        <p>Telemedicine, diagnostic tools, emergency response, and maternal health monitoring.</p>
+                        <span class="domain-count">2,140 Challenges</span>
+                    </div>
+                    <div class="domain-card">
+                        <div class="domain-icon blue"><i data-lucide="droplet"></i></div>
+                        <h3>Water Resources</h3>
+                        <p>Drinking water quality testing, rainwater harvesting, and groundwater replenishment.</p>
+                        <span class="domain-count">1,560 Challenges</span>
+                    </div>
+                    <div class="domain-card">
+                        <div class="domain-icon teal"><i data-lucide="trees"></i></div>
+                        <h3>Environment</h3>
+                        <p>Waste management, eco-restoration, mine land reclamation, and air quality tracking.</p>
+                        <span class="domain-count">1,280 Challenges</span>
+                    </div>
+                    <div class="domain-card">
+                        <div class="domain-icon orange"><i data-lucide="zap"></i></div>
+                        <h3>Energy</h3>
+                        <p>Decentralized solar micro-grids, clean cooking energy, and energy efficiency solutions.</p>
+                        <span class="domain-count">940 Challenges</span>
+                    </div>
+                    <div class="domain-card">
+                        <div class="domain-icon purple"><i data-lucide="building"></i></div>
+                        <h3>Infrastructure</h3>
+                        <p>Rural road maintenance, community sanitation facilities, and urban municipal services.</p>
+                        <span class="domain-count">1,222 Challenges</span>
+                    </div>
+                    <div class="domain-card">
+                        <div class="domain-icon pink"><i data-lucide="accessibility"></i></div>
+                        <h3>Accessibility</h3>
+                        <p>Assistive technology and barrier-free infrastructure for elderly & differently-abled citizens.</p>
+                        <span class="domain-count">640 Challenges</span>
+                    </div>
+                    <div class="domain-card">
+                        <div class="domain-icon yellow"><i data-lucide="briefcase"></i></div>
+                        <h3>Rural Livelihoods</h3>
+                        <p>Artisan market linkage, tribal handicraft promotion, and micro-enterprise technology.</p>
+                        <span class="domain-count">870 Challenges</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Intelligence Pipeline Section -->
+        <section class="section" id="ai-intelligence">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-label">SMART AUTOMATION</span>
+                    <h2>AI Intelligence & Matching Engine</h2>
+                    <p>Eliminating bottlenecks by instantly classifying, scoring, and routing challenges to experts.</p>
+                </div>
+
+                <div class="ai-pipeline-container card">
+                    <div class="ai-pipeline-step">
+                        <div class="pipeline-badge"><i data-lucide="file-text"></i> Step 1</div>
+                        <h4>Unstructured Input</h4>
+                        <p>Citizen reports problem in natural language with photos/GPS.</p>
+                    </div>
+                    <div class="ai-pipeline-arrow"><i data-lucide="chevron-right"></i></div>
+
+                    <div class="ai-pipeline-step highlight">
+                        <div class="pipeline-badge primary"><i data-lucide="cpu"></i> Step 2</div>
+                        <h4>NLP & Classification</h4>
+                        <p>AI extracts domain, priority score, and flags duplicate reports.</p>
+                    </div>
+                    <div class="ai-pipeline-arrow"><i data-lucide="chevron-right"></i></div>
+
+                    <div class="ai-pipeline-step">
+                        <div class="pipeline-badge success"><i data-lucide="crosshair"></i> Step 3</div>
+                        <h4>Institutional Matching</h4>
+                        <p>Matches challenge requirements to university faculty skill matrix.</p>
+                    </div>
+                    <div class="ai-pipeline-arrow"><i data-lucide="chevron-right"></i></div>
+
+                    <div class="ai-pipeline-step">
+                        <div class="pipeline-badge info"><i data-lucide="check-circle-2"></i> Step 4</div>
+                        <h4>Validation & Action</h4>
+                        <p>Government authority approves project proposal for R&D funding.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ecosystem Section -->
+        <section class="section section-alt" id="ecosystem">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-label">PARTNERS</span>
+                    <h2>Innovation Ecosystem Stakeholders</h2>
+                    <p>Empowering four key pillars to work synchronously towards sustainable development.</p>
+                </div>
+
+                <div class="ecosystem-grid">
+                    <div class="ecosystem-card card">
+                        <div class="ecosystem-icon"><i data-lucide="users"></i></div>
+                        <h3>Citizens & PRIs</h3>
+                        <p>Submit challenges, provide community feedback, and participate in pilot testing of solutions in local villages.</p>
+                    </div>
+
+                    <div class="ecosystem-card card">
+                        <div class="ecosystem-icon"><i data-lucide="graduation-cap"></i></div>
+                        <h3>Universities & Students</h3>
+                        <p>Faculty mentors and student engineering teams build hardware/software prototypes for real academic credit.</p>
+                    </div>
+
+                    <div class="ecosystem-card card">
+                        <div class="ecosystem-icon"><i data-lucide="landmark"></i></div>
+                        <h3>Government Departments</h3>
+                        <p>Validate incoming challenges, allocate innovation funds, monitor milestones, and deploy finished solutions.</p>
+                    </div>
+
+                    <div class="ecosystem-card card">
+                        <div class="ecosystem-icon"><i data-lucide="building-2"></i></div>
+                        <h3>Industry & Startups</h3>
+                        <p>Provide CSR sponsorship, technical mentorship, manufacturing scale, and commercial adoption of IP.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact Section -->
+        <section class="section" id="impact">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-label">MEASURABLE RESULTS</span>
+                    <h2>Social Impact Across Jharkhand</h2>
+                    <p>Real outcomes created through collaborative innovation.</p>
+                </div>
+
+                <div class="impact-grid">
+                    <div class="impact-card card">
+                        <div class="impact-icon primary"><i data-lucide="map-pin"></i></div>
+                        <strong class="impact-val">1,240+</strong>
+                        <span>Villages Reached</span>
+                    </div>
+                    <div class="impact-card card">
+                        <div class="impact-icon green"><i data-lucide="check-circle-2"></i></div>
+                        <strong class="impact-val">4,826+</strong>
+                        <span>Solutions Deployed</span>
+                    </div>
+                    <div class="impact-card card">
+                        <div class="impact-icon purple"><i data-lucide="user-check"></i></div>
+                        <strong class="impact-val">18,500+</strong>
+                        <span>Students Involved</span>
+                    </div>
+                    <div class="impact-card card">
+                        <div class="impact-icon orange"><i data-lucide="award"></i></div>
+                        <strong class="impact-val">142</strong>
+                        <span>Patents Generated</span>
+                    </div>
+                    <div class="impact-card card">
+                        <div class="impact-icon red"><i data-lucide="rocket"></i></div>
+                        <strong class="impact-val">68</strong>
+                        <span>Startups Incubated</span>
+                    </div>
+                    <div class="impact-card card">
+                        <div class="impact-icon teal"><i data-lucide="heart"></i></div>
+                        <strong class="impact-val">2.4M+</strong>
+                        <span>People Impacted</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="cta-container card">
+                <h2>Ready to Solve Real-World Challenges?</h2>
+                <p>Join Jharkhand's collaborative innovation portal today and turn your ideas or local problems into scalable solutions.</p>
+                <div class="cta-buttons">
+                    <a href="pages/auth/login.html?mode=signup" class="btn btn-primary btn-large">Get Started Now <i data-lucide="arrow-right"></i></a>
+                    <a href="pages/auth/login.html" class="btn btn-secondary btn-large">Sign In</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="brand">
+                    <span class="brand-mark"><i data-lucide="zap"></i></span>
+                    <span class="brand-text"><strong>Jhar</strong>Innovate</span>
+                </a>
+                <p>Societal Innovation Collaboration Portal connecting citizens, government, academia, and industry for sustainable development in Jharkhand.</p>
+            </div>
+
+            <div class="footer-links-group">
+                <div class="footer-col">
+                    <h4>Platform</h4>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#domains">Focus Domains</a>
+                    <a href="#ai-intelligence">AI Pipeline</a>
+                    <a href="#impact">Social Impact</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Portals</h4>
+                    <a href="pages/auth/login.html">Citizen Portal</a>
+                    <a href="pages/auth/login.html">Government Portal</a>
+                    <a href="pages/auth/login.html">University Portal</a>
+                    <a href="pages/auth/login.html">Industry Portal</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Documentation</a>
+                    <a href="#">Help Center</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 JharInnovate Portal. Government of Jharkhand Initiative. All rights reserved.</p>
+        </div>
     </footer>
 
-
-    <!-- JavaScript -->
-
-    <script src="js/pages/landing.js" defer></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-
-        });
-    </script>
-
+    <!-- Global Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/demo-data.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/formatters.js"></script>
+    <script src="js/utils/validators.js"></script>
+    <script src="js/utils/storage.js"></script>
+    <script src="js/components/toast.js"></script>
+    <script src="js/pages/landing.js"></script>
 </body>
-
 </html>

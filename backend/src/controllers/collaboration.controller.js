@@ -71,7 +71,29 @@ const createCollaboration = async (req, res) => {
       }
     });
 
+    if (!payload.type) {
+      payload.type = 'co_development';
+    }
+
     const collaboration = await Collaboration.create(payload);
+
+    await safeNotify(async () => {
+      let recipientUserId = null;
+      if (collaboration.project) {
+        const proj = await Project.findById(collaboration.project);
+        if (proj) recipientUserId = proj.createdBy;
+      }
+      if (recipientUserId && recipientUserId.toString() !== req.user._id.toString()) {
+        await createNotification({
+          recipient: recipientUserId,
+          sender: req.user._id,
+          type: 'collaboration_requested',
+          title: 'New Collaboration Request',
+          message: `A new ${collaboration.type || 'collaboration'} request was submitted by ${req.user.name || 'a platform user'}.`,
+          relatedId: collaboration._id
+        });
+      }
+    });
 
     return successResponse(
       res,
@@ -107,6 +129,8 @@ const getCollaborations = async (req, res) => {
   }
 };
 
+const { createNotification, safeNotify } = require('../services/notification.service');
+
 const acceptCollaboration = async (req, res) => {
   try {
     const collaboration = await Collaboration.findById(req.params.id);
@@ -137,6 +161,19 @@ const acceptCollaboration = async (req, res) => {
       });
     }
 
+    await safeNotify(async () => {
+      if (collaboration.requestedBy) {
+        await createNotification({
+          recipient: collaboration.requestedBy,
+          sender: req.user._id,
+          type: 'collaboration_accepted',
+          title: 'Collaboration Request Accepted',
+          message: `Your collaboration request (${collaboration.type}) was accepted by ${req.user.name || 'the recipient'}.`,
+          relatedId: collaboration._id
+        });
+      }
+    });
+
     return successResponse(res, collaboration, 'Collaboration request accepted', 200);
   } catch (error) {
     return errorResponse(res, error.message, 500);
@@ -160,6 +197,19 @@ const rejectCollaboration = async (req, res) => {
     collaboration.respondedBy = req.user._id;
     collaboration.respondedAt = new Date();
     await collaboration.save();
+
+    await safeNotify(async () => {
+      if (collaboration.requestedBy) {
+        await createNotification({
+          recipient: collaboration.requestedBy,
+          sender: req.user._id,
+          type: 'collaboration_rejected',
+          title: 'Collaboration Request Update',
+          message: `Your collaboration request (${collaboration.type}) was rejected.`,
+          relatedId: collaboration._id
+        });
+      }
+    });
 
     return successResponse(res, collaboration, 'Collaboration request rejected', 200);
   } catch (error) {

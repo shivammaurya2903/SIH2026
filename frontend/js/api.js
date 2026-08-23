@@ -11,36 +11,37 @@ const API = {
             headers.Authorization = `Bearer ${token}`;
         }
 
-        const response = await fetch(`${APP_CONFIG.apiBaseUrl}${endpoint}`, {
-            ...options,
-            headers
-        });
-
-        let data;
-
         try {
-            data = await response.json();
-        } catch {
-            data = {};
-        }
+            const response = await fetch(`${APP_CONFIG.apiBaseUrl}${endpoint}`, {
+                ...options,
+                headers
+            });
 
-        if (!response.ok) {
-            if (response.status === 401) {
-                localStorage.removeItem(APP_CONFIG.storageKeys.token);
-                localStorage.removeItem(APP_CONFIG.storageKeys.user);
-                localStorage.removeItem(APP_CONFIG.storageKeys.role);
+            let data;
+            try {
+                data = await response.json();
+            } catch {
+                data = {};
             }
 
-            throw new Error(data.message || "Something went wrong");
-        }
+            if (!response.ok) {
+                if (response.status === 401) {
+                    localStorage.removeItem(APP_CONFIG.storageKeys.token);
+                    localStorage.removeItem(APP_CONFIG.storageKeys.user);
+                    localStorage.removeItem(APP_CONFIG.storageKeys.role);
+                }
+                throw new Error(data.message || "Request failed");
+            }
 
-        return data;
+            return data;
+        } catch (error) {
+            console.warn(`[API] Failed endpoint ${endpoint}:`, error.message);
+            throw error;
+        }
     },
 
     get(endpoint) {
-        return this.request(endpoint, {
-            method: "GET"
-        });
+        return this.request(endpoint, { method: "GET" });
     },
 
     post(endpoint, data) {
@@ -65,39 +66,39 @@ const API = {
     },
 
     delete(endpoint) {
-        return this.request(endpoint, {
-            method: "DELETE"
-        });
+        return this.request(endpoint, { method: "DELETE" });
     },
 
     async upload(endpoint, formData) {
         const token = localStorage.getItem(APP_CONFIG.storageKeys.token);
-
         const headers = {};
-
         if (token) {
             headers.Authorization = `Bearer ${token}`;
         }
 
-        const response = await fetch(`${APP_CONFIG.apiBaseUrl}${endpoint}`, {
-            method: "POST",
-            headers,
-            body: formData
-        });
-
-        let data;
-
         try {
-            data = await response.json();
-        } catch {
-            data = {};
-        }
+            const response = await fetch(`${APP_CONFIG.apiBaseUrl}${endpoint}`, {
+                method: "POST",
+                headers,
+                body: formData
+            });
 
-        if (!response.ok) {
-            throw new Error(data.message || "Upload failed");
-        }
+            let data;
+            try {
+                data = await response.json();
+            } catch {
+                data = {};
+            }
 
-        return data;
+            if (!response.ok) {
+                throw new Error(data.message || "Upload failed");
+            }
+
+            return data;
+        } catch (error) {
+            console.warn(`[API Upload] Failed endpoint ${endpoint}:`, error.message);
+            throw error;
+        }
     }
 };
 

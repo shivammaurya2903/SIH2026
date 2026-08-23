@@ -46,13 +46,10 @@ const proposalSchema = new mongoose.Schema(
       type: Number,
       default: 1
     },
-    documents: [
-      {
-        name: String,
-        url: String,
-        type: String
-      }
-    ],
+    documents: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: []
+    },
     status: {
       type: String,
       enum: ['submitted', 'under_review', 'approved', 'rejected'],

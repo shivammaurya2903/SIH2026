@@ -1,80 +1,523 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Login to JharInnovate">
+
+    <meta
+        name="description"
+        content="Login to JharInnovate Societal Innovation Collaboration Portal"
+    >
+
     <title>Login | JharInnovate</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
     <link rel="stylesheet" href="../../css/variables.css">
     <link rel="stylesheet" href="../../css/main.css">
     <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/layout.css">
-    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/pages/auth.css">
+
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
-    <main>
-        <section class="auth-page">
-            <div class="auth-container">
-                <a href="../../index.html" class="brand">
-                    <span class="brand-mark"><i data-lucide="zap"></i></span>
-                    <span class="brand-text"><strong>Jhar</strong>Innovate</span>
-                </a>
 
-                <div class="auth-card">
-                    <div class="auth-heading">
-                        <span class="section-label">WELCOME BACK</span>
-                        <h1>Sign in to your account</h1>
-                        <p>Access your innovation workspace and continue making an impact.</p>
+<body class="auth-page">
+
+    <main class="auth-wrapper" id="authWrapper">
+
+        <a href="../../index.html" class="auth-back">
+            <i data-lucide="arrow-left"></i>
+            Back to home
+        </a>
+
+        <div class="auth-container">
+
+            <div class="auth-forms">
+
+                <section class="auth-form-panel login-panel">
+
+                    <div class="auth-form-content">
+
+                        <div class="auth-brand">
+                            <span class="auth-brand-mark">
+                                <i data-lucide="zap"></i>
+                            </span>
+
+                            <span>
+                                <strong>Jhar</strong>Innovate
+                            </span>
+                        </div>
+
+                        <h1>Welcome Back!</h1>
+
+                        <p>
+                            Sign in to continue your journey
+                            of creating social impact.
+                        </p>
+
+                        <div class="auth-socials">
+
+                            <button
+                                type="button"
+                                class="auth-social"
+                                aria-label="Continue with Google"
+                            >
+                                <i data-lucide="chrome"></i>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="auth-social"
+                                aria-label="Continue with Facebook"
+                            >
+                                <i data-lucide="facebook"></i>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="auth-social"
+                                aria-label="Continue with GitHub"
+                            >
+                                <i data-lucide="github"></i>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="auth-social"
+                                aria-label="Continue with LinkedIn"
+                            >
+                                <i data-lucide="linkedin"></i>
+                            </button>
+
+                        </div>
+
+                        <div class="auth-divider">
+                            or use your account
+                        </div>
+
+                        <form
+                            class="auth-form"
+                            id="loginForm"
+                            novalidate
+                        >
+
+                            <div class="auth-input-group">
+                                <input
+                                    type="email"
+                                    id="loginEmail"
+                                    name="email"
+                                    class="auth-input"
+                                    placeholder="Email"
+                                    autocomplete="email"
+                                    required
+                                >
+                            </div>
+
+                            <div class="auth-input-group auth-password-wrapper">
+
+                                <input
+                                    type="password"
+                                    id="loginPassword"
+                                    name="password"
+                                    class="auth-input"
+                                    placeholder="Password"
+                                    autocomplete="current-password"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    class="password-toggle"
+                                    data-target="loginPassword"
+                                    aria-label="Show password"
+                                >
+                                    <i data-lucide="eye"></i>
+                                </button>
+
+                            </div>
+
+                            <div class="auth-options">
+
+                                <label class="auth-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        id="rememberMe"
+                                    >
+                                    <span>Remember me</span>
+                                </label>
+
+                                <a
+                                    href="#"
+                                    class="auth-link"
+                                    id="forgotPassword"
+                                >
+                                    Forgot password?
+                                </a>
+
+                            </div>
+
+                            <div
+                                class="auth-error"
+                                id="loginError"
+                            ></div>
+
+                            <button
+                                type="submit"
+                                class="auth-submit"
+                                id="loginButton"
+                            >
+                                <span>Sign In</span>
+                                <i data-lucide="arrow-right"></i>
+                            </button>
+
+                        </form>
+
+                        <div class="auth-mobile-switch">
+                            Don't have an account?
+                            <button type="button" data-switch="signup">
+                                Sign Up
+                            </button>
+                        </div>
+
                     </div>
 
-                    <form id="loginForm">
-                        <div class="form-group">
-                            <label for="email">Email address</label>
-                            <input id="email" name="email" type="email" placeholder="you@example.com" required>
+                </section>
+
+                <section class="auth-form-panel signup-panel">
+
+                    <div class="auth-form-content">
+
+                        <div class="auth-brand">
+                            <span class="auth-brand-mark">
+                                <i data-lucide="zap"></i>
+                            </span>
+
+                            <span>
+                                <strong>Jhar</strong>Innovate
+                            </span>
                         </div>
 
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input id="password" name="password" type="password" placeholder="Enter your password" required>
+                        <h1>Create Account</h1>
+
+                        <p>
+                            Join the innovation network and help
+                            solve real-world challenges.
+                        </p>
+
+                        <div class="auth-socials">
+
+                            <button
+                                type="button"
+                                class="auth-social"
+                                aria-label="Register with Google"
+                            >
+                                <i data-lucide="chrome"></i>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="auth-social"
+                                aria-label="Register with Facebook"
+                            >
+                                <i data-lucide="facebook"></i>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="auth-social"
+                                aria-label="Register with GitHub"
+                            >
+                                <i data-lucide="github"></i>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="auth-social"
+                                aria-label="Register with LinkedIn"
+                            >
+                                <i data-lucide="linkedin"></i>
+                            </button>
+
                         </div>
 
-                        <div class="form-options">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="remember">
-                                <span>Remember me</span>
+                        <div class="auth-divider">
+                            or use your email for registration
+                        </div>
+
+                        <form
+                            class="auth-form"
+                            id="registerForm"
+                            novalidate
+                        >
+
+                            <input
+                                type="text"
+                                id="registerName"
+                                name="name"
+                                class="auth-input"
+                                placeholder="Full Name"
+                                autocomplete="name"
+                                required
+                            >
+
+                            <input
+                                type="email"
+                                id="registerEmail"
+                                name="email"
+                                class="auth-input"
+                                placeholder="Email"
+                                autocomplete="email"
+                                required
+                            >
+
+                            <input
+                                type="tel"
+                                id="registerPhone"
+                                name="phone"
+                                class="auth-input"
+                                placeholder="Phone Number"
+                                autocomplete="tel"
+                            >
+
+                            <select
+                                id="registerRole"
+                                name="role"
+                                class="auth-input"
+                                required
+                            >
+                                <option value="">
+                                    Select your role
+                                </option>
+                                <option value="citizen">
+                                    Citizen
+                                </option>
+                                <option value="government">
+                                    Government
+                                </option>
+                                <option value="university">
+                                    University
+                                </option>
+                                <option value="industry">
+                                    Industry
+                                </option>
+                            </select>
+
+                            <div class="auth-password-wrapper">
+
+                                <input
+                                    type="password"
+                                    id="registerPassword"
+                                    name="password"
+                                    class="auth-input"
+                                    placeholder="Password"
+                                    autocomplete="new-password"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    class="password-toggle"
+                                    data-target="registerPassword"
+                                    aria-label="Show password"
+                                >
+                                    <i data-lucide="eye"></i>
+                                </button>
+
+                            </div>
+
+                            <div class="auth-password-wrapper">
+
+                                <input
+                                    type="password"
+                                    id="registerConfirmPassword"
+                                    name="confirmPassword"
+                                    class="auth-input"
+                                    placeholder="Confirm Password"
+                                    autocomplete="new-password"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    class="password-toggle"
+                                    data-target="registerConfirmPassword"
+                                    aria-label="Show password"
+                                >
+                                    <i data-lucide="eye"></i>
+                                </button>
+
+                            </div>
+
+                            <label class="auth-checkbox">
+                                <input
+                                    type="checkbox"
+                                    id="terms"
+                                    required
+                                >
+
+                                <span>
+                                    I agree to the platform terms
+                                    and privacy policy
+                                </span>
                             </label>
 
-                            <a href="#">Forgot password?</a>
+                            <div
+                                class="auth-error"
+                                id="registerError"
+                            ></div>
+
+                            <button
+                                type="submit"
+                                class="auth-submit"
+                                id="registerButton"
+                            >
+                                <span>Sign Up</span>
+                                <i data-lucide="arrow-right"></i>
+                            </button>
+
+                        </form>
+
+                        <div class="auth-mobile-switch">
+                            Already have an account?
+                            <button type="button" data-switch="login">
+                                Sign In
+                            </button>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-large auth-submit">
-                            Sign In
-                            <i data-lucide="arrow-right"></i>
-                        </button>
-                    </form>
-
-                    <div class="auth-divider">
-                        <span>OR</span>
                     </div>
 
-                    <p class="auth-footer">
-                        Don't have an account?
-                        <a href="register.html">Create account</a>
-                    </p>
-                </div>
+                </section>
+
             </div>
-        </section>
+
+            <div class="auth-overlay">
+
+                <div class="auth-overlay-inner">
+
+                    <section class="auth-side">
+
+                        <div class="auth-side-content">
+
+                            <div class="auth-side-logo">
+                                <i data-lucide="users"></i>
+                            </div>
+
+                            <h2>Welcome Back!</h2>
+
+                            <p>
+                                Enter your personal details to
+                                continue your journey with
+                                JharInnovate and collaborate on
+                                meaningful societal solutions.
+                            </p>
+
+                            <button
+                                type="button"
+                                class="auth-side-button"
+                                data-switch="login"
+                            >
+                                SIGN IN
+                            </button>
+
+                            <div class="auth-feature-list">
+
+                                <div class="auth-feature">
+                                    <i data-lucide="users"></i>
+                                    Communities
+                                </div>
+
+                                <div class="auth-feature">
+                                    <i data-lucide="school"></i>
+                                    Universities
+                                </div>
+
+                                <div class="auth-feature">
+                                    <i data-lucide="handshake"></i>
+                                    Industry
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <section class="auth-side">
+
+                        <div class="auth-side-content">
+
+                            <div class="auth-side-logo">
+                                <i data-lucide="rocket"></i>
+                            </div>
+
+                            <h2>Join JharInnovate!</h2>
+
+                            <p>
+                                Create your account and become
+                                part of Jharkhand's growing
+                                societal innovation ecosystem.
+                            </p>
+
+                            <button
+                                type="button"
+                                class="auth-side-button"
+                                data-switch="signup"
+                            >
+                                SIGN UP
+                            </button>
+
+                            <div class="auth-feature-list">
+
+                                <div class="auth-feature">
+                                    <i data-lucide="lightbulb"></i>
+                                    Innovate
+                                </div>
+
+                                <div class="auth-feature">
+                                    <i data-lucide="users"></i>
+                                    Collaborate
+                                </div>
+
+                                <div class="auth-feature">
+                                    <i data-lucide="heart-handshake"></i>
+                                    Impact
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </main>
 
+    <script src="../../js/config.js"></script>
+    <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            lucide.createIcons();
-        });
-    </script>
+    <script src="../../js/demo-data.js"></script>
+
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/formatters.js"></script>
+    <script src="../../js/utils/validators.js"></script>
+    <script src="../../js/utils/storage.js"></script>
+
+    <script src="../../js/components/toast.js"></script>
+
+    <script src="../../js/pages/auth.js"></script>
+
 </body>
+
 </html>

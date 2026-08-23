@@ -1,6 +1,7 @@
 const {
   getUserNotifications,
-  markAsRead
+  markAsRead,
+  markAllAsRead
 } = require('../services/notification.service');
 const { successResponse, errorResponse } = require('../utils/response');
 
@@ -25,7 +26,7 @@ const markNotificationAsRead = async (req, res) => {
     );
 
     if (!notification) {
-      return errorResponse(res, 'Notification not found', 404);
+      return errorResponse(res, 'Notification not found or access denied', 404);
     }
 
     return successResponse(res, notification, 'Notification marked as read', 200);
@@ -34,7 +35,23 @@ const markNotificationAsRead = async (req, res) => {
   }
 };
 
+const markAllNotificationsAsRead = async (req, res) => {
+  try {
+    const result = await markAllAsRead(req.user._id);
+
+    return successResponse(
+      res,
+      { modifiedCount: result.modifiedCount },
+      'All notifications marked as read',
+      200
+    );
+  } catch (error) {
+    return errorResponse(res, error.message, 500);
+  }
+};
+
 module.exports = {
   getNotifications,
-  markNotificationAsRead
+  markNotificationAsRead,
+  markAllNotificationsAsRead
 };

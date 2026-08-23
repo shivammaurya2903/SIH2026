@@ -1,36 +1,40 @@
 :root {
-    --primary: #155eef;
-    --primary-dark: #1049b5;
-    --primary-light: #eef4ff;
+    --primary: #155EEF;
+    --primary-dark: #1049B5;
+    --primary-light: #EEF4FF;
 
-    --teal: #087f6c;
-    --teal-light: #e8f7f3;
+    --secondary: #4F46E5;
+    --secondary-light: #EEF2FF;
 
-    --orange: #f59e0b;
-    --orange-light: #fff7e6;
+    --accent: #6B3BBD;
+    --accent-light: #F5F3FF;
 
-    --green: #16a34a;
-    --green-light: #ecfdf3;
+    --teal: #087F6C;
+    --teal-light: #E8F7F3;
 
-    --red: #dc3545;
-    --red-light: #fff1f2;
+    --orange: #F79009;
+    --orange-light: #FFF7E6;
 
-    --purple: #7c3aed;
-    --purple-light: #f5f3ff;
+    --green: #12B76A;
+    --green-light: #ECFDF3;
 
-    --blue-light: #eff6ff;
+    --red: #F04438;
+    --red-light: #FFF1F2;
 
-    --background: #f7f9fc;
-    --surface: #ffffff;
-    --surface-soft: #f9fafb;
+    --purple: #6B3BBD;
+    --purple-light: #F5F3FF;
 
-    --text: #172033;
+    --background: #F8FAFC;
+    --surface: #FFFFFF;
+    --surface-soft: #F9FAFB;
+
+    --text: #111827;
     --text-dark: #101828;
     --text-secondary: #667085;
-    --text-light: #98a2b3;
+    --text-light: #98A2B3;
 
-    --border: #e5e7eb;
-    --border-light: #eef0f3;
+    --border: #E4E7EC;
+    --border-light: #EEF0F3;
 
     --font-family: "Inter", sans-serif;
 
@@ -83,4 +87,3 @@
         --header-height: 64px;
     }
 }
-

@@ -397,118 +397,39 @@ const DEMO_DATA = {
 
     analytics: {
         domains: [
-            {
-                label: "Education",
-                value: 2480,
-                percentage: 20
-            },
-            {
-                label: "Healthcare",
-                value: 2140,
-                percentage: 17
-            },
-            {
-                label: "Agriculture",
-                value: 2860,
-                percentage: 23
-            },
-            {
-                label: "Water",
-                value: 1560,
-                percentage: 12
-            },
-            {
-                label: "Environment",
-                value: 1280,
-                percentage: 10
-            },
-            {
-                label: "Energy",
-                value: 940,
-                percentage: 8
-            },
-            {
-                label: "Infrastructure",
-                value: 1222,
-                percentage: 10
-            }
+            { label: "Education", value: 2480, percentage: 20 },
+            { label: "Healthcare", value: 2140, percentage: 17 },
+            { label: "Agriculture", value: 2860, percentage: 23 },
+            { label: "Water", value: 1560, percentage: 12 },
+            { label: "Environment", value: 1280, percentage: 10 },
+            { label: "Energy", value: 940, percentage: 8 },
+            { label: "Infrastructure", value: 1222, percentage: 10 }
         ],
 
-        projectStatus: [
-            {
-                label: "Review",
-                value: 38
-            },
-            {
-                label: "Research",
-                value: 62
-            },
-            {
-                label: "Prototype",
-                value: 48
-            },
-            {
-                label: "Pilot",
-                value: 35
-            },
-            {
-                label: "Deployment",
-                value: 22
-            }
+        projects: [
+            { label: "Review", value: 38 },
+            { label: "Research", value: 62 },
+            { label: "Prototype", value: 48 },
+            { label: "Pilot", value: 35 },
+            { label: "Deployment", value: 22 }
         ],
 
         impact: [
-            {
-                label: "Ranchi",
-                value: 8400
-            },
-            {
-                label: "Dhanbad",
-                value: 9100
-            },
-            {
-                label: "Bokaro",
-                value: 6800
-            },
-            {
-                label: "Dumka",
-                value: 6200
-            },
-            {
-                label: "Deoghar",
-                value: 5700
-            },
-            {
-                label: "Gumla",
-                value: 4300
-            }
+            { label: "Ranchi", value: 8400 },
+            { label: "Dhanbad", value: 9100 },
+            { label: "Bokaro", value: 6800 },
+            { label: "Dumka", value: 6200 },
+            { label: "Deoghar", value: 5700 },
+            { label: "Gumla", value: 4300 }
         ],
 
         monthlyChallenges: [
-            {
-                month: "Mar",
-                value: 620
-            },
-            {
-                month: "Apr",
-                value: 840
-            },
-            {
-                month: "May",
-                value: 980
-            },
-            {
-                month: "Jun",
-                value: 1120
-            },
-            {
-                month: "Jul",
-                value: 1340
-            },
-            {
-                month: "Aug",
-                value: 1580
-            }
+            { month: "Mar", value: 620 },
+            { month: "Apr", value: 840 },
+            { month: "May", value: 980 },
+            { month: "Jun", value: 1120 },
+            { month: "Jul", value: 1340 },
+            { month: "Aug", value: 1580 }
         ]
     },
 
@@ -554,7 +475,7 @@ const DEMO_DATA = {
         "Water",
         "Environment",
         "Energy",
-        "Urban Development",
+        "Infrastructure",
         "Accessibility",
         "Public Administration",
         "Rural Livelihood"
@@ -579,37 +500,14 @@ const DEMO_DATA = {
     ]
 };
 
-function getDemoChallenges() {
-    return DEMO_DATA.challenges;
-}
-
-function getDemoProjects() {
-    return DEMO_DATA.projects;
-}
-
-function getDemoTeams() {
-    return DEMO_DATA.teams;
-}
-
-function getDemoDistricts() {
-    return DEMO_DATA.districts;
-}
-
-function getDemoAnalytics() {
-    return DEMO_DATA.analytics;
-}
-
-function getDemoNotifications() {
-    return DEMO_DATA.notifications;
-}
-
-function getDemoUser() {
-    return DEMO_DATA.user;
-}
-
-function getDemoStats() {
-    return DEMO_DATA.stats;
-}
+function getDemoChallenges() { return DEMO_DATA.challenges; }
+function getDemoProjects() { return DEMO_DATA.projects; }
+function getDemoTeams() { return DEMO_DATA.teams; }
+function getDemoDistricts() { return DEMO_DATA.districts; }
+function getDemoAnalytics() { return DEMO_DATA.analytics; }
+function getDemoNotifications() { return DEMO_DATA.notifications; }
+function getDemoUser() { return DEMO_DATA.user; }
+function getDemoStats() { return DEMO_DATA.stats; }
 
 window.DEMO_DATA = DEMO_DATA;
 window.getDemoChallenges = getDemoChallenges;

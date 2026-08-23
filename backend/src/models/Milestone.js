@@ -49,20 +49,14 @@ const milestoneSchema = new mongoose.Schema(
       max: 100,
       default: 0
     },
-    deliverables: [
-      {
-        name: String,
-        url: String,
-        type: String
-      }
-    ],
-    documents: [
-      {
-        name: String,
-        url: String,
-        type: String
-      }
-    ],
+    deliverables: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: []
+    },
+    documents: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: []
+    },
     remarks: String
   },
   {

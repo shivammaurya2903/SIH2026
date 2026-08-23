@@ -3,81 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Join JharInnovate">
+    <meta name="description" content="Join JharInnovate - Societal Innovation Collaboration Portal">
     <title>Register | JharInnovate</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="../../css/variables.css">
     <link rel="stylesheet" href="../../css/main.css">
     <link rel="stylesheet" href="../../css/components.css">
     <link rel="stylesheet" href="../../css/layout.css">
     <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/pages/auth.css">
+    
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
-    <main>
-        <section class="auth-page">
-            <div class="auth-container">
-                <a href="../../index.html" class="brand">
-                    <span class="brand-mark"><i data-lucide="zap"></i></span>
-                    <span class="brand-text"><strong>Jhar</strong>Innovate</span>
-                </a>
+<body class="auth-page">
+    <main class="auth-wrapper register-standalone" id="authWrapper">
+        <a href="../../index.html" class="auth-back">
+            <i data-lucide="arrow-left"></i>
+            Back to home
+        </a>
 
-                <div class="auth-card">
-                    <div class="auth-heading">
-                        <span class="section-label">JOIN THE NETWORK</span>
-                        <h1>Create your account</h1>
-                        <p>Choose your role and become part of Jharkhand's innovation ecosystem.</p>
+        <div class="auth-container">
+            <div class="auth-card standalone-card card">
+                <div class="auth-brand">
+                    <span class="auth-brand-mark"><i data-lucide="zap"></i></span>
+                    <span class="brand-text"><strong>Jhar</strong>Innovate</span>
+                </div>
+
+                <div class="auth-heading">
+                    <span class="section-label">JOIN THE NETWORK</span>
+                    <h1>Create your account</h1>
+                    <p>Select your role and become part of Jharkhand's innovation ecosystem.</p>
+                </div>
+
+                <form id="registerForm" class="auth-form" novalidate>
+                    <div class="form-group auth-input-group">
+                        <label for="registerName">Full Name</label>
+                        <input id="registerName" name="name" type="text" class="auth-input" placeholder="Your full name" required>
                     </div>
 
-                    <form id="registerForm">
-                        <div class="form-group">
-                            <label for="name">Full name</label>
-                            <input id="name" name="name" type="text" placeholder="Your full name" required>
-                        </div>
+                    <div class="form-group auth-input-group">
+                        <label for="registerEmail">Email Address</label>
+                        <input id="registerEmail" name="email" type="email" class="auth-input" placeholder="you@example.com" required>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="registerEmail">Email address</label>
-                            <input id="registerEmail" name="email" type="email" placeholder="you@example.com" required>
-                        </div>
+                    <div class="form-group auth-input-group">
+                        <label for="registerPhone">Phone Number</label>
+                        <input id="registerPhone" name="phone" type="tel" class="auth-input" placeholder="10-digit mobile number">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="role">I am joining as</label>
-                            <select id="role" name="role" required>
-                                <option value="">Select your role</option>
-                                <option value="citizen">Citizen</option>
-                                <option value="government">Government</option>
-                                <option value="university">University</option>
-                                <option value="industry">Industry</option>
-                            </select>
-                        </div>
+                    <div class="form-group auth-input-group">
+                        <label for="registerRole">I am joining as</label>
+                        <select id="registerRole" name="role" class="auth-input" required>
+                            <option value="">Select your role</option>
+                            <option value="citizen">Citizen</option>
+                            <option value="government">Government</option>
+                            <option value="university">University</option>
+                            <option value="industry">Industry</option>
+                        </select>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="registerPassword">Password</label>
-                            <input id="registerPassword" name="password" type="password" placeholder="Create a password" required>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-large auth-submit">
-                            Create Account
-                            <i data-lucide="arrow-right"></i>
+                    <div class="form-group auth-input-group auth-password-wrapper">
+                        <label for="registerPassword">Password</label>
+                        <input id="registerPassword" name="password" type="password" class="auth-input" placeholder="Create a password" required>
+                        <button type="button" class="password-toggle" data-target="registerPassword" aria-label="Show password">
+                            <i data-lucide="eye"></i>
                         </button>
-                    </form>
+                    </div>
 
-                    <p class="auth-footer">
-                        Already have an account?
-                        <a href="login.html">Sign in</a>
-                    </p>
-                </div>
+                    <div class="form-group auth-input-group auth-password-wrapper">
+                        <label for="registerConfirmPassword">Confirm Password</label>
+                        <input id="registerConfirmPassword" name="confirmPassword" type="password" class="auth-input" placeholder="Confirm password" required>
+                        <button type="button" class="password-toggle" data-target="registerConfirmPassword" aria-label="Show password">
+                            <i data-lucide="eye"></i>
+                        </button>
+                    </div>
+
+                    <label class="auth-checkbox">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <span>I agree to the Terms and Privacy Policy</span>
+                    </label>
+
+                    <div class="auth-error" id="registerError"></div>
+
+                    <button type="submit" class="auth-submit btn btn-primary btn-large" id="registerButton">
+                        <span>Create Account</span>
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                </form>
+
+                <p class="auth-footer">
+                    Already have an account?
+                    <a href="login.html">Sign in</a>
+                </p>
             </div>
-        </section>
+        </div>
     </main>
 
+    <script src="../../js/config.js"></script>
+    <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            lucide.createIcons();
-        });
-    </script>
+    <script src="../../js/demo-data.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/formatters.js"></script>
+    <script src="../../js/utils/validators.js"></script>
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/components/toast.js"></script>
+    <script src="../../js/pages/auth.js"></script>
 </body>
 </html>

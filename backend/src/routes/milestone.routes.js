@@ -10,6 +10,7 @@ const {
 const { protect } = require('../middleware/auth.middleware');
 const { authorize } = require('../middleware/role.middleware');
 const { validateObjectId } = require('../middleware/validation.middleware');
+const { upload, handleUploadError } = require('../middleware/upload.middleware');
 
 const router = express.Router({ mergeParams: true });
 
@@ -20,6 +21,8 @@ router.post(
   '/',
   protect,
   authorize('government', 'admin', 'university', 'faculty'),
+  upload.array('deliverables', 10),
+  handleUploadError,
   createMilestone
 );
 
@@ -28,6 +31,8 @@ router.put(
   protect,
   authorize('government', 'admin', 'university', 'faculty'),
   validateObjectId('id'),
+  upload.array('deliverables', 10),
+  handleUploadError,
   updateMilestone
 );
 

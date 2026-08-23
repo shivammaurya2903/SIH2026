@@ -77,13 +77,10 @@ const projectSchema = new mongoose.Schema(
         default: 0
       }
     },
-    documents: [
-      {
-        name: String,
-        url: String,
-        type: String
-      }
-    ]
+    documents: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: []
+    }
   },
   {
     timestamps: true

@@ -20,9 +20,28 @@ const notificationSchema = new mongoose.Schema(
         'proposal',
         'collaboration',
         'milestone',
-        'system'
+        'system',
+        'challenge_submitted',
+        'challenge_approved',
+        'challenge_rejected',
+        'proposal_submitted',
+        'proposal_approved',
+        'proposal_rejected',
+        'project_created',
+        'project_status_changed',
+        'team_member_added',
+        'team_member_removed',
+        'mentor_assigned',
+        'milestone_created',
+        'milestone_completed',
+        'collaboration_requested',
+        'collaboration_accepted',
+        'collaboration_rejected',
+        'info',
+        'warning',
+        'error'
       ],
-      required: true
+      default: 'system'
     },
     title: {
       type: String,

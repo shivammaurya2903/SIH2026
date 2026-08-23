@@ -5,11 +5,7 @@ const Auth = {
 
     getUser() {
         const user = localStorage.getItem(APP_CONFIG.storageKeys.user);
-
-        if (!user) {
-            return null;
-        }
-
+        if (!user) return null;
         try {
             return JSON.parse(user);
         } catch {
@@ -29,14 +25,12 @@ const Auth = {
         if (data.token) {
             localStorage.setItem(APP_CONFIG.storageKeys.token, data.token);
         }
-
         if (data.user) {
             localStorage.setItem(
                 APP_CONFIG.storageKeys.user,
                 JSON.stringify(data.user)
             );
         }
-
         if (data.user?.role) {
             localStorage.setItem(
                 APP_CONFIG.storageKeys.role,
@@ -50,92 +44,36 @@ const Auth = {
         localStorage.removeItem(APP_CONFIG.storageKeys.user);
         localStorage.removeItem(APP_CONFIG.storageKeys.role);
 
-        window.location.href = "../../index.html";
+        const currentPath = window.location.pathname;
+        if (currentPath.includes("/pages/")) {
+            window.location.href = "../../index.html";
+        } else {
+            window.location.href = "index.html";
+        }
     },
 
     redirectByRole(role) {
-        const routes = {
-            citizen: "../citizen/dashboard.html",
-            government: "../government/dashboard.html",
-            university: "../university/dashboard.html",
-            industry: "../industry/dashboard.html",
-            admin: "../admin/dashboard.html"
+        const userRole = role || this.getRole() || "citizen";
+        const currentPath = window.location.pathname;
+
+        const rolePages = {
+            citizen: "pages/citizen/dashboard.html",
+            government: "pages/government/dashboard.html",
+            university: "pages/university/dashboard.html",
+            industry: "pages/industry/dashboard.html",
+            admin: "pages/admin/dashboard.html"
         };
 
-        window.location.href = routes[role] || "../../index.html";
+        const page = rolePages[userRole] || rolePages.citizen;
+
+        if (currentPath.includes("/pages/auth/")) {
+            window.location.href = `../${userRole}/dashboard.html`;
+        } else if (currentPath.includes("/pages/")) {
+            window.location.href = `../../${page}`;
+        } else {
+            window.location.href = page;
+        }
     }
 };
-
-async function handleLogin(event) {
-    event.preventDefault();
-
-    const form = event.currentTarget;
-    const email = form.email.value.trim();
-    const password = form.password.value;
-
-    try {
-        const response = await API.post("/auth/login", {
-            email,
-            password
-        });
-
-        Auth.saveSession(response);
-
-        Toast.success("Login successful");
-
-        setTimeout(() => {
-            Auth.redirectByRole(response.user?.role);
-        }, 500);
-    } catch (error) {
-        Toast.error(error.message);
-    }
-}
-
-async function handleRegister(event) {
-    event.preventDefault();
-
-    const form = event.currentTarget;
-
-    const data = {
-        name: form.name.value.trim(),
-        email: form.email.value.trim(),
-        role: form.role.value,
-        password: form.password.value
-    };
-
-    try {
-        const response = await API.post("/auth/register", data);
-
-        if (response.token) {
-            Auth.saveSession(response);
-            Toast.success("Account created successfully");
-
-            setTimeout(() => {
-                Auth.redirectByRole(response.user?.role);
-            }, 500);
-        } else {
-            Toast.success("Account created. Please login.");
-
-            setTimeout(() => {
-                window.location.href = "login.html";
-            }, 700);
-        }
-    } catch (error) {
-        Toast.error(error.message);
-    }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
-
-    if (loginForm) {
-        loginForm.addEventListener("submit", handleLogin);
-    }
-
-    if (registerForm) {
-        registerForm.addEventListener("submit", handleRegister);
-    }
-});
 
 window.Auth = Auth;

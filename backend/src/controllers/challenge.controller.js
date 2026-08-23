@@ -1,8 +1,11 @@
 const Challenge = require('../models/Challenge');
 const University = require('../models/University');
 const Industry = require('../models/Industry');
+const User = require('../models/User');
 const { analyzeChallenge: runAIAnalysis, detectDuplicates } = require('../services/ai.service');
 const { matchUniversities, matchIndustries } = require('../services/matching.service');
+const { createNotification, createBulkNotifications, safeNotify } = require('../services/notification.service');
+const { extractUploadedFiles } = require('../services/file.service');
 const { successResponse, errorResponse } = require('../utils/response');
 
 const createChallenge = async (req, res) => {
@@ -13,7 +16,6 @@ const createChallenge = async (req, res) => {
       'category',
       'subCategory',
       'location',
-      'attachments',
       'expectedOutcome'
     ];
 
@@ -30,7 +32,41 @@ const createChallenge = async (req, res) => {
       }
     });
 
+    if (typeof payload.location === 'string') {
+      try {
+        payload.location = JSON.parse(payload.location);
+      } catch (e) {
+        payload.location = { district: payload.location };
+      }
+    }
+
+    if (!payload.location || !payload.location.district) {
+      const districtVal = req.body.district || req.body['location[district]'] || 'Ranchi';
+      payload.location = {
+        district: districtVal,
+        ...(typeof payload.location === 'object' ? payload.location : {})
+      };
+    }
+
+    const fileAttachments = extractUploadedFiles(req, 'attachments');
+    if (fileAttachments.length > 0) {
+      payload.attachments = fileAttachments;
+    }
+
     const challenge = await Challenge.create(payload);
+
+    await safeNotify(async () => {
+      const govUsers = await User.find({ role: { $in: ['government', 'admin'] } }).select('_id');
+      const govUserIds = govUsers.map((u) => u._id);
+      await createBulkNotifications({
+        recipients: govUserIds,
+        sender: req.user._id,
+        type: 'challenge_submitted',
+        title: 'New Societal Challenge Submitted',
+        message: `Challenge "${challenge.title}" was submitted by ${req.user.name || 'a citizen'} for review.`,
+        relatedId: challenge._id
+      });
+    });
 
     return successResponse(res, challenge, 'Challenge submitted successfully', 201);
   } catch (error) {
@@ -119,7 +155,6 @@ const updateChallenge = async (req, res) => {
       'category',
       'subCategory',
       'location',
-      'attachments',
       'expectedOutcome'
     ];
 
@@ -128,6 +163,11 @@ const updateChallenge = async (req, res) => {
         challenge[field] = req.body[field];
       }
     });
+
+    const fileAttachments = extractUploadedFiles(req, 'attachments');
+    if (fileAttachments.length > 0) {
+      challenge.attachments = [...(challenge.attachments || []), ...fileAttachments];
+    }
 
     await challenge.save();
 
@@ -217,6 +257,19 @@ const approveChallenge = async (req, res) => {
       return errorResponse(res, 'Challenge not found', 404);
     }
 
+    await safeNotify(async () => {
+      if (challenge.submittedBy) {
+        await createNotification({
+          recipient: challenge.submittedBy,
+          sender: req.user._id,
+          type: 'challenge_approved',
+          title: 'Challenge Approved',
+          message: `Your submitted challenge "${challenge.title}" has been approved by government officials.`,
+          relatedId: challenge._id
+        });
+      }
+    });
+
     return successResponse(res, challenge, 'Challenge approved successfully', 200);
   } catch (error) {
     return errorResponse(res, error.message, 500);
@@ -238,6 +291,19 @@ const rejectChallenge = async (req, res) => {
     if (!challenge) {
       return errorResponse(res, 'Challenge not found', 404);
     }
+
+    await safeNotify(async () => {
+      if (challenge.submittedBy) {
+        await createNotification({
+          recipient: challenge.submittedBy,
+          sender: req.user._id,
+          type: 'challenge_rejected',
+          title: 'Challenge Status Update',
+          message: `Your submitted challenge "${challenge.title}" was reviewed. Status: Rejected.`,
+          relatedId: challenge._id
+        });
+      }
+    });
 
     return successResponse(res, challenge, 'Challenge rejected successfully', 200);
   } catch (error) {

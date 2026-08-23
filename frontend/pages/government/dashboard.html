@@ -30,7 +30,7 @@
                         <h1>Dashboard Overview</h1>
                         <p>Monitor challenges, projects and social impact across Jharkhand.</p>
                     </div>
-                    <button class="btn btn-primary">
+                    <button class="btn btn-primary" type="button" onclick="window.Toast ? Toast.info('Generating PDF Report...') : null">
                         <i data-lucide="download"></i>
                         Export Report
                     </button>
@@ -108,11 +108,27 @@
         </div>
     </div>
 
+    <!-- Global Scripts -->
+    <script src="../../js/config.js"></script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/demo-data.js"></script>
+
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/formatters.js"></script>
+    <script src="../../js/utils/validators.js"></script>
+    <script src="../../js/utils/storage.js"></script>
+    <script src="../../js/utils/debounce.js"></script>
+    <script src="../../js/utils/permissions.js"></script>
+
+    <script src="../../js/components/toast.js"></script>
+    <script src="../../js/components/modal.js"></script>
+    <script src="../../js/components/sidebar.js"></script>
+    <script src="../../js/components/header.js"></script>
+    <script src="../../js/components/table.js"></script>
+
     <script src="../../js/navigation.js"></script>
-    <script src="../../js/pages/dashboard.js"></script>
     <script src="../../js/pages/map.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
-    </script>
+    <script src="../../js/pages/dashboard.js"></script>
 </body>
 </html>

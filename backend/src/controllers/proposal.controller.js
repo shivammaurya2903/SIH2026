@@ -2,7 +2,10 @@ const Proposal = require('../models/Proposal');
 const Challenge = require('../models/Challenge');
 const Project = require('../models/Project');
 const University = require('../models/University');
+const User = require('../models/User');
 const projectService = require('../services/project.service');
+const { createNotification, createBulkNotifications, safeNotify } = require('../services/notification.service');
+const { extractUploadedFiles } = require('../services/file.service');
 const { successResponse, errorResponse } = require('../utils/response');
 
 const createProposal = async (req, res) => {
@@ -42,8 +45,7 @@ const createProposal = async (req, res) => {
       'requiredResources',
       'technologies',
       'estimatedBudget',
-      'durationInMonths',
-      'documents'
+      'durationInMonths'
     ];
 
     const payload = {
@@ -59,7 +61,25 @@ const createProposal = async (req, res) => {
       }
     });
 
+    const fileDocs = extractUploadedFiles(req, 'documents', req.body.documents);
+    if (fileDocs.length > 0) {
+      payload.documents = fileDocs;
+    }
+
     const proposal = await Proposal.create(payload);
+
+    await safeNotify(async () => {
+      const govUsers = await User.find({ role: { $in: ['government', 'admin'] } }).select('_id');
+      const govUserIds = govUsers.map((u) => u._id);
+      await createBulkNotifications({
+        recipients: govUserIds,
+        sender: req.user._id,
+        type: 'proposal_submitted',
+        title: 'New Solution Proposal Submitted',
+        message: `Proposal "${proposal.title}" was submitted for challenge "${challenge.title}".`,
+        relatedId: proposal._id
+      });
+    });
 
     return successResponse(res, proposal, 'Proposal submitted successfully', 201);
   } catch (error) {
@@ -122,10 +142,23 @@ const approveProposal = async (req, res) => {
       req.user._id
     );
 
-    if (req.body.reviewComment) {
+    if (req.body && req.body.reviewComment) {
       proposal.reviewComment = req.body.reviewComment;
       await proposal.save();
     }
+
+    await safeNotify(async () => {
+      if (proposal.submittedBy) {
+        await createNotification({
+          recipient: proposal.submittedBy,
+          sender: req.user._id,
+          type: 'proposal_approved',
+          title: 'Proposal Approved',
+          message: `Your proposal "${proposal.title}" has been approved! Project "${project.title}" has been initialized.`,
+          relatedId: project._id
+        });
+      }
+    });
 
     return successResponse(
       res,
@@ -160,6 +193,19 @@ const rejectProposal = async (req, res) => {
     if (!proposal) {
       return errorResponse(res, 'Proposal not found', 404);
     }
+
+    await safeNotify(async () => {
+      if (proposal.submittedBy) {
+        await createNotification({
+          recipient: proposal.submittedBy,
+          sender: req.user._id,
+          type: 'proposal_rejected',
+          title: 'Proposal Review Update',
+          message: `Your proposal "${proposal.title}" was reviewed. Status: Rejected.`,
+          relatedId: proposal._id
+        });
+      }
+    });
 
     return successResponse(res, proposal, 'Proposal rejected successfully', 200);
   } catch (error) {

@@ -4,6 +4,7 @@ const User = require('../models/User');
 const University = require('../models/University');
 const Industry = require('../models/Industry');
 const projectService = require('../services/project.service');
+const { createNotification, safeNotify } = require('../services/notification.service');
 const { successResponse, errorResponse } = require('../utils/response');
 
 const ALLOWED_MEMBER_ROLES = ['leader', 'student', 'faculty', 'researcher', 'industry_mentor'];
@@ -158,7 +159,8 @@ const updateTeam = async (req, res) => {
 
 const addMember = async (req, res) => {
   try {
-    const { user: memberUserId, role, responsibilities } = req.body;
+    const memberUserId = req.body.user || req.body.userId;
+    const { role, responsibilities } = req.body;
     if (!memberUserId) {
       return errorResponse(res, 'User ID is required for team member', 400);
     }
@@ -194,6 +196,17 @@ const addMember = async (req, res) => {
 
     await team.save();
 
+    await safeNotify(async () => {
+      await createNotification({
+        recipient: memberUserId,
+        sender: req.user._id,
+        type: 'team_member_added',
+        title: 'Added to Multidisciplinary Team',
+        message: `You have been added to team "${team.name}" as a ${targetRole}.`,
+        relatedId: team._id
+      });
+    });
+
     return successResponse(res, team, 'Team member added successfully', 200);
   } catch (error) {
     return errorResponse(res, error.message, 500);
@@ -222,6 +235,17 @@ const removeMember = async (req, res) => {
     }
 
     await team.save();
+
+    await safeNotify(async () => {
+      await createNotification({
+        recipient: memberUserId,
+        sender: req.user._id,
+        type: 'team_member_removed',
+        title: 'Team Update',
+        message: `You were removed from team "${team.name}".`,
+        relatedId: team._id
+      });
+    });
 
     return successResponse(res, team, 'Team member removed successfully', 200);
   } catch (error) {
@@ -258,6 +282,17 @@ const assignFacultyMentor = async (req, res) => {
       await Project.findByIdAndUpdate(team.project, { facultyMentor: facultyMentorId });
     }
 
+    await safeNotify(async () => {
+      await createNotification({
+        recipient: facultyMentorId,
+        sender: req.user._id,
+        type: 'mentor_assigned',
+        title: 'Assigned as Faculty Mentor',
+        message: `You have been assigned as Faculty Mentor for team "${team.name}".`,
+        relatedId: team._id
+      });
+    });
+
     return successResponse(res, team, 'Faculty mentor assigned to team successfully', 200);
   } catch (error) {
     return errorResponse(res, error.message, 500);
@@ -288,6 +323,17 @@ const assignIndustryMentor = async (req, res) => {
 
     team.industryMentor = industryMentorId;
     await team.save();
+
+    await safeNotify(async () => {
+      await createNotification({
+        recipient: industryMentorId,
+        sender: req.user._id,
+        type: 'mentor_assigned',
+        title: 'Assigned as Industry Mentor',
+        message: `You have been assigned as Industry Mentor for team "${team.name}".`,
+        relatedId: team._id
+      });
+    });
 
     return successResponse(res, team, 'Industry mentor assigned to team successfully', 200);
   } catch (error) {

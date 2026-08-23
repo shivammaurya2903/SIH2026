@@ -9,6 +9,7 @@ const {
 const { protect } = require('../middleware/auth.middleware');
 const { authorize } = require('../middleware/role.middleware');
 const { validateObjectId } = require('../middleware/validation.middleware');
+const { upload, handleUploadError } = require('../middleware/upload.middleware');
 
 const router = express.Router();
 
@@ -19,6 +20,8 @@ router.post(
   '/',
   protect,
   authorize('university', 'faculty', 'student', 'admin'),
+  upload.array('documents', 10),
+  handleUploadError,
   createProposal
 );
 router.patch(

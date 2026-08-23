@@ -56,14 +56,10 @@ const challengeSchema = new mongoose.Schema(
       latitude: Number,
       longitude: Number
     },
-    attachments: [
-      {
-        name: String,
-        url: String,
-        type: String,
-        size: Number
-      }
-    ],
+    attachments: {
+      type: [mongoose.Schema.Types.Mixed],
+      default: []
+    },
     status: {
       type: String,
       enum: [
@@ -190,5 +186,9 @@ challengeSchema.index({
 challengeSchema.index({
   'location.district': 1
 });
+
+if (mongoose.models.Challenge) {
+  delete mongoose.models.Challenge;
+}
 
 module.exports = mongoose.model('Challenge', challengeSchema);

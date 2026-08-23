@@ -2,6 +2,8 @@ const Milestone = require('../models/Milestone');
 const Project = require('../models/Project');
 const University = require('../models/University');
 const Industry = require('../models/Industry');
+const { createNotification, createBulkNotifications, safeNotify } = require('../services/notification.service');
+const { extractUploadedFiles } = require('../services/file.service');
 const { successResponse, errorResponse } = require('../utils/response');
 
 const ALLOWED_MILESTONE_STATUSES = ['pending', 'in_progress', 'completed', 'blocked', 'delayed'];
@@ -39,8 +41,8 @@ const canUserAccessProjectMilestones = async (project, user) => {
 
 const createMilestone = async (req, res) => {
   try {
+    const targetProjectId = req.body.project || req.params.projectId;
     const {
-      project: projectId,
       title,
       description,
       dueDate,
@@ -54,11 +56,11 @@ const createMilestone = async (req, res) => {
       status
     } = req.body;
 
-    if (!title || !projectId) {
+    if (!title || !targetProjectId) {
       return errorResponse(res, 'Milestone title and project ID are required', 400);
     }
 
-    const project = await Project.findById(projectId);
+    const project = await Project.findById(targetProjectId);
     if (!project) {
       return errorResponse(res, 'Target project not found', 404);
     }
@@ -83,21 +85,37 @@ const createMilestone = async (req, res) => {
       completedAt = new Date();
     }
 
+    const uploadedDeliverables = extractUploadedFiles(req, 'deliverables', deliverables || documents || []);
+
     const milestone = await Milestone.create({
-      project: projectId,
+      project: targetProjectId,
       title,
       description: description || '',
       dueDate,
       startDate,
       assignedMembers: assignedMembers || assignedTo || [],
       assignedTo: assignedTo || assignedMembers || [],
-      deliverables: deliverables || [],
-      documents: documents || [],
+      deliverables: uploadedDeliverables,
+      documents: uploadedDeliverables,
       completionPercentage: initialPercentage === 100 ? 100 : initialPercentage,
       progress: initialPercentage === 100 ? 100 : initialPercentage,
       status: targetStatus,
       completedAt,
       createdBy: req.user._id
+    });
+
+    await safeNotify(async () => {
+      const assignedIds = milestone.assignedMembers || [];
+      if (assignedIds.length > 0) {
+        await createBulkNotifications({
+          recipients: assignedIds,
+          sender: req.user._id,
+          type: 'milestone_created',
+          title: 'New Milestone Assigned',
+          message: `You have been assigned to milestone "${milestone.title}" in project "${project.title}".`,
+          relatedId: milestone._id
+        });
+      }
     });
 
     return successResponse(res, milestone, 'Milestone created successfully', 201);
@@ -273,6 +291,19 @@ const updateMilestoneStatus = async (req, res) => {
     }
 
     await milestone.save();
+
+    await safeNotify(async () => {
+      if (milestone.status === 'completed' && project.createdBy) {
+        await createNotification({
+          recipient: project.createdBy,
+          sender: req.user._id,
+          type: 'milestone_completed',
+          title: 'Milestone Completed',
+          message: `Milestone "${milestone.title}" in project "${project.title}" has been marked as completed.`,
+          relatedId: milestone._id
+        });
+      }
+    });
 
     return successResponse(res, milestone, 'Milestone status updated successfully', 200);
   } catch (error) {

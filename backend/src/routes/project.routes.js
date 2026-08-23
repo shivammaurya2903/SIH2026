@@ -10,6 +10,7 @@ const milestoneRoutes = require('./milestone.routes');
 const { protect } = require('../middleware/auth.middleware');
 const { authorize } = require('../middleware/role.middleware');
 const { validateObjectId } = require('../middleware/validation.middleware');
+const { upload, handleUploadError } = require('../middleware/upload.middleware');
 
 const router = express.Router();
 
@@ -29,6 +30,8 @@ router.put(
   protect,
   authorize('government', 'admin', 'university', 'faculty', 'industry'),
   validateObjectId('id'),
+  upload.array('documents', 10),
+  handleUploadError,
   updateProject
 );
 router.patch(
@@ -36,6 +39,8 @@ router.patch(
   protect,
   authorize('government', 'admin', 'university', 'faculty', 'industry'),
   validateObjectId('id'),
+  upload.array('documents', 10),
+  handleUploadError,
   updateProject
 );
 router.delete(

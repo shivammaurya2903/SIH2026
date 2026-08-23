@@ -3,99 +3,84 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function loadDashboardData() {
-    const role = Auth.getRole();
+    const role = (window.Auth && Auth.getRole()) || "citizen";
 
     if (role === "citizen") {
         await loadCitizenDashboard();
-    }
-
-    if (role === "government") {
+    } else if (role === "government") {
         await loadGovernmentDashboard();
-    }
-
-    if (role === "university") {
+    } else if (role === "university") {
         await loadUniversityDashboard();
-    }
-
-    if (role === "industry") {
+    } else if (role === "industry") {
         await loadIndustryDashboard();
-    }
-
-    if (role === "admin") {
+    } else if (role === "admin") {
         await loadAdminDashboard();
     }
 }
 
 async function loadCitizenDashboard() {
     const container = document.getElementById("citizenChallenges");
-
-    if (!container) {
-        return;
-    }
+    if (!container) return;
 
     try {
         const response = await API.get("/challenges/my");
-
         renderChallengeItems(container, response.data || response);
     } catch {
-        renderChallengeItems(container, getDemoChallenges());
+        renderChallengeItems(container, window.getDemoChallenges ? getDemoChallenges() : []);
     }
 }
 
 async function loadGovernmentDashboard() {
     const container = document.getElementById("governmentChallenges");
-
-    if (!container) {
-        return;
-    }
+    if (!container) return;
 
     try {
         const response = await API.get("/challenges");
-
         renderChallengeItems(container, response.data || response);
     } catch {
-        renderChallengeItems(container, getDemoChallenges());
+        renderChallengeItems(container, window.getDemoChallenges ? getDemoChallenges() : []);
     }
 }
 
 async function loadUniversityDashboard() {
     const container = document.getElementById("universityChallenges");
+    const progressContainer = document.getElementById("universityProgress");
 
-    if (!container) {
-        return;
+    if (container) {
+        try {
+            const response = await API.get("/challenges/recommended");
+            renderChallengeItems(container, response.data || response);
+        } catch {
+            renderChallengeItems(container, window.getDemoChallenges ? getDemoChallenges() : []);
+        }
     }
 
-    try {
-        const response = await API.get("/challenges/recommended");
-
-        renderChallengeItems(container, response.data || response);
-    } catch {
-        renderChallengeItems(container, getDemoChallenges());
+    if (progressContainer) {
+        renderProjectItems(progressContainer, window.getDemoProjects ? getDemoProjects() : []);
     }
 }
 
 async function loadIndustryDashboard() {
     const container = document.getElementById("industryOpportunities");
+    const collabContainer = document.getElementById("industryCollaborations");
 
-    if (!container) {
-        return;
+    if (container) {
+        try {
+            const response = await API.get("/projects/opportunities");
+            renderProjectItems(container, response.data || response);
+        } catch {
+            renderProjectItems(container, window.getDemoProjects ? getDemoProjects() : []);
+        }
     }
 
-    try {
-        const response = await API.get("/projects/opportunities");
-
-        renderProjectItems(container, response.data || response);
-    } catch {
-        renderProjectItems(container, getDemoProjects());
+    if (collabContainer) {
+        renderProjectItems(collabContainer, window.getDemoProjects ? getDemoProjects().slice(0, 3) : []);
     }
 }
 
 async function loadAdminDashboard() {
     const container = document.getElementById("adminOverview");
-
-    if (!container) {
-        return;
-    }
+    if (!container) return;
 
     container.innerHTML = `
         <div class="insight-list">
@@ -131,24 +116,25 @@ async function loadAdminDashboard() {
         </div>
     `;
 
-    lucide.createIcons();
+    if (window.lucide) {
+        lucide.createIcons();
+    }
 }
 
 function renderChallengeItems(container, challenges) {
     if (!challenges?.length) {
         container.innerHTML = `
-            <div class="table-empty">
-                <i data-lucide="inbox"></i>
-                <p>No challenges found</p>
+            <div class="table-empty card" style="padding:40px;text-align:center">
+                <i data-lucide="inbox" style="width:36px;height:36px;color:var(--text-light)"></i>
+                <p style="margin-top:12px;color:var(--text-secondary)">No challenges found</p>
             </div>
         `;
-
-        lucide.createIcons();
+        if (window.lucide) lucide.createIcons();
         return;
     }
 
     container.innerHTML = challenges.slice(0, 6).map(challenge => `
-        <div class="challenge-item">
+        <div class="challenge-item card" style="margin-bottom:12px;padding:16px">
             <div class="challenge-main">
                 <div class="challenge-topline">
                     <span class="challenge-id">
@@ -186,12 +172,23 @@ function renderChallengeItems(container, challenges) {
         </div>
     `).join("");
 
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
 }
 
 function renderProjectItems(container, projects) {
+    if (!projects?.length) {
+        container.innerHTML = `
+            <div class="table-empty card" style="padding:40px;text-align:center">
+                <i data-lucide="rocket" style="width:36px;height:36px;color:var(--text-light)"></i>
+                <p style="margin-top:12px;color:var(--text-secondary)">No projects found</p>
+            </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+    }
+
     container.innerHTML = projects.slice(0, 5).map(project => `
-        <div class="challenge-item">
+        <div class="challenge-item card" style="margin-bottom:12px;padding:16px">
             <div class="challenge-main">
                 <div class="challenge-topline">
                     <span class="badge badge-primary">
@@ -208,57 +205,11 @@ function renderProjectItems(container, projects) {
 
             <div class="challenge-action">
                 <span class="badge badge-success">
-                    ${project.status || "Open"}
+                    ${project.status || "Active"}
                 </span>
             </div>
         </div>
     `).join("");
 
-    lucide.createIcons();
-}
-
-function getDemoChallenges() {
-    return [
-        {
-            id: "#JH-10482",
-            title: "Smart Irrigation for Rural Farmers",
-            category: "Agriculture",
-            district: "Ranchi",
-            status: "In Progress",
-            description: "Develop an affordable irrigation monitoring solution for rural farming communities."
-        },
-        {
-            id: "#JH-10476",
-            title: "Digital Learning Access",
-            category: "Education",
-            district: "Dumka",
-            status: "Under Review",
-            description: "Improve access to digital learning resources in rural schools."
-        },
-        {
-            id: "#JH-10471",
-            title: "Village Water Quality Monitoring",
-            category: "Water",
-            district: "Deoghar",
-            status: "Validated",
-            description: "Create an accessible system for monitoring local water quality."
-        }
-    ];
-}
-
-function getDemoProjects() {
-    return [
-        {
-            title: "AI Crop Advisory Platform",
-            category: "Agriculture",
-            status: "Open",
-            description: "Industry partner needed for AI infrastructure and deployment."
-        },
-        {
-            title: "Rural Healthcare Assistant",
-            category: "Healthcare",
-            status: "Open",
-            description: "Seeking technology and implementation partner."
-        }
-    ];
+    if (window.lucide) lucide.createIcons();
 }
