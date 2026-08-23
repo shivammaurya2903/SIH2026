@@ -7,9 +7,14 @@ const teamSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
+    description: {
+      type: String,
+      trim: true
+    },
     project: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Project'
+      ref: 'Project',
+      required: true
     },
     university: {
       type: mongoose.Schema.Types.ObjectId,
@@ -19,15 +24,34 @@ const teamSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
+    industryMentor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    status: {
+      type: String,
+      enum: ['active', 'inactive', 'disbanded'],
+      default: 'active'
+    },
     members: [
       {
         user: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User'
+          ref: 'User',
+          required: true
         },
         role: {
           type: String,
-          enum: ['leader', 'student', 'researcher', 'faculty']
+          enum: ['leader', 'student', 'faculty', 'researcher', 'industry_mentor'],
+          default: 'student'
+        },
+        responsibilities: {
+          type: String,
+          trim: true
         },
         joinedAt: {
           type: Date,

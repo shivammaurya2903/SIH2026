@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Districts | JharInnovate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/variables.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/pages/dashboard.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar"></aside>
+        <div class="dashboard-main">
+            <header class="dashboard-header" id="header"></header>
+            <main class="dashboard-content">
+                <div class="page-header">
+                    <div>
+                        <span class="section-label">STATE NETWORK</span>
+                        <h1>Districts</h1>
+                        <p>Explore innovation activity across Jharkhand districts.</p>
+                    </div>
+                </div>
+
+                <section class="card dashboard-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Jharkhand District Map</h2>
+                            <p>Click a district to view detailed information.</p>
+                        </div>
+                    </div>
+                    <div id="districtMap" class="large-map"></div>
+                </section>
+
+                <div class="district-grid" id="districtCards"></div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../js/navigation.js"></script>
+    <script src="../../js/pages/map.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
+    </script>
+</body>
+</html>

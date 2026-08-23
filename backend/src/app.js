@@ -17,6 +17,8 @@ const collaborationRoutes = require('./routes/collaboration.routes');
 const notificationRoutes = require('./routes/notification.routes');
 const analyticsRoutes = require('./routes/analytics.routes');
 const impactRoutes = require('./routes/impact.routes');
+const teamRoutes = require('./routes/team.routes');
+const milestoneRoutes = require('./routes/milestone.routes');
 
 const { notFound, errorHandler } = require('./middleware/error.middleware');
 
@@ -95,6 +97,8 @@ app.use('/api/collaborations', collaborationRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/impact', impactRoutes);
+app.use('/api/teams', teamRoutes);
+app.use('/api/milestones', milestoneRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

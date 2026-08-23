@@ -1,7 +1,7 @@
 const Project = require('../models/Project');
-const Challenge = require('../models/Challenge');
 const University = require('../models/University');
 const Industry = require('../models/Industry');
+const projectService = require('../services/project.service');
 const { successResponse, errorResponse } = require('../utils/response');
 
 const ALLOWED_PROJECT_FIELDS = [
@@ -65,14 +65,7 @@ const createProject = async (req, res) => {
       }
     });
 
-    const project = await Project.create(payload);
-
-    if (project.challenge) {
-      await Challenge.findByIdAndUpdate(project.challenge, {
-        project: project._id,
-        status: 'in_progress'
-      });
-    }
+    const project = await projectService.createProject(payload);
 
     return successResponse(res, project, 'Project created successfully', 201);
   } catch (error) {
@@ -88,13 +81,7 @@ const getProjects = async (req, res) => {
     if (req.query.industry) filter.industry = req.query.industry;
     if (req.query.challenge) filter.challenge = req.query.challenge;
 
-    const projects = await Project.find(filter)
-      .populate('challenge', 'title category status location')
-      .populate('university', 'name district')
-      .populate('industry', 'name type')
-      .populate('team')
-      .populate('facultyMentor', 'name email role')
-      .sort({ createdAt: -1 });
+    const projects = await projectService.getProjects(filter);
 
     return successResponse(res, projects, 'Projects retrieved successfully', 200);
   } catch (error) {
@@ -104,12 +91,7 @@ const getProjects = async (req, res) => {
 
 const getProject = async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id)
-      .populate('challenge')
-      .populate('university')
-      .populate('industry')
-      .populate('team')
-      .populate('facultyMentor', 'name email role');
+    const project = await projectService.getProjectById(req.params.id);
 
     if (!project) {
       return errorResponse(res, 'Project not found', 404);
@@ -123,13 +105,13 @@ const getProject = async (req, res) => {
 
 const updateProject = async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id);
+    const rawProject = await Project.findById(req.params.id);
 
-    if (!project) {
+    if (!rawProject) {
       return errorResponse(res, 'Project not found', 404);
     }
 
-    const isAuthorized = await canUserAccessProject(project, req.user);
+    const isAuthorized = await canUserAccessProject(rawProject, req.user);
     if (!isAuthorized) {
       return errorResponse(res, 'Forbidden: You are not authorized to update this project', 403);
     }
@@ -151,36 +133,18 @@ const updateProject = async (req, res) => {
       'documents'
     ];
 
+    const updates = {};
     updatableFields.forEach((field) => {
       if (req.body[field] !== undefined) {
-        project[field] = req.body[field];
+        updates[field] = req.body[field];
       }
     });
 
-    await project.save();
+    const updatedProject = await projectService.updateProject(req.params.id, updates, rawProject);
 
-    if (req.body.status && project.challenge) {
-      const challengeStatus = String(req.body.status).toLowerCase();
-      const validChallengeStatuses = [
-        'in_progress',
-        'prototype',
-        'testing',
-        'pilot',
-        'deployed',
-        'completed',
-        'on_hold',
-        'cancelled'
-      ];
-      if (validChallengeStatuses.includes(challengeStatus)) {
-        await Challenge.findByIdAndUpdate(project.challenge, {
-          status: challengeStatus
-        });
-      }
-    }
-
-    return successResponse(res, project, 'Project updated successfully', 200);
+    return successResponse(res, updatedProject, 'Project updated successfully', 200);
   } catch (error) {
-    return errorResponse(res, error.message, 500);
+    return errorResponse(res, error.message, error.message.includes('Invalid project status') ? 400 : 500);
   }
 };
 
@@ -199,7 +163,7 @@ const deleteProject = async (req, res) => {
       return errorResponse(res, 'Forbidden: You are not authorized to delete this project', 403);
     }
 
-    await project.deleteOne();
+    await projectService.deleteProject(req.params.id);
 
     return successResponse(res, null, 'Project deleted successfully', 200);
   } catch (error) {

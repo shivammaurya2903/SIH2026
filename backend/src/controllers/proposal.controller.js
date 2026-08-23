@@ -2,6 +2,7 @@ const Proposal = require('../models/Proposal');
 const Challenge = require('../models/Challenge');
 const Project = require('../models/Project');
 const University = require('../models/University');
+const projectService = require('../services/project.service');
 const { successResponse, errorResponse } = require('../utils/response');
 
 const createProposal = async (req, res) => {
@@ -111,47 +112,27 @@ const approveProposal = async (req, res) => {
       return errorResponse(res, 'Only government or admin can approve proposals', 403);
     }
 
-    const proposal = await Proposal.findById(req.params.id).populate('challenge');
+    const proposal = await Proposal.findById(req.params.id);
     if (!proposal) {
       return errorResponse(res, 'Proposal not found', 404);
     }
 
-    proposal.status = 'approved';
-    proposal.reviewedBy = req.user._id;
-    proposal.reviewedAt = new Date();
-    proposal.reviewComment = req.body.reviewComment || proposal.reviewComment || '';
+    const { project, alreadyExisted } = await projectService.createProjectFromProposal(
+      proposal._id,
+      req.user._id
+    );
 
-    let project = await Project.findOne({ challenge: proposal.challenge._id });
-    if (!project) {
-      project = await Project.create({
-        title: proposal.title,
-        description: proposal.proposedSolution || proposal.problemStatement,
-        challenge: proposal.challenge._id,
-        university: proposal.university,
-        createdBy: req.user._id,
-        status: 'planning',
-        budget: {
-          estimated: proposal.estimatedBudget || 0,
-          allocated: proposal.estimatedBudget || 0,
-          spent: 0
-        },
-        technologies: proposal.technologies || []
-      });
+    if (req.body.reviewComment) {
+      proposal.reviewComment = req.body.reviewComment;
+      await proposal.save();
     }
-
-    proposal.project = project._id;
-    await proposal.save();
-
-    await Challenge.findByIdAndUpdate(proposal.challenge._id, {
-      status: 'assigned',
-      assignedUniversity: proposal.university,
-      project: project._id
-    });
 
     return successResponse(
       res,
-      { proposal, project },
-      'Proposal approved and linked to project successfully',
+      { proposal, project, alreadyExisted },
+      alreadyExisted
+        ? 'Proposal approved. Linked to pre-existing project.'
+        : 'Proposal approved and project created successfully',
       200
     );
   } catch (error) {

@@ -13,19 +13,35 @@ const milestoneSchema = new mongoose.Schema(
       trim: true
     },
     description: String,
+    assignedMembers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
     assignedTo: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
       }
     ],
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
     startDate: Date,
     dueDate: Date,
     completedAt: Date,
     status: {
       type: String,
-      enum: ['pending', 'in_progress', 'completed', 'delayed'],
+      enum: ['pending', 'in_progress', 'completed', 'blocked', 'delayed'],
       default: 'pending'
+    },
+    completionPercentage: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: 0
     },
     progress: {
       type: Number,
@@ -34,6 +50,13 @@ const milestoneSchema = new mongoose.Schema(
       default: 0
     },
     deliverables: [
+      {
+        name: String,
+        url: String,
+        type: String
+      }
+    ],
+    documents: [
       {
         name: String,
         url: String,

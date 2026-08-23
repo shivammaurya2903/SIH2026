@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Challenge | JharInnovate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/variables.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/pages/challenges.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar"></aside>
+
+        <div class="dashboard-main">
+            <header class="dashboard-header" id="header"></header>
+
+            <main class="dashboard-content">
+                <div class="page-header">
+                    <div>
+                        <span class="section-label">COMMUNITY INPUT</span>
+                        <h1>Report a Challenge</h1>
+                        <p>Tell us about a problem that needs an innovative solution.</p>
+                    </div>
+                </div>
+
+                <form id="challengeForm" class="challenge-form card">
+                    <div class="form-section">
+                        <h2>Challenge Information</h2>
+                        <p>Provide clear information about the problem.</p>
+
+                        <div class="form-grid">
+                            <div class="form-group full">
+                                <label for="title">Challenge title</label>
+                                <input id="title" name="title" type="text" placeholder="Enter a clear title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="category">Domain</label>
+                                <select id="category" name="category" required>
+                                    <option value="">Select domain</option>
+                                    <option>Education</option>
+                                    <option>Healthcare</option>
+                                    <option>Agriculture</option>
+                                    <option>Water</option>
+                                    <option>Environment</option>
+                                    <option>Energy</option>
+                                    <option>Infrastructure</option>
+                                    <option>Accessibility</option>
+                                    <option>Public Administration</option>
+                                    <option>Rural Livelihoods</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="district">District</label>
+                                <select id="district" name="district" required>
+                                    <option value="">Select district</option>
+                                    <option>Ranchi</option>
+                                    <option>East Singhbhum</option>
+                                    <option>Dhanbad</option>
+                                    <option>Deoghar</option>
+                                    <option>Dumka</option>
+                                    <option>Bokaro</option>
+                                    <option>Hazaribagh</option>
+                                    <option>Giridih</option>
+                                    <option>Palamu</option>
+                                    <option>Gumla</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full">
+                                <label for="description">Problem description</label>
+                                <textarea id="description" name="description" rows="7" placeholder="Describe the problem, who is affected and why it matters." required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <input id="location" name="location" type="text" placeholder="Village, town or locality">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="priority">Priority</label>
+                                <select id="priority" name="priority">
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="critical">Critical</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2>Evidence</h2>
+                        <p>Add photographs, videos or supporting documents.</p>
+
+                        <label class="upload-area" for="evidence">
+                            <i data-lucide="cloud-upload"></i>
+                            <strong>Upload evidence</strong>
+                            <span>Images, videos or documents</span>
+                            <input id="evidence" name="evidence" type="file" multiple hidden>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="dashboard.html" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            Submit Challenge
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../js/navigation.js"></script>
+    <script src="../../js/pages/challenges.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Dashboard | JharInnovate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/variables.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/pages/dashboard.css">
+    <link rel="stylesheet" href="../../css/pages/analytics.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar"></aside>
+
+        <div class="dashboard-main">
+            <header class="dashboard-header" id="header"></header>
+
+            <main class="dashboard-content">
+                <div class="page-header">
+                    <div>
+                        <span class="section-label">GOVERNMENT PORTAL</span>
+                        <h1>Dashboard Overview</h1>
+                        <p>Monitor challenges, projects and social impact across Jharkhand.</p>
+                    </div>
+                    <button class="btn btn-primary">
+                        <i data-lucide="download"></i>
+                        Export Report
+                    </button>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="dashboard-stat card"><span class="stat-icon primary"><i data-lucide="layers"></i></span><div><strong>12,482</strong><span>Total Challenges</span></div></div>
+                    <div class="dashboard-stat card"><span class="stat-icon green"><i data-lucide="rocket"></i></span><div><strong>1,842</strong><span>Active Projects</span></div></div>
+                    <div class="dashboard-stat card"><span class="stat-icon purple"><i data-lucide="university"></i></span><div><strong>32</strong><span>Universities</span></div></div>
+                    <div class="dashboard-stat card"><span class="stat-icon orange"><i data-lucide="handshake"></i></span><div><strong>76</strong><span>Industry Partners</span></div></div>
+                </div>
+
+                <div class="dashboard-grid map-dashboard-grid">
+                    <section class="card dashboard-panel">
+                        <div class="panel-header">
+                            <div>
+                                <h2>Jharkhand Innovation Map</h2>
+                                <p>Challenge distribution across districts.</p>
+                            </div>
+                            <a href="districts.html" class="text-link">Explore map <i data-lucide="arrow-up-right"></i></a>
+                        </div>
+                        <div id="governmentMap" class="dashboard-map"></div>
+                    </section>
+
+                    <section class="card dashboard-panel">
+                        <div class="panel-header">
+                            <div>
+                                <h2>AI Intelligence</h2>
+                                <p>Platform insights.</p>
+                            </div>
+                            <span class="badge badge-primary">AI</span>
+                        </div>
+                        <div class="insight-list">
+                            <div><span class="insight-icon primary"><i data-lucide="sparkles"></i></span><div><strong>48</strong><span>Challenges analyzed</span></div></div>
+                            <div><span class="insight-icon orange"><i data-lucide="alert-triangle"></i></span><div><strong>18</strong><span>High-priority challenges</span></div></div>
+                            <div><span class="insight-icon red"><i data-lucide="copy-check"></i></span><div><strong>12</strong><span>Potential duplicates</span></div></div>
+                            <div><span class="insight-icon green"><i data-lucide="route"></i></span><div><strong>36</strong><span>Institution matches</span></div></div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="dashboard-grid">
+                    <section class="card dashboard-panel">
+                        <div class="panel-header">
+                            <div>
+                                <h2>Challenge Distribution</h2>
+                                <p>Domain-wise submissions.</p>
+                            </div>
+                        </div>
+                        <div class="chart-placeholder" id="challengeChart"></div>
+                    </section>
+
+                    <section class="card dashboard-panel">
+                        <div class="panel-header">
+                            <div>
+                                <h2>District Performance</h2>
+                                <p>Leading districts by activity.</p>
+                            </div>
+                        </div>
+                        <div id="districtPerformance"></div>
+                    </section>
+                </div>
+
+                <section class="card dashboard-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Recent Challenges</h2>
+                            <p>Latest challenges submitted across the state.</p>
+                        </div>
+                        <a href="challenges.html" class="text-link">View all <i data-lucide="arrow-up-right"></i></a>
+                    </div>
+                    <div id="governmentChallenges"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../js/navigation.js"></script>
+    <script src="../../js/pages/dashboard.js"></script>
+    <script src="../../js/pages/map.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
+    </script>
+</body>
+</html>

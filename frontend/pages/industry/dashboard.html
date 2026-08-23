@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Dashboard | JharInnovate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/variables.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/layout.css">
+    <link rel="stylesheet" href="../../css/responsive.css">
+    <link rel="stylesheet" href="../../css/pages/dashboard.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar"></aside>
+        <div class="dashboard-main">
+            <header class="dashboard-header" id="header"></header>
+            <main class="dashboard-content">
+                <div class="page-header">
+                    <div>
+                        <span class="section-label">INDUSTRY PORTAL</span>
+                        <h1>Innovation Dashboard</h1>
+                        <p>Discover opportunities and collaborate on high-impact solutions.</p>
+                    </div>
+                    <a href="opportunities.html" class="btn btn-primary">
+                        <i data-lucide="search"></i>
+                        Explore Opportunities
+                    </a>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="dashboard-stat card"><span class="stat-icon primary"><i data-lucide="briefcase"></i></span><div><strong>24</strong><span>Opportunities</span></div></div>
+                    <div class="dashboard-stat card"><span class="stat-icon green"><i data-lucide="handshake"></i></span><div><strong>8</strong><span>Collaborations</span></div></div>
+                    <div class="dashboard-stat card"><span class="stat-icon purple"><i data-lucide="users"></i></span><div><strong>14</strong><span>Mentorships</span></div></div>
+                    <div class="dashboard-stat card"><span class="stat-icon orange"><i data-lucide="rocket"></i></span><div><strong>6</strong><span>Active Pilots</span></div></div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <section class="card dashboard-panel">
+                        <div class="panel-header">
+                            <div><h2>Recommended Opportunities</h2><p>Projects matching your capabilities.</p></div>
+                        </div>
+                        <div id="industryOpportunities"></div>
+                    </section>
+
+                    <section class="card dashboard-panel">
+                        <div class="panel-header">
+                            <div><h2>Active Collaborations</h2><p>Current partnerships.</p></div>
+                        </div>
+                        <div id="industryCollaborations"></div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="../../js/navigation.js"></script>
+    <script src="../../js/pages/dashboard.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
+    </script>
+</body>
+</html>

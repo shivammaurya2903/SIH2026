@@ -1,49 +1,50 @@
 const express = require('express');
 const {
-  createProject,
-  getProjects,
-  getProject,
-  updateProject,
-  deleteProject
-} = require('../controllers/project.controller');
-const milestoneRoutes = require('./milestone.routes');
+  createMilestone,
+  getMilestones,
+  getMilestoneById,
+  updateMilestone,
+  updateMilestoneStatus,
+  deleteMilestone
+} = require('../controllers/milestone.controller');
 const { protect } = require('../middleware/auth.middleware');
 const { authorize } = require('../middleware/role.middleware');
 const { validateObjectId } = require('../middleware/validation.middleware');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
-router.use('/:projectId/milestones', validateObjectId('projectId'), milestoneRoutes);
-
-router.get('/', protect, getProjects);
-router.get('/:id', protect, validateObjectId('id'), getProject);
+router.get('/', protect, getMilestones);
+router.get('/:id', protect, validateObjectId('id'), getMilestoneById);
 
 router.post(
   '/',
   protect,
   authorize('government', 'admin', 'university', 'faculty'),
-  createProject
+  createMilestone
 );
+
 router.put(
   '/:id',
   protect,
-  authorize('government', 'admin', 'university', 'faculty', 'industry'),
+  authorize('government', 'admin', 'university', 'faculty'),
   validateObjectId('id'),
-  updateProject
+  updateMilestone
 );
+
 router.patch(
-  '/:id',
+  '/:id/status',
   protect,
   authorize('government', 'admin', 'university', 'faculty', 'industry'),
   validateObjectId('id'),
-  updateProject
+  updateMilestoneStatus
 );
+
 router.delete(
   '/:id',
   protect,
   authorize('government', 'admin', 'university', 'faculty'),
   validateObjectId('id'),
-  deleteProject
+  deleteMilestone
 );
 
 module.exports = router;
