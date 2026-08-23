@@ -84,7 +84,7 @@ const rejectCollaboration = async (req, res) => {
         respondedBy: req.user._id,
         respondedAt: new Date()
       },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!collaboration) {

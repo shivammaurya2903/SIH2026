@@ -16,6 +16,7 @@ router.get('/:id', protect, validateObjectId('id'), getProject);
 
 router.post('/', protect, createProject);
 router.put('/:id', protect, validateObjectId('id'), updateProject);
+router.patch('/:id', protect, validateObjectId('id'), updateProject);
 router.delete('/:id', protect, validateObjectId('id'), deleteProject);
 
 module.exports = router;

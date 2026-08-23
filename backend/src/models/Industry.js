@@ -18,6 +18,7 @@ const industrySchema = new mongoose.Schema(
         'startup',
         'msme',
         'csr',
+        'csr_org',
         'research_lab',
         'innovation_hub'
       ],

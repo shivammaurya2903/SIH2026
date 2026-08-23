@@ -43,7 +43,7 @@ const updateUser = async (req, res) => {
       req.params.id,
       updates,
       {
-        new: true,
+        returnDocument: 'after',
         runValidators: true
       }
     ).select('-password');

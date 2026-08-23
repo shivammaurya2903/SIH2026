@@ -1,14 +1,15 @@
 const Proposal = require('../models/Proposal');
 const Challenge = require('../models/Challenge');
 const Project = require('../models/Project');
+const University = require('../models/University');
 const { successResponse, errorResponse } = require('../utils/response');
 
 const createProposal = async (req, res) => {
   try {
     const { challenge: challengeId, university: universityId } = req.body;
 
-    if (!challengeId || !universityId) {
-      return errorResponse(res, 'Challenge ID and University ID are required', 400);
+    if (!challengeId) {
+      return errorResponse(res, 'Challenge ID is required', 400);
     }
 
     const challenge = await Challenge.findById(challengeId);
@@ -16,8 +17,22 @@ const createProposal = async (req, res) => {
       return errorResponse(res, 'Target challenge not found', 404);
     }
 
+    let targetUniId = universityId;
+    if (!targetUniId && req.user) {
+      const uniDoc = await University.findOne({
+        $or: [
+          { name: req.user.organization },
+          { email: req.user.email }
+        ]
+      });
+      if (uniDoc) {
+        targetUniId = uniDoc._id;
+      }
+    }
+
     const proposal = await Proposal.create({
       ...req.body,
+      university: targetUniId || req.body.university,
       submittedBy: req.user._id,
       status: 'submitted'
     });
@@ -135,7 +150,7 @@ const rejectProposal = async (req, res) => {
         reviewedAt: new Date(),
         reviewComment: req.body.reviewComment || ''
       },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     if (!proposal) {
