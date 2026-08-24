@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">My Reports & Tracking — JharInnovate / SamadhanSetu</title>
+  <script src="categories.js"></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -192,7 +193,7 @@
                   <div>
                     <div class="report-title">${item.title}</div>
                     <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
-                      ${item.category || 'General'} • ${(item.location && item.location.district) ? item.location.district : 'Ranchi'}
+                      ${typeof getCategoryLabel === 'function' ? getCategoryLabel(item.category, getLanguage()) : (item.category || 'General')} • ${(item.location && item.location.district) ? item.location.district : 'Ranchi'}
                     </div>
                   </div>
                   <span class="report-id">#SS-${item._id.substring(0, 6).toUpperCase()}</span>

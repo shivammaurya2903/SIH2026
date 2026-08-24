@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">Challenge Details & AI Triage — JharInnovate / SamadhanSetu</title>
+  <script src="categories.js"></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -220,7 +221,7 @@
         if (res.ok && data.success && data.data) {
           const c = data.data;
           document.getElementById('cTitle').textContent = c.title;
-          document.getElementById('cCategory').textContent = c.category || 'General';
+          document.getElementById('cCategory').textContent = typeof getCategoryLabel === 'function' ? getCategoryLabel(c.category, getLanguage()) : (c.category || 'General');
           document.getElementById('cDistrict').textContent = `📍 ${(c.location && c.location.district) ? c.location.district : 'Ranchi'}, Jharkhand`;
           document.getElementById('cDesc').textContent = c.description;
           document.getElementById('cOutcome').textContent = c.expectedOutcome || 'Solar-powered filtration and water quality monitoring.';

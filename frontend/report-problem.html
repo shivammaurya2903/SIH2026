@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">Report a Problem — JharInnovate / SamadhanSetu</title>
+  <script src="categories.js"></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -97,37 +98,37 @@
           <p class="step-sub" data-i18n="s1.sub">Select the category that best describes your community issue.</p>
 
           <div class="cat-grid">
-            <div class="cat-card selected" onclick="selectCat('Water Infrastructure', this)">
+            <div class="cat-card selected" onclick="selectCat('water', this)">
               <div class="cat-icon">💧</div>
-              <div class="cat-label" data-i18n="cat.water">Water</div>
+              <div class="cat-label" data-i18n="cat.water">Water Infrastructure</div>
             </div>
-            <div class="cat-card" onclick="selectCat('Agriculture', this)">
+            <div class="cat-card" onclick="selectCat('agriculture', this)">
               <div class="cat-icon">🌾</div>
               <div class="cat-label" data-i18n="cat.agri">Agriculture</div>
             </div>
-            <div class="cat-card" onclick="selectCat('Rural Health', this)">
+            <div class="cat-card" onclick="selectCat('healthcare', this)">
               <div class="cat-icon">🏥</div>
               <div class="cat-label" data-i18n="cat.health">Healthcare</div>
             </div>
-            <div class="cat-card" onclick="selectCat('Education Technology', this)">
+            <div class="cat-card" onclick="selectCat('education', this)">
               <div class="cat-icon">🎓</div>
               <div class="cat-label" data-i18n="cat.edu">Education</div>
             </div>
-            <div class="cat-card" onclick="selectCat('Roads & Infra', this)">
+            <div class="cat-card" onclick="selectCat('infrastructure', this)">
               <div class="cat-icon">🛣️</div>
-              <div class="cat-label" data-i18n="cat.roads">Roads</div>
+              <div class="cat-label" data-i18n="cat.roads">Infrastructure</div>
             </div>
-            <div class="cat-card" onclick="selectCat('Waste Management', this)">
+            <div class="cat-card" onclick="selectCat('sanitation', this)">
               <div class="cat-icon">🗑️</div>
               <div class="cat-label" data-i18n="cat.sanitation">Sanitation</div>
             </div>
-            <div class="cat-card" onclick="selectCat('Clean Energy', this)">
+            <div class="cat-card" onclick="selectCat('energy', this)">
               <div class="cat-icon">💡</div>
               <div class="cat-label" data-i18n="cat.energy">Electricity</div>
             </div>
-            <div class="cat-card" onclick="selectCat('Public Safety', this)">
-              <div class="cat-icon">🚍</div>
-              <div class="cat-label" data-i18n="cat.transport">Transport</div>
+            <div class="cat-card" onclick="selectCat('public_administration', this)">
+              <div class="cat-icon">🏛️</div>
+              <div class="cat-label" data-i18n="cat.transport">Public Administration</div>
             </div>
           </div>
 
@@ -323,7 +324,7 @@
       applyLanguage(getLanguage() === 'en' ? 'hi' : 'en');
     }
 
-    let selectedCategory = 'Water Infrastructure';
+    let selectedCategory = 'water';
     let activeStep = 1;
 
     function selectCat(cat, el) {
@@ -350,7 +351,8 @@
 
       if (step === 5) {
         document.getElementById('revTitle').textContent = document.getElementById('title').value;
-        document.getElementById('revMeta').textContent = `${selectedCategory} • ${document.getElementById('district').value}`;
+        const catDisp = typeof getCategoryLabel === 'function' ? getCategoryLabel(selectedCategory, getLanguage()) : selectedCategory;
+        document.getElementById('revMeta').textContent = `${catDisp} • ${document.getElementById('district').value}`;
         document.getElementById('revDesc').textContent = document.getElementById('description').value;
       }
 
@@ -418,7 +420,10 @@
           document.getElementById('trackingId').textContent = `#SS-${data.data._id.substring(0, 6).toUpperCase()}`;
           document.getElementById('successScreen').classList.remove('hidden');
         } else {
-          alert(data.message || 'Submission failed');
+          const errMsg = (data.message && (data.message.includes('category') || data.message.includes('enum') || data.message.includes('validation')))
+            ? (getLanguage() === 'hi' ? 'कृपया एक वैध चुनौती श्रेणी चुनें।' : 'Please select a valid challenge category.')
+            : (data.message || 'Submission failed');
+          alert(errMsg);
           submitBtn.disabled = false;
           submitBtn.textContent = t('btn.submitNow');
         }

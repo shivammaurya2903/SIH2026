@@ -15,9 +15,36 @@ const getGroqClient = () => {
   return groqClient;
 };
 
+const CATEGORY_ALIASES = {
+  'water_infrastructure': 'water',
+  'water infrastructure': 'water',
+  'drinking_water': 'water',
+  'rural_health': 'healthcare',
+  'rural health': 'healthcare',
+  'health': 'healthcare',
+  'education_technology': 'education',
+  'education technology': 'education',
+  'edtech': 'education',
+  'roads_&_infra': 'infrastructure',
+  'roads & infra': 'infrastructure',
+  'roads_and_infrastructure': 'infrastructure',
+  'roads': 'infrastructure',
+  'waste_management': 'sanitation',
+  'waste management': 'sanitation',
+  'clean_energy': 'energy',
+  'clean energy': 'energy',
+  'electricity': 'energy',
+  'public_safety': 'public_administration',
+  'public safety': 'public_administration',
+  'transport': 'infrastructure'
+};
+
 const sanitizeCategory = (category) => {
   if (!category) return 'other';
-  const catLower = String(category).toLowerCase().trim().replace(/[\s-]+/g, '_');
+  const catRaw = String(category).trim().toLowerCase();
+  if (CATEGORY_ALIASES[catRaw]) return CATEGORY_ALIASES[catRaw];
+  const catLower = catRaw.replace(/[\s-]+/g, '_');
+  if (CATEGORY_ALIASES[catLower]) return CATEGORY_ALIASES[catLower];
   if (CATEGORIES.includes(catLower)) return catLower;
   const match = CATEGORIES.find((c) => catLower.includes(c) || c.includes(catLower));
   return match || 'other';
@@ -172,5 +199,6 @@ const detectDuplicates = async (challenge, existingChallenges = []) => {
 
 module.exports = {
   analyzeChallenge,
-  detectDuplicates
+  detectDuplicates,
+  sanitizeCategory
 };

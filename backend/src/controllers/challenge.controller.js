@@ -70,7 +70,8 @@ const createChallenge = async (req, res) => {
 
     return successResponse(res, challenge, 'Challenge submitted successfully', 201);
   } catch (error) {
-    return errorResponse(res, error.message, 500);
+    const statusCode = error.name === 'ValidationError' || error.name === 'CastError' ? 400 : 500;
+    return errorResponse(res, error.message, statusCode);
   }
 };
 

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">Government Command Center — JharInnovate / SamadhanSetu</title>
+  <script src="categories.js"></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -246,7 +247,7 @@
           tbody.innerHTML = list.map(c => `
             <tr>
               <td style="font-weight: 700; color: var(--primary-dark);">${c.title}</td>
-              <td>${c.category || 'General'}</td>
+              <td>${typeof getCategoryLabel === 'function' ? getCategoryLabel(c.category, getLanguage()) : (c.category || 'General')}</td>
               <td>${(c.location && c.location.district) ? c.location.district : 'Ranchi'}</td>
               <td><span style="font-weight: 800; color: var(--accent);">${c.priorityScore || 50}/100</span></td>
               <td style="display: flex; gap: 4px;">

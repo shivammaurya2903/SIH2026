@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">Societal Challenges Feed — JharInnovate / SamadhanSetu</title>
+  <script src="categories.js"></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -91,11 +92,19 @@
       </select>
       <select class="filter-select" id="categoryFilter" onchange="filterFeed()">
         <option value="" data-i18n="filter.allCategories">All Categories</option>
-        <option value="Water Infrastructure" data-i18n="cat.water">Water Infrastructure</option>
-        <option value="Agriculture" data-i18n="cat.agri">Agriculture</option>
-        <option value="Rural Health" data-i18n="cat.health">Healthcare</option>
-        <option value="Clean Energy" data-i18n="cat.energy">Energy</option>
-        <option value="Waste Management" data-i18n="cat.waste">Waste Management</option>
+        <option value="water" data-i18n="cat.water">Water Infrastructure</option>
+        <option value="healthcare" data-i18n="cat.health">Healthcare</option>
+        <option value="agriculture" data-i18n="cat.agri">Agriculture</option>
+        <option value="education" data-i18n="cat.edu">Education</option>
+        <option value="infrastructure" data-i18n="cat.infra">Infrastructure</option>
+        <option value="sanitation" data-i18n="cat.sanitation">Sanitation</option>
+        <option value="energy" data-i18n="cat.energy">Energy</option>
+        <option value="urban_development" data-i18n="cat.urban">Urban Development</option>
+        <option value="accessibility" data-i18n="cat.access">Accessibility</option>
+        <option value="public_administration" data-i18n="cat.pubadmin">Public Administration</option>
+        <option value="rural_livelihoods" data-i18n="cat.livelihoods">Rural Livelihoods</option>
+        <option value="environment" data-i18n="cat.environment">Environment</option>
+        <option value="other" data-i18n="cat.other">Other</option>
       </select>
     </div>
 
@@ -210,7 +219,7 @@
         filtered = filtered.filter(c => c.location && c.location.district === dist);
       }
       if (cat) {
-        filtered = filtered.filter(c => c.category === cat);
+        filtered = filtered.filter(c => typeof normalizeCategoryValue === 'function' ? normalizeCategoryValue(c.category) === cat : c.category === cat);
       }
 
       if (filtered.length === 0) {
@@ -228,7 +237,7 @@
         <div class="challenge-card">
           <div>
             <div class="c-header">
-              <span class="c-badge">${c.category || 'General'}</span>
+              <span class="c-badge">${typeof getCategoryLabel === 'function' ? getCategoryLabel(c.category, getLanguage()) : (c.category || 'General')}</span>
               <div class="c-score" title="Groq AI Priority Score">${c.priorityScore || 50}</div>
             </div>
             <div class="c-title">${c.title}</div>
