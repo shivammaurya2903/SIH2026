@@ -21,14 +21,20 @@ const ALLOWED_PROJECT_FIELDS = [
   'expectedEndDate',
   'actualEndDate',
   'budget',
-  'documents'
+  'documents',
+  'innovation',
+  'testingDetails',
+  'pilotDetails',
+  'deploymentDetails'
 ];
 
 const canUserAccessProject = async (project, user) => {
   if (['government', 'admin'].includes(user.role)) return true;
 
-  if (project.createdBy && project.createdBy.toString() === user._id.toString()) return true;
-  if (project.facultyMentor && project.facultyMentor.toString() === user._id.toString()) return true;
+  const userIdStr = String(user._id || user.id);
+  if (project.createdBy && String(project.createdBy) === userIdStr) return true;
+  if (project.facultyMentor && String(project.facultyMentor) === userIdStr) return true;
+  if (['university', 'faculty'].includes(user.role)) return true;
 
   if (user.role === 'university' && project.university) {
     const uni = await University.findById(project.university);
@@ -136,8 +142,13 @@ const updateProject = async (req, res) => {
       'startDate',
       'expectedEndDate',
       'actualEndDate',
-      'budget'
-    ];
+      'budget',
+    'documents',
+    'innovation',
+    'testingDetails',
+    'pilotDetails',
+    'deploymentDetails'
+  ];
 
     const updates = {};
     updatableFields.forEach((field) => {

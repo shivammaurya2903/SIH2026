@@ -39,7 +39,10 @@
     <p style="font-size: 14px; color: var(--text-muted); line-height: 1.5;" data-i18n="head.sub">
       You do not have the required role authorization to access this dashboard.
     </p>
-    <a href="index.html" class="btn" data-i18n="btn.home">Return to Home →</a>
+    <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px;">
+      <button onclick="window.history.back()" class="btn btn-secondary" style="background: var(--surface); color: var(--text); border: 1px solid var(--border);" data-i18n="btn.back">← Go Back</button>
+      <button onclick="goToUserDashboard()" class="btn" data-i18n="btn.dashboard">Go to My Dashboard →</button>
+    </div>
   </div>
 
   <script>
@@ -85,6 +88,24 @@
     }
     function toggleLanguage() {
       applyLanguage(getLanguage() === 'en' ? 'hi' : 'en');
+    }
+
+    function goToUserDashboard() {
+      try {
+        const user = JSON.parse(localStorage.getItem('jhar_user') || '{}');
+        const roleMap = {
+          citizen: 'citizen-dashboard.html',
+          government: 'government-dashboard.html',
+          university: 'university-dashboard.html',
+          faculty: 'faculty-dashboard.html',
+          student: 'student-dashboard.html',
+          industry: 'industry-dashboard.html',
+          admin: 'admin-dashboard.html'
+        };
+        window.location.href = roleMap[user.role] || 'index.html';
+      } catch (err) {
+        window.location.href = 'index.html';
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {

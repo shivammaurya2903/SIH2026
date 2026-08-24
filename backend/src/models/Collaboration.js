@@ -32,10 +32,16 @@ const collaborationSchema = new mongoose.Schema(
         'technology',
         'prototyping',
         'testing',
+        'pilot',
         'deployment',
+        'technology_transfer',
         'co_development'
       ],
       required: true
+    },
+    fundingAmount: {
+      type: Number,
+      default: 0
     },
     message: String,
     proposedContribution: String,

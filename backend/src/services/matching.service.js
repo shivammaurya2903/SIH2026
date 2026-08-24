@@ -1,5 +1,13 @@
 const calculateUniversityMatchScore = (challenge, university) => {
   let score = 0;
+  const reasons = {
+    domainExpertise: 0,
+    facultyExpertise: 0,
+    researchCapability: 0,
+    infrastructure: 0,
+    locationProximity: 0
+  };
+  const explanation = [];
 
   const challengeSkills = (challenge.aiAnalysis?.requiredSkills || []).map((s) => s.toLowerCase());
   const challengeKeywords = (challenge.aiAnalysis?.keywords || []).map((k) => k.toLowerCase());
@@ -17,28 +25,49 @@ const calculateUniversityMatchScore = (challenge, university) => {
 
   if (deptText.includes(category) || expertiseText.includes(category) || researchText.includes(category)) {
     score += 30;
+    reasons.domainExpertise = 30;
+    explanation.push(`Strong ${category.replace(/_/g, ' ')} domain specialization`);
   }
 
   challengeSkills.forEach((skill) => {
     if (expertiseText.includes(skill) || researchText.includes(skill)) {
       score += 15;
+      reasons.facultyExpertise += 15;
+      explanation.push(`Faculty expertise in ${skill}`);
     } else if (deptText.includes(skill) || facilityText.includes(skill)) {
       score += 10;
+      reasons.researchCapability += 10;
+      explanation.push(`R&D capability matching ${skill}`);
     }
   });
 
   challengeKeywords.forEach((kw) => {
     if (kw.length > 3 && (expertiseText.includes(kw) || researchText.includes(kw))) {
       score += 5;
+      reasons.researchCapability += 5;
     }
   });
+
+  if (facilityText.length > 0) {
+    reasons.infrastructure = 10;
+    score += 10;
+    explanation.push('Available research laboratory & innovation facilities');
+  }
 
   if (university.district && challenge.location?.district && 
       university.district.toLowerCase() === challenge.location.district.toLowerCase()) {
     score += 10;
+    reasons.locationProximity = 10;
+    explanation.push(`Located in target district (${university.district})`);
   }
 
-  return Math.min(100, Math.max(0, Math.round(score)));
+  const finalScore = Math.min(100, Math.max(0, Math.round(score)));
+
+  return {
+    score: finalScore,
+    reasons,
+    explanation: explanation.length > 0 ? explanation : ['General academic & R&D capability match']
+  };
 };
 
 const calculateIndustryMatchScore = (challenge, industry) => {
@@ -79,11 +108,17 @@ const calculateIndustryMatchScore = (challenge, industry) => {
 
 const matchUniversities = async (challenge, universities = []) => {
   return universities
-    .map((university) => ({
-      university: university._id,
-      name: university.name,
-      matchScore: calculateUniversityMatchScore(challenge, university)
-    }))
+    .map((university) => {
+      const matchResult = calculateUniversityMatchScore(challenge, university);
+      const score = typeof matchResult === 'number' ? matchResult : matchResult.score;
+      return {
+        university: university._id,
+        name: university.name,
+        matchScore: score,
+        reasons: matchResult.reasons || { domainExpertise: 30, facultyExpertise: 25, researchCapability: 20, infrastructure: 10 },
+        explanation: matchResult.explanation || ['Strong academic and R&D capability match']
+      };
+    })
     .sort((a, b) => b.matchScore - a.matchScore);
 };
 
@@ -92,7 +127,9 @@ const matchIndustries = async (challenge, industries = []) => {
     .map((industry) => ({
       industry: industry._id,
       name: industry.name,
-      matchScore: calculateIndustryMatchScore(challenge, industry)
+      matchScore: typeof calculateIndustryMatchScore(challenge, industry) === 'number'
+        ? calculateIndustryMatchScore(challenge, industry)
+        : calculateIndustryMatchScore(challenge, industry).score
     }))
     .sort((a, b) => b.matchScore - a.matchScore);
 };

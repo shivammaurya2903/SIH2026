@@ -81,6 +81,11 @@
   </nav>
 
   <div class="container">
+    <div style="margin-bottom: 20px;">
+      <h1 style="font-size: 24px; font-weight: 900; color: var(--primary-dark);" data-i18n="head.title">Tell Us About a Problem in Your Community</h1>
+      <div style="font-size: 14px; color: var(--text-muted); margin-top: 4px;" data-i18n="head.sub">Your report can become the starting point for a research project, innovation or deployable solution.</div>
+    </div>
+
     <div class="stepper">
       <div class="step-node active" id="st1">1</div>
       <div class="step-node" id="st2">2</div>
@@ -163,8 +168,9 @@
           <h2 class="step-title" data-i18n="s3.title">Problem Kahan Hai?</h2>
           <p class="step-sub" data-i18n="s3.sub">Specify the geographic location in Jharkhand.</p>
 
-          <div style="display: flex; gap: 10px; margin-bottom: 18px;">
-            <button type="button" class="btn btn-secondary" onclick="useGps()" style="flex: 1;" data-i18n="s3.gps">📍 Use My Location (GPS)</button>
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px;">
+            <button type="button" class="btn btn-secondary" onclick="useGps()" style="width: 100%;" data-i18n="s3.gps">📍 Use My Location (GPS)</button>
+            <div id="gpsBadge" style="display: none; background: var(--primary-light); color: var(--primary); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; text-align: center;"></div>
           </div>
 
           <div class="form-group">
@@ -186,7 +192,23 @@
             <input type="text" id="block" class="form-control" placeholder="e.g. Kanke Block, Nagri Panchayat" data-i18n-placeholder="s3.blockPh">
           </div>
 
-          <div style="display: flex; justify-content: space-between;">
+          <div class="form-group">
+            <label class="form-label" for="address">Specific Street Address / Landmark</label>
+            <input type="text" id="address" class="form-control" placeholder="Near Primary Health Centre, Main Road">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;" class="form-group">
+            <div>
+              <label class="form-label" for="latitude">Latitude (GPS)</label>
+              <input type="number" step="any" id="latitude" class="form-control" placeholder="23.3441">
+            </div>
+            <div>
+              <label class="form-label" for="longitude">Longitude (GPS)</label>
+              <input type="number" step="any" id="longitude" class="form-control" placeholder="85.3096">
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; margin-top: 18px;">
             <button type="button" class="btn btn-secondary" onclick="nextStep(2)" data-i18n="btn.back">← Back</button>
             <button type="button" class="btn btn-primary" onclick="nextStep(4)" data-i18n="btn.nextDesc">Next: Description →</button>
           </div>
@@ -359,10 +381,21 @@
       activeStep = step;
     }
 
+    let capturedLat = 23.3441;
+    let capturedLng = 85.3096;
+
     function useGps() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
-          alert(`GPS Location Acquired: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
+          capturedLat = pos.coords.latitude;
+          capturedLng = pos.coords.longitude;
+          document.getElementById('latitude').value = capturedLat.toFixed(6);
+          document.getElementById('longitude').value = capturedLng.toFixed(6);
+          const badge = document.getElementById('gpsBadge');
+          if (badge) {
+            badge.style.display = 'block';
+            badge.textContent = `Location Captured ✓ (${capturedLat.toFixed(4)}, ${capturedLng.toFixed(4)})`;
+          }
         }, () => alert('Unable to retrieve GPS location. Manual entry fallback active.'));
       }
     }
@@ -396,9 +429,17 @@
       formData.append('title', document.getElementById('title').value);
       formData.append('category', selectedCategory);
       formData.append('description', document.getElementById('description').value);
+      const latIn = parseFloat(document.getElementById('latitude').value);
+      const lngIn = parseFloat(document.getElementById('longitude').value);
+      const latVal = !isNaN(latIn) ? latIn : capturedLat;
+      const lngVal = !isNaN(lngIn) ? lngIn : capturedLng;
+
       formData.append('location', JSON.stringify({
         district: document.getElementById('district').value,
-        block: document.getElementById('block').value
+        block: document.getElementById('block').value,
+        address: document.getElementById('address').value,
+        latitude: latVal,
+        longitude: lngVal
       }));
 
       const files = document.getElementById('attachments').files;

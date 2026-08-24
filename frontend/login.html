@@ -625,6 +625,11 @@
     }
 
     function handleRedirect(role) {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('intent') === 'submit-challenge' && ['citizen', 'government', 'admin'].includes(role)) {
+        window.location.href = 'report-problem.html';
+        return;
+      }
       switch (role) {
         case 'citizen': window.location.href = 'citizen-dashboard.html'; break;
         case 'government': window.location.href = 'government-dashboard.html'; break;

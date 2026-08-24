@@ -124,19 +124,23 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div>
-      <div class="hero-badge" data-i18n="hero.badge">JHARKHAND • SIH 2026</div>
-      <h1 class="hero-title" data-i18n="hero.title">Your Problem Can Become a Solution.</h1>
+      <div class="hero-badge" data-i18n="hero.badge">SIH26043 • GOVERNMENT OF JHARKHAND</div>
+      <h1 class="hero-title" data-i18n="hero.title">Real Problems.<br>Collective Intelligence.<br>Measurable Impact.</h1>
       <p class="hero-sub" data-i18n="hero.sub">
-        Report a problem in your area. Help government understand it. Connect with universities and industries to build real solutions for all 24 Jharkhand districts.
+        JharInnovate connects communities, government, universities and industry to transform real-world challenges into researched, tested and deployable solutions.
       </p>
 
+      <div style="background: var(--primary-light); padding: 12px 16px; border-radius: var(--radius-md); border-left: 4px solid var(--primary); margin-bottom: 24px; font-size: 14px; font-weight: 700; color: var(--primary-dark);" data-i18n="hero.subMsg">
+        💡 One problem can become a research project. One research project can become a deployed solution.
+      </div>
+
       <div class="hero-cta-group">
-        <a href="report-problem.html" class="btn btn-primary btn-lg" data-i18n="hero.reportCta">📝 Report a Problem</a>
-        <a href="challenges.html" class="btn btn-secondary btn-lg" data-i18n="hero.exploreCta">🔍 Explore Challenges</a>
+        <button onclick="handleReportProblemClick()" class="btn btn-primary btn-lg" data-i18n="hero.reportCta">📝 REPORT A COMMUNITY PROBLEM</button>
+        <a href="#workflow" class="btn btn-secondary btn-lg" data-i18n="hero.exploreCta">🔍 EXPLORE INNOVATION FLOW</a>
       </div>
     </div>
 
-    <!-- 3D Rural Jharkhand Map Visual -->
+    <!-- 24 District Jharkhand Map Visual -->
     <div class="map-card">
       <div class="map-header">
         <span class="map-title" data-i18n="map.title">JHARKHAND • 24 DISTRICTS</span>
@@ -152,7 +156,8 @@
   <!-- Live Metrics Bar -->
   <section class="metrics-bar">
     <div style="text-align: center; margin-bottom: 20px;">
-      <h2 style="font-size: 18px; font-weight: 800; color: var(--primary-dark);" data-i18n="metrics.title">What's happening in Jharkhand?</h2>
+      <h2 style="font-size: 20px; font-weight: 900; color: var(--primary-dark);" data-i18n="metrics.title">Jharkhand Innovation at a Glance</h2>
+      <div style="font-size: 13px; color: var(--text-muted);" data-i18n="metrics.sub">Real live metrics populated dynamically from backend APIs</div>
     </div>
     <div class="metrics-grid">
       <div class="metric-box">
@@ -160,84 +165,151 @@
         <div class="metric-label" data-i18n="metrics.reported">Challenges Reported</div>
       </div>
       <div class="metric-box">
-        <div class="metric-val" style="color: var(--accent);" id="mUnderReview">142</div>
-        <div class="metric-label" data-i18n="metrics.review">Problems Under Review</div>
+        <div class="metric-val" style="color: var(--primary);" id="mUnderReview">1,092</div>
+        <div class="metric-label">Challenges Validated</div>
       </div>
       <div class="metric-box">
-        <div class="metric-val" style="color: var(--secondary);" id="mActive">48</div>
-        <div class="metric-label" data-i18n="metrics.solutions">Solutions in Progress</div>
+        <div class="metric-val" style="color: var(--secondary);" id="mActive">14</div>
+        <div class="metric-label">Universities Engaged</div>
       </div>
       <div class="metric-box">
-        <div class="metric-val" style="color: var(--success);" id="mImpact">124K+</div>
-        <div class="metric-label" data-i18n="metrics.impact">People Impacted</div>
+        <div class="metric-val" style="color: var(--accent);" id="mIndustry">28</div>
+        <div class="metric-label">Industry Partners</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val" style="color: var(--primary);" id="mProjects">48</div>
+        <div class="metric-label">Active Projects</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val" style="color: var(--success);" id="mDeployed">14</div>
+        <div class="metric-label">Solutions Deployed</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val" style="color: var(--primary-dark);" id="mImpact">124K+</div>
+        <div class="metric-label" data-i18n="metrics.impact">Beneficiaries Reached</div>
       </div>
     </div>
   </section>
 
-  <!-- Workflow Pipeline -->
-  <section class="workflow-section">
-    <h2 class="section-title" data-i18n="wf.title">From Problem to Measurable Impact</h2>
-    <p class="section-sub" data-i18n="wf.sub">A 6-step collaborative journey solving rural community issues.</p>
+  <!-- How a Problem Becomes a Solution (01 to 09 visual process) -->
+  <section class="workflow-section" id="workflow">
+    <h2 class="section-title" data-i18n="wf.title">How a Problem Becomes a Solution</h2>
+    <p class="section-sub" data-i18n="wf.sub">The complete 9-step collaborative lifecycle from rural report to deployed social impact.</p>
 
-    <div class="pipeline-grid">
+    <div class="pipeline-grid" style="grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));">
       <div class="pipe-step">
-        <div class="pipe-num">1</div>
-        <div class="pipe-title" data-i18n="wf.step1Title">CITIZEN</div>
-        <div class="pipe-desc" data-i18n="wf.step1Desc">Reports local issue via mobile or voice</div>
+        <div class="pipe-num">01</div>
+        <div class="pipe-title">REPORT</div>
+        <div class="pipe-desc">Communities identify real local challenges</div>
       </div>
       <div class="pipe-step">
-        <div class="pipe-num">2</div>
-        <div class="pipe-title" data-i18n="wf.step2Title">AI ANALYZE</div>
-        <div class="pipe-desc" data-i18n="wf.step2Desc">Scores priority & checks duplicates</div>
+        <div class="pipe-num">02</div>
+        <div class="pipe-title">AI TRIAGE</div>
+        <div class="pipe-desc">Categorizes, prioritizes & checks duplicates</div>
       </div>
       <div class="pipe-step">
-        <div class="pipe-num">3</div>
-        <div class="pipe-title" data-i18n="wf.step3Title">GOVERNMENT</div>
-        <div class="pipe-desc" data-i18n="wf.step3Desc">Verifies & approves problem for R&D</div>
+        <div class="pipe-num">03</div>
+        <div class="pipe-title">VALIDATE</div>
+        <div class="pipe-desc">Government verifies genuine challenges</div>
       </div>
       <div class="pipe-step">
-        <div class="pipe-num">4</div>
-        <div class="pipe-title" data-i18n="wf.step4Title">MATCHING</div>
-        <div class="pipe-desc" data-i18n="wf.step4Desc">Pairs with University & Industry CSR</div>
+        <div class="pipe-num">04</div>
+        <div class="pipe-title">MATCH</div>
+        <div class="pipe-desc">Finds universities with relevant R&D expertise</div>
       </div>
       <div class="pipe-step">
-        <div class="pipe-num">5</div>
-        <div class="pipe-title" data-i18n="wf.step5Title">SOLUTION</div>
-        <div class="pipe-desc" data-i18n="wf.step5Desc">Teams build prototype & pilot project</div>
+        <div class="pipe-num">05</div>
+        <div class="pipe-title">PROPOSE</div>
+        <div class="pipe-desc">Faculty & students submit solution proposals</div>
       </div>
       <div class="pipe-step">
-        <div class="pipe-num">6</div>
-        <div class="pipe-title" data-i18n="wf.step6Title">IMPACT</div>
-        <div class="pipe-desc" data-i18n="wf.step6Desc">Field deployment & citizen confirmation</div>
+        <div class="pipe-num">06</div>
+        <div class="pipe-title">COLLABORATE</div>
+        <div class="pipe-desc">Industry provides CSR funding, testing & pilot</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">07</div>
+        <div class="pipe-title">BUILD</div>
+        <div class="pipe-desc">Teams execute milestones & deliverables</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">08</div>
+        <div class="pipe-title">DEPLOY</div>
+        <div class="pipe-desc">Prototype → Testing → Pilot → Deployment</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">09</div>
+        <div class="pipe-title">MEASURE</div>
+        <div class="pipe-desc">Social impact tracked using real outcomes</div>
       </div>
     </div>
   </section>
 
-  <!-- Stakeholders Section -->
+  <!-- Example Storytelling Section -->
+  <section style="max-width: 1200px; margin: 20px auto 40px; padding: 0 20px;">
+    <div style="background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px;">
+      <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">EXAMPLE WORKFLOW STORY</div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 13px; font-weight: 700;">
+        <span style="background: #EFF6FF; color: var(--primary); padding: 6px 12px; border-radius: 6px;">Unsafe Drinking Water</span> ➔ 
+        <span style="background: #FEF3C7; color: #b45309; padding: 6px 12px; border-radius: 6px;">AI High Priority (Score 87)</span> ➔ 
+        <span style="background: #EFF6FF; color: var(--primary); padding: 6px 12px; border-radius: 6px;">Government Validated</span> ➔ 
+        <span style="background: #EEF2FF; color: var(--secondary); padding: 6px 12px; border-radius: 6px;">BIT Mesra Matched (94%)</span> ➔ 
+        <span style="background: #EFF6FF; color: var(--primary); padding: 6px 12px; border-radius: 6px;">Industry Testing & Pilot</span> ➔ 
+        <span style="background: #F0FDF4; color: var(--success); padding: 6px 12px; border-radius: 6px;">Solution Deployed to 1,450 Students</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stakeholders Section ("Who Makes It Happen?") -->
   <section style="background: var(--surface); padding: 48px 0; border-top: 1px solid var(--border);">
     <div style="text-align: center; margin-bottom: 24px;">
-      <h2 class="section-title" data-i18n="stk.title">Built for Every Stakeholder</h2>
+      <h2 class="section-title">Who Makes It Happen?</h2>
+      <p class="section-sub">Connecting key societal stakeholders in one unified civic innovation engine.</p>
     </div>
     <div class="stakeholder-grid">
       <div class="stake-card">
         <div class="stake-icon">👨‍🌾</div>
-        <div class="stake-title" data-i18n="stk.citizenTitle">Citizens</div>
-        <div class="stake-desc" data-i18n="stk.citizenDesc">Report community issues in under 1 minute using photo or voice. Track resolution status transparently.</div>
+        <div class="stake-title">Communities</div>
+        <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">"Identify the problems that matter."</div>
+        <div class="stake-desc">
+          • Submit community challenges<br>
+          • Share evidence (photo, video, voice)<br>
+          • Provide GPS location & district<br>
+          • Track resolution progress transparently
+        </div>
       </div>
       <div class="stake-card">
         <div class="stake-icon">🏛️</div>
-        <div class="stake-title" data-i18n="stk.govTitle">Government</div>
-        <div class="stake-desc" data-i18n="stk.govDesc">Review AI-triaged priority issues, assign R&D projects to universities, and monitor state-wide progress.</div>
+        <div class="stake-title">Government</div>
+        <div style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 8px;">"Validate and coordinate action."</div>
+        <div class="stake-desc">
+          • Review AI-triaged priority challenges<br>
+          • Approve genuine problems for R&D<br>
+          • Monitor project execution pipeline<br>
+          • Measure state-wide social impact
+        </div>
       </div>
       <div class="stake-card">
         <div class="stake-icon">🎓</div>
-        <div class="stake-title" data-i18n="stk.uniTitle">Universities</div>
-        <div class="stake-desc" data-i18n="stk.uniDesc">Discover AI-matched societal challenges fitting academic department capabilities and submit R&D proposals.</div>
+        <div class="stake-title">Universities</div>
+        <div style="font-size: 13px; font-weight: 700; color: var(--secondary); margin-bottom: 8px;">"Turn challenges into innovation."</div>
+        <div class="stake-desc">
+          • Discover AI-matched challenges<br>
+          • Match department & lab capability<br>
+          • Conduct applied R&D research<br>
+          • Build functional working prototypes
+        </div>
       </div>
       <div class="stake-card">
         <div class="stake-icon">🏭</div>
-        <div class="stake-title" data-i18n="stk.indTitle">Industry CSR</div>
-        <div class="stake-desc" data-i18n="stk.indDesc">Fund and mentor high-impact innovation projects aligned with corporate social responsibility mandates.</div>
+        <div class="stake-title">Industry</div>
+        <div style="font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 8px;">"Help solutions reach reality."</div>
+        <div class="stake-desc">
+          • Provide technical engineering mentorship<br>
+          • Co-fund projects via CSR allocation<br>
+          • Offer hardware labs & field testing<br>
+          • Scale solutions to full deployment
+        </div>
       </div>
     </div>
   </section>
@@ -388,6 +460,28 @@
         }
       }
     };
+
+    function handleReportProblemClick() {
+      const token = localStorage.getItem(CONFIG.STORAGE_KEYS.TOKEN);
+      const userStr = localStorage.getItem(CONFIG.STORAGE_KEYS.USER);
+
+      if (!token || !userStr) {
+        window.location.href = 'register.html?intent=submit-challenge';
+        return;
+      }
+
+      try {
+        const user = JSON.parse(userStr);
+        const allowedRoles = ['citizen', 'government', 'admin'];
+        if (allowedRoles.includes(user.role)) {
+          window.location.href = 'report-problem.html';
+        } else {
+          alert(`Your role (${user.role}) is not authorized to submit societal challenges directly. Contact platform admin or switch to a community reporter account.`);
+        }
+      } catch (err) {
+        window.location.href = 'register.html?intent=submit-challenge';
+      }
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       applyLanguage(getLanguage());

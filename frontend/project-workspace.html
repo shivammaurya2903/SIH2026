@@ -65,10 +65,27 @@
       <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">BIT Mesra • Tata Steel CSR • Kanke, Ranchi</div>
     </div>
 
+    <!-- PROJECT LIFECYCLE PROGRESS BANNER -->
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+      <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">PROJECT LIFECYCLE STAGE</div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 12px; font-weight: 800;">
+        <span style="background: #EFF6FF; color: var(--primary); padding: 4px 10px; border-radius: 20px; border: 1px solid #93C5FD;">1. PLANNING ✓</span> ➔ 
+        <span style="background: #EFF6FF; color: var(--primary); padding: 4px 10px; border-radius: 20px; border: 1px solid #93C5FD;">2. IN PROGRESS ✓</span> ➔ 
+        <span style="background: #EFF6FF; color: var(--primary); padding: 4px 10px; border-radius: 20px; border: 1px solid #93C5FD;">3. PROTOTYPE ✓</span> ➔ 
+        <span style="background: #FEF3C7; color: #b45309; padding: 4px 10px; border-radius: 20px; border: 1px solid #FCD34D;">4. TESTING (Active)</span> ➔ 
+        <span style="background: #F8FAFC; color: var(--text-muted); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border);">5. PILOT</span> ➔ 
+        <span style="background: #F8FAFC; color: var(--text-muted); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border);">6. DEPLOYED</span> ➔ 
+        <span style="background: #F8FAFC; color: var(--text-muted); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border);">7. COMPLETED</span>
+      </div>
+    </div>
+
     <div class="tab-bar">
       <div class="tab-item active" onclick="switchTab('overview', this)" data-i18n="tab.overview">Overview</div>
       <div class="tab-item" onclick="switchTab('team', this)" data-i18n="tab.team">Team</div>
       <div class="tab-item" onclick="switchTab('milestones', this)" data-i18n="tab.milestones">Milestones</div>
+      <div class="tab-item" onclick="switchTab('testing', this)">Testing & Pilot</div>
+      <div class="tab-item" onclick="switchTab('innovation', this)">Innovation & IPR</div>
+      <div class="tab-item" onclick="switchTab('timeline', this)">Activity Timeline</div>
       <div class="tab-item" onclick="switchTab('documents', this)" data-i18n="tab.documents">Documents</div>
     </div>
 
@@ -95,10 +112,89 @@
       <h2 class="card-title" data-i18n="ms.title">Milestone Progress</h2>
       <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
         <div style="padding: 10px; background: #EFF6FF; border-radius: var(--radius-md); border: 1px solid #93C5FD;">
-          <strong>Milestone 1:</strong> Lab Filtration Prototype Completed (Verified)
+          <strong>Milestone 1:</strong> Lab Filtration Prototype Completed (Verified 100%)
         </div>
         <div style="padding: 10px; background: #FEF3C7; border-radius: var(--radius-md); border: 1px solid #FCD34D;">
-          <strong>Milestone 2:</strong> IoT Sensor & Telemetry Integration (In Progress)
+          <strong>Milestone 2:</strong> IoT Sensor & Telemetry Integration (In Progress 50%)
+        </div>
+      </div>
+    </div>
+
+    <!-- TESTING & PILOT DETAILS (SIH26043 FEATURE 7) -->
+    <div class="card hidden" id="paneTesting">
+      <h2 class="card-title">Field Testing, Pilot Trial & Regional Deployment</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px;">
+        <div style="background: var(--background); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin-bottom: 8px;">🔬 Field Testing Details</h3>
+          <div style="font-size: 13px; line-height: 1.8;">
+            <div>Status: <strong style="color: var(--primary);">In Progress (Passed Lab QA)</strong></div>
+            <div>Test Date: <strong>14 Aug 2026</strong></div>
+            <div>Result: <strong>Water Turbidity < 1 NTU achieved</strong></div>
+            <div>Summary: Multi-stage solar telemetry filtration passed 72h continuous stress testing.</div>
+          </div>
+        </div>
+
+        <div style="background: var(--background); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin-bottom: 8px;">🚀 Pilot Trial & Deployment</h3>
+          <div style="font-size: 13px; line-height: 1.8;">
+            <div>Pilot Status: <strong>Active Pilot Trial</strong></div>
+            <div>Location: <strong>Kanke School Cluster, Ranchi</strong></div>
+            <div>Period: <strong>01 Aug 2026 – 30 Sep 2026</strong></div>
+            <div>Deployment Outcome: <strong>1,450 students provided clean drinking water daily</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INNOVATION & IPR TRACKING (SIH26043 FEATURE 6) -->
+    <div class="card hidden" id="paneInnovation">
+      <h2 class="card-title">Innovation Outcomes & Intellectual Property (IPR)</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px;">
+        <div style="padding: 14px; background: #F8FAFC; border-radius: 10px; border: 1px solid #E2E8F0;">
+          <div style="font-size: 12px; font-weight: 800; color: var(--text-muted);">PATENT STATUS</div>
+          <div style="font-size: 15px; font-weight: 800; color: var(--primary); margin-top: 4px;">Filed (Temp Reg #2026310492)</div>
+        </div>
+        <div style="padding: 14px; background: #F8FAFC; border-radius: 10px; border: 1px solid #E2E8F0;">
+          <div style="font-size: 12px; font-weight: 800; color: var(--text-muted);">RESEARCH PUBLICATION</div>
+          <div style="font-size: 15px; font-weight: 800; color: var(--primary); margin-top: 4px;">Submitted (IEEE Rural Tech Journal)</div>
+        </div>
+        <div style="padding: 14px; background: #F8FAFC; border-radius: 10px; border: 1px solid #E2E8F0;">
+          <div style="font-size: 12px; font-weight: 800; color: var(--text-muted);">TECHNOLOGY TRANSFER</div>
+          <div style="font-size: 15px; font-weight: 800; color: var(--primary); margin-top: 4px;">Under Review (Tata Steel CSR Partner)</div>
+        </div>
+        <div style="padding: 14px; background: #F8FAFC; border-radius: 10px; border: 1px solid #E2E8F0;">
+          <div style="font-size: 12px; font-weight: 800; color: var(--text-muted);">IP AGREEMENT STATUS</div>
+          <div style="font-size: 15px; font-weight: 800; color: #15803D; margin-top: 4px;">Approved & Signed</div>
+        </div>
+      </div>
+      <div style="margin-top: 14px; padding: 14px; background: #F8FAFC; border-radius: 10px; border: 1px solid #E2E8F0; font-size: 13px;">
+        <strong>Startup Incubated:</strong> Yes (AquaInnovate Tech Pvt Ltd) — Supported by BIT Mesra Incubation Hub.
+      </div>
+    </div>
+
+    <!-- PROJECT ACTIVITY TIMELINE (SIH26043 FEATURE 8) -->
+    <div class="card hidden" id="paneTimeline">
+      <h2 class="card-title">Project Activity Timeline</h2>
+      <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 14px; border-left: 2px solid var(--primary); padding-left: 18px;">
+        <div>
+          <div style="font-size: 12px; font-weight: 800; color: var(--primary);">24 AUG 2026</div>
+          <div style="font-weight: 800; font-size: 14px;">✓ Field Testing Completed</div>
+          <div style="font-size: 13px; color: var(--text-muted);">Water telemetry sensors calibrated in Kanke school cluster.</div>
+        </div>
+        <div>
+          <div style="font-size: 12px; font-weight: 800; color: var(--primary);">22 AUG 2026</div>
+          <div style="font-weight: 800; font-size: 14px;">✓ Industry Collaboration Accepted</div>
+          <div style="font-size: 13px; color: var(--text-muted);">Tata Steel CSR grant allocation approved for pilot deployment.</div>
+        </div>
+        <div>
+          <div style="font-size: 12px; font-weight: 800; color: var(--primary);">18 AUG 2026</div>
+          <div style="font-weight: 800; font-size: 14px;">✓ Faculty Mentor Assigned</div>
+          <div style="font-size: 13px; color: var(--text-muted);">Dr. Ramesh Kumar assigned as academic guide for student R&D team.</div>
+        </div>
+        <div>
+          <div style="font-size: 12px; font-weight: 800; color: var(--primary);">15 AUG 2026</div>
+          <div style="font-weight: 800; font-size: 14px;">✓ Project Created from Academic Proposal</div>
+          <div style="font-size: 13px; color: var(--text-muted);">Government approved BIT Mesra R&D proposal for problem #SS-10482.</div>
         </div>
       </div>
     </div>
@@ -175,11 +271,17 @@
       document.getElementById('paneOverview').classList.add('hidden');
       document.getElementById('paneTeam').classList.add('hidden');
       document.getElementById('paneMilestones').classList.add('hidden');
+      document.getElementById('paneTesting').classList.add('hidden');
+      document.getElementById('paneInnovation').classList.add('hidden');
+      document.getElementById('paneTimeline').classList.add('hidden');
       document.getElementById('paneDocuments').classList.add('hidden');
 
       if (name === 'overview') document.getElementById('paneOverview').classList.remove('hidden');
       if (name === 'team') document.getElementById('paneTeam').classList.remove('hidden');
       if (name === 'milestones') document.getElementById('paneMilestones').classList.remove('hidden');
+      if (name === 'testing') document.getElementById('paneTesting').classList.remove('hidden');
+      if (name === 'innovation') document.getElementById('paneInnovation').classList.remove('hidden');
+      if (name === 'timeline') document.getElementById('paneTimeline').classList.remove('hidden');
       if (name === 'documents') document.getElementById('paneDocuments').classList.remove('hidden');
     }
 

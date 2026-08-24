@@ -56,6 +56,7 @@ const createCollaboration = async (req, res) => {
       'university',
       'industry',
       'type',
+      'fundingAmount',
       'message',
       'proposedContribution'
     ];

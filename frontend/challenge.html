@@ -222,7 +222,12 @@
           const c = data.data;
           document.getElementById('cTitle').textContent = c.title;
           document.getElementById('cCategory').textContent = typeof getCategoryLabel === 'function' ? getCategoryLabel(c.category, getLanguage()) : (c.category || 'General');
-          document.getElementById('cDistrict').textContent = `📍 ${(c.location && c.location.district) ? c.location.district : 'Ranchi'}, Jharkhand`;
+          let locStr = `📍 ${c.location?.district || 'Ranchi'}, Jharkhand`;
+          if (c.location?.address) locStr += ` • ${c.location.address}`;
+          if (c.location?.latitude && c.location?.longitude) {
+            locStr += ` [GPS: ${Number(c.location.latitude).toFixed(4)}, ${Number(c.location.longitude).toFixed(4)}]`;
+          }
+          document.getElementById('cDistrict').textContent = locStr;
           document.getElementById('cDesc').textContent = c.description;
           document.getElementById('cOutcome').textContent = c.expectedOutcome || 'Solar-powered filtration and water quality monitoring.';
           document.getElementById('cScore').textContent = c.priorityScore || 50;

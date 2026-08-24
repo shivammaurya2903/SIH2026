@@ -80,6 +80,67 @@ const projectSchema = new mongoose.Schema(
     documents: {
       type: [mongoose.Schema.Types.Mixed],
       default: []
+    },
+    innovation: {
+      patentStatus: {
+        type: String,
+        enum: ['not_filed', 'filed', 'granted'],
+        default: 'not_filed'
+      },
+      publicationStatus: {
+        type: String,
+        enum: ['not_submitted', 'submitted', 'published'],
+        default: 'not_submitted'
+      },
+      technologyTransferStatus: {
+        type: String,
+        enum: ['not_started', 'under_review', 'completed'],
+        default: 'not_started'
+      },
+      ipAgreementStatus: {
+        type: String,
+        enum: ['draft', 'under_review', 'approved'],
+        default: 'draft'
+      },
+      startupCreated: {
+        type: Boolean,
+        default: false
+      },
+      innovationOutcome: {
+        type: String,
+        default: ''
+      }
+    },
+    testingDetails: {
+      status: {
+        type: String,
+        enum: ['pending', 'in_progress', 'passed', 'failed'],
+        default: 'pending'
+      },
+      summary: { type: String, default: '' },
+      testDate: Date,
+      result: { type: String, default: '' }
+    },
+    pilotDetails: {
+      status: {
+        type: String,
+        enum: ['planned', 'active', 'completed', 'cancelled'],
+        default: 'planned'
+      },
+      location: { type: String, default: '' },
+      startDate: Date,
+      endDate: Date,
+      outcome: { type: String, default: '' }
+    },
+    deploymentDetails: {
+      status: {
+        type: String,
+        enum: ['planned', 'deployed', 'scaled'],
+        default: 'planned'
+      },
+      deploymentDate: Date,
+      location: { type: String, default: '' },
+      notes: { type: String, default: '' }
     }
   },
   {
