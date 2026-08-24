@@ -5,10 +5,11 @@ const User = require('../models/User');
 const { analyzeChallenge: runAIAnalysis, detectDuplicates } = require('../services/ai.service');
 const { matchUniversities, matchIndustries } = require('../services/matching.service');
 const { createNotification, createBulkNotifications, safeNotify } = require('../services/notification.service');
-const { extractUploadedFiles } = require('../services/file.service');
+const { extractUploadedFiles, processAndUploadFiles, rollbackCloudinaryUploads } = require('../services/file.service');
 const { successResponse, errorResponse } = require('../utils/response');
 
 const createChallenge = async (req, res) => {
+  let fileAttachments = [];
   try {
     const allowedFields = [
       'title',
@@ -48,12 +49,18 @@ const createChallenge = async (req, res) => {
       };
     }
 
-    const fileAttachments = extractUploadedFiles(req, 'attachments');
+    fileAttachments = await processAndUploadFiles(req, 'attachments');
     if (fileAttachments.length > 0) {
       payload.attachments = fileAttachments;
     }
 
-    const challenge = await Challenge.create(payload);
+    let challenge;
+    try {
+      challenge = await Challenge.create(payload);
+    } catch (dbErr) {
+      await rollbackCloudinaryUploads(fileAttachments);
+      throw dbErr;
+    }
 
     await safeNotify(async () => {
       const govUsers = await User.find({ role: { $in: ['government', 'admin'] } }).select('_id');
@@ -165,7 +172,7 @@ const updateChallenge = async (req, res) => {
       }
     });
 
-    const fileAttachments = extractUploadedFiles(req, 'attachments');
+    const fileAttachments = await processAndUploadFiles(req, 'attachments');
     if (fileAttachments.length > 0) {
       challenge.attachments = [...(challenge.attachments || []), ...fileAttachments];
     }

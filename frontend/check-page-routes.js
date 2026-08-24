@@ -35,6 +35,8 @@ allHtmlPages.forEach(filePath => {
         target.startsWith('mailto:') || 
         target.startsWith('tel:') || 
         target.startsWith('data:') || 
+        target.startsWith('${') || 
+        target.includes('${') || 
         target.startsWith('/api/')) {
       continue;
     }

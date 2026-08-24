@@ -168,6 +168,9 @@
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
+        if (typeof handleAuthError === 'function' && handleAuthError(res, data)) {
+          return;
+        }
         const listContainer = document.getElementById('reportsList');
 
         if (res.ok && data.success && data.data) {

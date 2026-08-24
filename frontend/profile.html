@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">User Profile — JharInnovate / SamadhanSetu</title>
+  <script src="categories.js"></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -147,6 +148,9 @@
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
+        if (typeof handleAuthError === 'function' && handleAuthError(res, data)) {
+          return;
+        }
         if (res.ok && data.success && data.data) {
           const u = data.data;
           document.getElementById('profName').value = u.name || '';

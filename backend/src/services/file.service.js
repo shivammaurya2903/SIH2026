@@ -25,17 +25,27 @@ const getFileUrl = (filename) => {
   return `/uploads/${filename}`;
 };
 
-const formatFileMetadata = (file, userId = null) => {
+const { uploadImageToCloudinary, deleteImageFromCloudinary, isConfigured: isCloudinaryConfigured } = require('./cloudinary.service');
+
+const formatFileMetadata = (file, userId = null, cloudinaryData = null) => {
   if (!file) return null;
+
+  const isImage = (file.mimetype || '').startsWith('image/');
+  const localUrl = getFileUrl(file.filename || path.basename(file.path || ''));
 
   return {
     name: file.originalname || file.name || file.filename,
     originalName: file.originalname || file.name || file.filename,
     filename: file.filename || path.basename(file.path || ''),
-    url: getFileUrl(file.filename || path.basename(file.path || '')),
-    type: file.mimetype || file.type || 'application/octet-stream',
+    url: cloudinaryData?.secureUrl || localUrl,
+    secureUrl: cloudinaryData?.secureUrl || localUrl,
+    publicId: cloudinaryData?.publicId || null,
+    resourceType: isImage ? 'image' : 'document',
     mimeType: file.mimetype || file.type || 'application/octet-stream',
+    format: cloudinaryData?.format || path.extname(file.originalname || '').replace('.', ''),
     size: file.size || 0,
+    width: cloudinaryData?.width || null,
+    height: cloudinaryData?.height || null,
     uploadedBy: userId || null,
     uploadedAt: new Date()
   };
@@ -80,9 +90,53 @@ const extractUploadedFiles = (req, fieldName, existingArray = []) => {
   return result.filter((item) => typeof item === 'object' && item !== null && !Array.isArray(item));
 };
 
+const processAndUploadFiles = async (req, fieldName, existingArray = []) => {
+  let filesToProcess = [];
+
+  if (req.files && Array.isArray(req.files)) {
+    filesToProcess = req.files.filter(f => f.fieldname === fieldName || !fieldName);
+  } else if (req.files && typeof req.files === 'object' && req.files[fieldName]) {
+    filesToProcess = req.files[fieldName];
+  } else if (req.file && (req.file.fieldname === fieldName || !fieldName)) {
+    filesToProcess = [req.file];
+  }
+
+  const existing = extractUploadedFiles(req, fieldName, existingArray);
+  const newlyUploaded = [];
+
+  for (const file of filesToProcess) {
+    const isImage = (file.mimetype || '').startsWith('image/');
+    let cRes = null;
+
+    if (isImage && isCloudinaryConfigured && file.path) {
+      try {
+        cRes = await uploadImageToCloudinary(file.path);
+      } catch (err) {
+        console.error('Failed to upload image to Cloudinary:', err.message);
+      }
+    }
+
+    const meta = formatFileMetadata(file, req.user?._id, cRes);
+    newlyUploaded.push(meta);
+  }
+
+  return [...existing, ...newlyUploaded];
+};
+
+const rollbackCloudinaryUploads = async (attachments = []) => {
+  if (!Array.isArray(attachments)) return;
+  for (const att of attachments) {
+    if (att && att.publicId) {
+      await deleteImageFromCloudinary(att.publicId);
+    }
+  }
+};
+
 module.exports = {
   deleteFile,
   getFileUrl,
   formatFileMetadata,
-  extractUploadedFiles
+  extractUploadedFiles,
+  processAndUploadFiles,
+  rollbackCloudinaryUploads
 };

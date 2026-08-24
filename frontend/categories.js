@@ -226,6 +226,31 @@ function getBlocksForDistrict(rawDistrict) {
   return found ? found.blocks : ["Sadar Block", "Urban Local Body / Ward", "North Block", "South Block"];
 }
 
+/**
+ * Global 401 Session Invalidation Helper
+ * If server returns 401 or invalid token message, clears localStorage session and redirects to login.
+ */
+function handleAuthError(res, data) {
+  const is401 = (res && res.status === 401) ||
+                (data && data.message && (
+                  data.message.includes('no longer exists') ||
+                  data.message.includes('expired') ||
+                  data.message.includes('malformed') ||
+                  data.message.includes('token')
+                ));
+  if (is401) {
+    localStorage.removeItem('jhar_token');
+    localStorage.removeItem('jhar_user');
+    const msg = (typeof getLanguage === 'function' && getLanguage() === 'hi')
+      ? 'आपका सत्र समाप्त हो गया है। कृपया पुनः साइन इन करें।'
+      : 'Your session has expired. Please sign in again.';
+    alert(msg);
+    window.location.href = 'login.html';
+    return true;
+  }
+  return false;
+}
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     CHALLENGE_CATEGORIES,
@@ -235,6 +260,7 @@ if (typeof module !== 'undefined' && module.exports) {
     getCategoryLabel,
     getCategoryIcon,
     getDistrictLabel,
-    getBlocksForDistrict
+    getBlocksForDistrict,
+    handleAuthError
   };
 }

@@ -96,6 +96,11 @@
           <p id="cOutcome" style="font-size: 13px; color: var(--text-muted);">
             Automated solar-powered filtration units with telemetry sensors deployed across 14 rural schools.
           </p>
+
+          <h3 style="font-size: 14px; font-weight: 800; color: var(--primary-dark); margin-top: 20px; margin-bottom: 6px;">Uploaded Evidence & Images (Cloudinary)</h3>
+          <div id="cAttachmentsGallery" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;">
+            <span style="font-size: 13px; color: var(--text-muted);">No evidence images attached.</span>
+          </div>
         </div>
       </div>
 
@@ -131,17 +136,15 @@
 
         <div class="card">
           <h3 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px;" data-i18n="match.uniHeading">Academic R&D Match</h3>
-          <div style="background: var(--background); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border);">
-            <div style="font-weight: 800; font-size: 13px; color: var(--primary);">BIT Mesra (94% Capability Match)</div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Department of Environmental Engineering & Water Resource Hub</div>
+          <div id="uniMatchContainer" style="background: var(--background); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+            <div style="font-size: 13px; color: var(--text-muted);">No academic match available yet.</div>
           </div>
         </div>
 
         <div class="card">
           <h3 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px;" data-i18n="match.indHeading">Industry CSR Partner</h3>
-          <div style="background: var(--background); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border);">
-            <div style="font-weight: 800; font-size: 13px; color: var(--secondary);">Tata Steel CSR & Sustainability Hub</div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Clean Water Capability & CSR Sponsorship Alignment</div>
+          <div id="indMatchContainer" style="background: var(--background); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+            <div style="font-size: 13px; color: var(--text-muted);">No industry partner matched yet.</div>
           </div>
         </div>
       </div>
@@ -229,17 +232,70 @@
           }
           document.getElementById('cDistrict').textContent = locStr;
           document.getElementById('cDesc').textContent = c.description;
-          document.getElementById('cOutcome').textContent = c.expectedOutcome || 'Solar-powered filtration and water quality monitoring.';
-          document.getElementById('cScore').textContent = c.priorityScore || 50;
+          document.getElementById('cOutcome').textContent = c.expectedOutcome || 'Community impact solution development.';
+          document.getElementById('cScore').textContent = c.aiAnalysis?.priorityScore || c.priorityScore || 50;
+
+          if (c.attachments && c.attachments.length > 0) {
+            const gallery = document.getElementById('cAttachmentsGallery');
+            if (gallery) {
+              gallery.innerHTML = c.attachments.map(att => {
+                const imgUrl = att.secureUrl || att.url || (att.filename ? `/uploads/${att.filename}` : null);
+                if (imgUrl && (att.resourceType === 'image' || (att.mimeType || '').startsWith('image/') || imgUrl.match(/\.(jpg|jpeg|png|webp)/i))) {
+                  return `<a href="${imgUrl}" target="_blank" title="View Evidence Image"><img src="${imgUrl}" style="width: 110px; height: 110px; object-fit: cover; border-radius: var(--radius-md); border: 1px solid var(--border); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"></a>`;
+                } else if (imgUrl) {
+                  return `<a href="${imgUrl}" target="_blank" class="pill" style="padding: 8px 12px; font-weight: 700;">📄 ${att.originalName || att.name || 'Document'}</a>`;
+                }
+                return '';
+              }).join('');
+            }
+          }
 
           if (c.aiAnalysis) {
             document.getElementById('aiSummary').textContent = c.aiAnalysis.summary || 'AI Analysis completed.';
-            if (c.aiAnalysis.keywords) {
+            if (c.aiAnalysis.keywords && c.aiAnalysis.keywords.length > 0) {
               document.getElementById('aiKeywords').innerHTML = c.aiAnalysis.keywords.map(k => `<span class="pill">${k}</span>`).join('');
             }
-            if (c.aiAnalysis.requiredSkills) {
+            if (c.aiAnalysis.requiredSkills && c.aiAnalysis.requiredSkills.length > 0) {
               document.getElementById('aiSkills').innerHTML = c.aiAnalysis.requiredSkills.map(s => `<span class="pill" style="color:var(--primary); font-weight:800;">${s}</span>`).join('');
             }
+          }
+
+          if (c.assignedUniversity) {
+            const uName = typeof c.assignedUniversity === 'object' ? c.assignedUniversity.name : 'Matched University';
+            document.getElementById('uniMatchContainer').innerHTML = `
+              <div style="font-weight: 800; font-size: 13px; color: var(--primary);">${uName} (Assigned R&D Partner)</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">University R&D Project Team Assigned</div>
+            `;
+          } else if (c.matchedUniversities && c.matchedUniversities.length > 0) {
+            const topUni = c.matchedUniversities[0];
+            const uName = typeof topUni.university === 'object' ? topUni.university.name : 'University Hub';
+            document.getElementById('uniMatchContainer').innerHTML = `
+              <div style="font-weight: 800; font-size: 13px; color: var(--primary);">${uName} (${topUni.matchScore || 85}% AI Capability Match)</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">R&D Capability Alignment</div>
+            `;
+          } else {
+            document.getElementById('uniMatchContainer').innerHTML = `
+              <div style="font-size: 13px; color: var(--text-muted);">No academic match available yet.</div>
+            `;
+          }
+
+          if (c.assignedIndustry) {
+            const iName = typeof c.assignedIndustry === 'object' ? c.assignedIndustry.name : 'CSR Partner';
+            document.getElementById('indMatchContainer').innerHTML = `
+              <div style="font-weight: 800; font-size: 13px; color: var(--secondary);">${iName} (Sponsoring Partner)</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">CSR Sponsorship & Deployment Collaboration</div>
+            `;
+          } else if (c.matchedIndustries && c.matchedIndustries.length > 0) {
+            const topInd = c.matchedIndustries[0];
+            const iName = typeof topInd.industry === 'object' ? topInd.industry.name : 'Industry Partner';
+            document.getElementById('indMatchContainer').innerHTML = `
+              <div style="font-weight: 800; font-size: 13px; color: var(--secondary);">${iName} (${topInd.matchScore || 80}% CSR Match)</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Clean Tech & CSR Alignment</div>
+            `;
+          } else {
+            document.getElementById('indMatchContainer').innerHTML = `
+              <div style="font-size: 13px; color: var(--text-muted);">No industry partner matched yet.</div>
+            `;
           }
         }
       } catch (err) {}

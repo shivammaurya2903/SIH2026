@@ -150,12 +150,15 @@
         <!-- STEP 2 -->
         <div class="step-pane hidden" id="pane2">
           <h2 class="step-title" data-i18n="s2.title">Problem ki Photo Upload Karein</h2>
-          <p class="step-sub" data-i18n="s2.sub">Upload clear photos proving the issue (Max 10MB per file).</p>
+          <p class="step-sub" data-i18n="s2.sub">Upload clear photos or evidence documents (Max 10MB per file, JPG/PNG/WEBP/PDF).</p>
 
           <div class="form-group">
             <label class="form-label" for="attachments" data-i18n="s2.label">Choose Image / Document File</label>
-            <input type="file" id="attachments" class="form-control" multiple accept="image/*,application/pdf">
+            <input type="file" id="attachments" class="form-control" multiple accept="image/jpeg,image/png,image/webp,application/pdf" onchange="handleFileSelection(event)">
           </div>
+
+          <!-- LOCAL IMAGE PREVIEW GRID (SIH26043 STEP 16) -->
+          <div id="imagePreviewGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 16px;"></div>
 
           <div style="display: flex; justify-content: space-between;">
             <button type="button" class="btn btn-secondary" onclick="nextStep(1)" data-i18n="btn.back">← Back</button>
@@ -468,6 +471,40 @@
       rec.start();
     }
 
+    function handleFileSelection(event) {
+      const files = Array.from(event.target.files);
+      const container = document.getElementById('imagePreviewGrid');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const rejectedExts = ['.exe', '.bat', '.cmd', '.sh', '.js', '.html', '.php', '.dll', '.msi'];
+
+      files.forEach((file) => {
+        const ext = '.' + file.name.split('.').pop().toLowerCase();
+        if (rejectedExts.includes(ext)) {
+          alert(`Security Warning: '${file.name}' is an executable/script format and is strictly prohibited.`);
+          return;
+        }
+
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+        const card = document.createElement('div');
+        card.style.cssText = 'background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px; text-align: center; font-size: 11px;';
+
+        let thumbHtml = `<div style="width: 100%; height: 80px; background: var(--background); display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; border-radius: 4px;">📄 DOC</div>`;
+        if (file.type.startsWith('image/')) {
+          const objUrl = URL.createObjectURL(file);
+          thumbHtml = `<img src="${objUrl}" style="width: 100%; height: 80px; object-fit: cover; border-radius: 4px; margin-bottom: 6px;">`;
+        }
+
+        card.innerHTML = `
+          ${thumbHtml}
+          <div style="font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${file.name}</div>
+          <div style="color: var(--text-muted); font-size: 10px;">${sizeMb} MB</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
     function onDistrictChange(districtName) {
       const blockSelect = document.getElementById('block');
       if (!blockSelect) return;
@@ -519,6 +556,10 @@
           body: formData
         });
         const data = await res.json();
+
+        if (typeof handleAuthError === 'function' && handleAuthError(res, data)) {
+          return;
+        }
 
         if (res.ok && data.success && data.data) {
           const c = data.data;
