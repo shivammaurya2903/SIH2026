@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="pageTitle">Challenge Details & AI Triage — JharInnovate / SamadhanSetu</title>
+  <style>
+    :root {
+      --primary: #1D4ED8;
+      --primary-dark: #172554;
+      --primary-light: #EFF6FF;
+      --accent: #F59E0B;
+      --background: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --danger: #DC2626;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-md: 0 4px 12px rgba(15,23,42,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--background); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    .civic-nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary-dark); }
+    .brand-logo { width: 36px; height: 36px; background: var(--primary); color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+
+    .container { max-width: 1000px; margin: 24px auto; padding: 0 20px; width: 100%; }
+
+    .detail-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; }
+    @media (max-width: 868px) { .detail-grid { grid-template-columns: 1fr; } }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow-md); }
+    
+    .c-header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
+    .c-title { font-size: 24px; font-weight: 900; color: var(--primary-dark); line-height: 1.2; }
+    .c-badge { background: var(--primary-light); color: var(--primary); font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; }
+
+    .score-box { background: var(--accent); color: var(--primary-dark); padding: 12px 18px; border-radius: var(--radius-md); text-align: center; }
+    .score-val { font-size: 28px; font-weight: 900; line-height: 1; }
+    .score-lbl { font-size: 10px; font-weight: 800; text-transform: uppercase; margin-top: 2px; }
+
+    .pill-group { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .pill { background: var(--background); border: 1px solid var(--border); font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 4px; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 16px; border-radius: var(--radius-md); font-weight: 700; font-size: 13px; text-decoration: none; border: 1px solid transparent; cursor: pointer; }
+    .btn-secondary { background: var(--background); color: var(--text); border-color: var(--border); }
+    .btn-primary { background: var(--primary); color: white; }
+    .lang-toggle { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--primary); font-weight: 800; cursor: pointer; font-size: 12px; }
+
+    .civic-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px; text-align: center; margin-top: auto; font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <nav class="civic-nav">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">J</div>
+      <div>
+        <div style="font-weight: 900; font-size: 18px;">JharInnovate</div>
+        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;" data-i18n="nav.subtitle">CHALLENGE DETAILS & AI ANALYSIS</div>
+      </div>
+    </a>
+    <div style="display: flex; gap: 10px;">
+      <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">EN | हिंदी</button>
+      <a href="challenges.html" class="btn btn-secondary" data-i18n="nav.back">← Back to Feed</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="detail-grid">
+      
+      <div>
+        <div class="card">
+          <div class="c-header-row">
+            <div>
+              <span class="c-badge" id="cCategory">Water Infrastructure</span>
+              <h1 class="c-title" id="cTitle" style="margin-top: 8px;">Drinking Water Contamination in Rural Schools</h1>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;" id="cDistrict">📍 Kanke, Ranchi, Jharkhand</div>
+            </div>
+            <div class="score-box">
+              <div class="score-val" id="cScore">87</div>
+              <div class="score-lbl" data-i18n="card.scoreLbl">AI Priority</div>
+            </div>
+          </div>
+
+          <h3 style="font-size: 14px; font-weight: 800; color: var(--primary-dark); margin-top: 16px; margin-bottom: 6px;" data-i18n="card.descHeading">Problem Description</h3>
+          <p id="cDesc" style="font-size: 14px; color: var(--text); line-height: 1.6; white-space: pre-line;">
+            High fluoride and heavy metal levels in groundwater across rural schools in Kanke block causing fluorosis among students.
+          </p>
+
+          <h3 style="font-size: 14px; font-weight: 800; color: var(--primary-dark); margin-top: 20px; margin-bottom: 6px;" data-i18n="card.outcomeHeading">Expected Solution Outcome</h3>
+          <p id="cOutcome" style="font-size: 13px; color: var(--text-muted);">
+            Automated solar-powered filtration units with telemetry sensors deployed across 14 rural schools.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="background: var(--primary-light); border-color: var(--primary);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <span style="font-size: 20px;">🤖</span>
+            <h3 style="font-size: 16px; font-weight: 800; color: var(--primary);" data-i18n="ai.title">Groq AI Priority Triage</h3>
+          </div>
+
+          <p id="aiSummary" style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.4;">
+            Critical water quality problem affecting 1,200+ students requiring solar filtration and IoT turbidity sensors.
+          </p>
+
+          <div style="margin-bottom: 12px;">
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;" data-i18n="ai.kwLabel">Extracted Keywords</div>
+            <div class="pill-group" id="aiKeywords">
+              <span class="pill">Water</span>
+              <span class="pill">Fluoride</span>
+              <span class="pill">Solar Filtration</span>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;" data-i18n="ai.skillsLabel">Required R&D Skills</div>
+            <div class="pill-group" id="aiSkills">
+              <span class="pill" style="color: var(--primary); font-weight: 800;">Hydrology</span>
+              <span class="pill" style="color: var(--primary); font-weight: 800;">IoT Sensors</span>
+              <span class="pill" style="color: var(--primary); font-weight: 800;">Water Chemistry</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px;" data-i18n="match.uniHeading">Academic R&D Match</h3>
+          <div style="background: var(--background); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+            <div style="font-weight: 800; font-size: 13px; color: var(--primary);">BIT Mesra (94% Capability Match)</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Department of Environmental Engineering & Water Resource Hub</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 15px; font-weight: 800; color: var(--primary-dark); margin-bottom: 10px;" data-i18n="match.indHeading">Industry CSR Partner</h3>
+          <div style="background: var(--background); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+            <div style="font-weight: 800; font-size: 13px; color: var(--secondary);">Tata Steel CSR & Sustainability Hub</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Clean Water Capability & CSR Sponsorship Alignment</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="civic-footer">
+    <div data-i18n="footer.copy">&copy; 2026 JharInnovate / SamadhanSetu — Challenge Intelligence</div>
+  </footer>
+
+  <script>
+    const CONFIG = {
+      API_BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000/api' : '/api',
+      STORAGE_KEYS: { LANG: 'jhar_language' }
+    };
+
+    const I18N = {
+      en: {
+        pageTitle: 'Challenge Details & AI Triage — JharInnovate / SamadhanSetu',
+        nav: { subtitle: 'CHALLENGE DETAILS & AI ANALYSIS', back: '← Back to Feed' },
+        card: { scoreLbl: 'AI Priority', descHeading: 'Problem Description', outcomeHeading: 'Expected Solution Outcome' },
+        ai: { title: 'Groq AI Priority Triage', kwLabel: 'Extracted Keywords', skillsLabel: 'Required R&D Skills' },
+        match: { uniHeading: 'Academic R&D Match', indHeading: 'Industry CSR Partner' },
+        footer: { copy: '© 2026 JharInnovate / SamadhanSetu — Challenge Intelligence' }
+      },
+      hi: {
+        pageTitle: 'चुनौती विवरण और एआई विश्लेषण — झारइन्नोवेट / समाधानसेतु',
+        nav: { subtitle: 'चुनौती विवरण और एआई विश्लेषण', back: '← फीड पर वापस' },
+        card: { scoreLbl: 'एआई प्राथमिकता', descHeading: 'समस्या का विवरण', outcomeHeading: 'अपेक्षित समाधान परिणाम' },
+        ai: { title: 'Groq AI प्राथमिकता विश्लेषण', kwLabel: 'निकाले गए कीवर्ड', skillsLabel: 'आवश्यक आरएंडडी कौशल' },
+        match: { uniHeading: 'अकादमिक आरएंडडी मिलान', indHeading: 'उद्योग सीएसआर भागीदार' },
+        footer: { copy: '© 2026 झारइन्नोवेट / समाधानसेतु — चुनौती इंटेलिजेंस' }
+      }
+    };
+
+    function getLanguage() { return localStorage.getItem(CONFIG.STORAGE_KEYS.LANG) || 'en'; }
+    function t(key) {
+      const lang = getLanguage();
+      const keys = key.split('.');
+      let obj = I18N[lang] || I18N['en'];
+      for (const k of keys) {
+        if (!obj || obj[k] === undefined) return key;
+        obj = obj[k];
+      }
+      return obj;
+    }
+    function applyLanguage(lang) {
+      const currentLang = lang || getLanguage();
+      localStorage.setItem(CONFIG.STORAGE_KEYS.LANG, currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = t(key);
+        if (val && val !== key) el.textContent = val;
+      });
+
+      const toggleBtn = document.getElementById('langToggleBtn');
+      if (toggleBtn) toggleBtn.textContent = currentLang === 'en' ? 'EN | हिंदी' : 'हिंदी | EN';
+    }
+    function toggleLanguage() {
+      applyLanguage(getLanguage() === 'en' ? 'hi' : 'en');
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      applyLanguage(getLanguage());
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      if (!id) return;
+
+      try {
+        const res = await fetch(`${CONFIG.API_BASE_URL}/challenges/${id}`);
+        const data = await res.json();
+
+        if (res.ok && data.success && data.data) {
+          const c = data.data;
+          document.getElementById('cTitle').textContent = c.title;
+          document.getElementById('cCategory').textContent = c.category || 'General';
+          document.getElementById('cDistrict').textContent = `📍 ${(c.location && c.location.district) ? c.location.district : 'Ranchi'}, Jharkhand`;
+          document.getElementById('cDesc').textContent = c.description;
+          document.getElementById('cOutcome').textContent = c.expectedOutcome || 'Solar-powered filtration and water quality monitoring.';
+          document.getElementById('cScore').textContent = c.priorityScore || 50;
+
+          if (c.aiAnalysis) {
+            document.getElementById('aiSummary').textContent = c.aiAnalysis.summary || 'AI Analysis completed.';
+            if (c.aiAnalysis.keywords) {
+              document.getElementById('aiKeywords').innerHTML = c.aiAnalysis.keywords.map(k => `<span class="pill">${k}</span>`).join('');
+            }
+            if (c.aiAnalysis.requiredSkills) {
+              document.getElementById('aiSkills').innerHTML = c.aiAnalysis.requiredSkills.map(s => `<span class="pill" style="color:var(--primary); font-weight:800;">${s}</span>`).join('');
+            }
+          }
+        }
+      } catch (err) {}
+    });
+  </script>
+</body>
+</html>

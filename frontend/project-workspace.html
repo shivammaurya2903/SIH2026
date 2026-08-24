@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="pageTitle">Project R&D Workspace — JharInnovate / SamadhanSetu</title>
+  <style>
+    :root {
+      --primary: #1D4ED8;
+      --primary-dark: #172554;
+      --primary-light: #EFF6FF;
+      --accent: #F59E0B;
+      --background: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-md: 0 4px 12px rgba(15,23,42,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--background); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    .civic-nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary-dark); }
+    .brand-logo { width: 36px; height: 36px; background: var(--primary); color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+
+    .container { max-width: 1050px; margin: 24px auto; padding: 0 20px; width: 100%; }
+
+    .tab-bar { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+    .tab-item { padding: 10px 18px; font-weight: 800; font-size: 14px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab-item.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-md); margin-bottom: 24px; }
+    .card-title { font-size: 18px; font-weight: 800; color: var(--primary-dark); margin-bottom: 16px; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius-md); font-weight: 700; font-size: 13px; text-decoration: none; border: 1px solid transparent; cursor: pointer; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-secondary { background: var(--background); color: var(--text); border-color: var(--border); }
+    .lang-toggle { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--primary); font-weight: 800; cursor: pointer; font-size: 12px; }
+
+    .civic-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px; text-align: center; margin-top: auto; font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <nav class="civic-nav">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">W</div>
+      <div>
+        <div style="font-weight: 900; font-size: 18px;">JharInnovate</div>
+        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;" data-i18n="nav.subtitle">PROJECT COLLABORATION WORKSPACE</div>
+      </div>
+    </a>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">EN | हिंदी</button>
+      <a href="citizen-dashboard.html" class="btn btn-secondary" data-i18n="nav.dashboard">Dashboard</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div style="margin-bottom: 20px;">
+      <h1 style="font-size: 24px; font-weight: 900; color: var(--primary-dark);">Solar Water Filtration Telemetry System</h1>
+      <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">BIT Mesra • Tata Steel CSR • Kanke, Ranchi</div>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-item active" onclick="switchTab('overview', this)" data-i18n="tab.overview">Overview</div>
+      <div class="tab-item" onclick="switchTab('team', this)" data-i18n="tab.team">Team</div>
+      <div class="tab-item" onclick="switchTab('milestones', this)" data-i18n="tab.milestones">Milestones</div>
+      <div class="tab-item" onclick="switchTab('documents', this)" data-i18n="tab.documents">Documents</div>
+    </div>
+
+    <div class="card" id="paneOverview">
+      <h2 class="card-title" data-i18n="over.title">Project Overview & Objectives</h2>
+      <p style="font-size: 14px; color: var(--text); line-height: 1.6;" data-i18n="over.desc">
+        Designing and deploying 14 low-cost solar water filtration units with IoT telemetry sensors across rural schools in Kanke block.
+      </p>
+    </div>
+
+    <div class="card hidden" id="paneTeam">
+      <h2 class="card-title" data-i18n="team.title">Assigned R&D Team</h2>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+        <div style="padding: 10px; background: var(--background); border-radius: var(--radius-md);">
+          <strong>Dr. Ramesh Kumar</strong> — Faculty Mentor (BIT Mesra)
+        </div>
+        <div style="padding: 10px; background: var(--background); border-radius: var(--radius-md);">
+          <strong>Priya Sharma</strong> — Student Lead (IoT & Embedded Systems)
+        </div>
+      </div>
+    </div>
+
+    <div class="card hidden" id="paneMilestones">
+      <h2 class="card-title" data-i18n="ms.title">Milestone Progress</h2>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+        <div style="padding: 10px; background: #EFF6FF; border-radius: var(--radius-md); border: 1px solid #93C5FD;">
+          <strong>Milestone 1:</strong> Lab Filtration Prototype Completed (Verified)
+        </div>
+        <div style="padding: 10px; background: #FEF3C7; border-radius: var(--radius-md); border: 1px solid #FCD34D;">
+          <strong>Milestone 2:</strong> IoT Sensor & Telemetry Integration (In Progress)
+        </div>
+      </div>
+    </div>
+
+    <div class="card hidden" id="paneDocuments">
+      <h2 class="card-title" data-i18n="doc.title">Project Documents & Code</h2>
+      <button class="btn btn-primary" onclick="alert('Upload file triggered')" data-i18n="doc.uploadBtn">Upload Deliverable</button>
+    </div>
+  </div>
+
+  <footer class="civic-footer">
+    <div data-i18n="footer.copy">&copy; 2026 JharInnovate / SamadhanSetu — Project Collaboration Workspace</div>
+  </footer>
+
+  <script>
+    const CONFIG = { STORAGE_KEYS: { LANG: 'jhar_language' } };
+
+    const I18N = {
+      en: {
+        pageTitle: 'Project R&D Workspace — JharInnovate / SamadhanSetu',
+        nav: { subtitle: 'PROJECT COLLABORATION WORKSPACE', dashboard: 'Dashboard' },
+        tab: { overview: 'Overview', team: 'Team', milestones: 'Milestones', documents: 'Documents' },
+        over: { title: 'Project Overview & Objectives', desc: 'Designing and deploying 14 low-cost solar water filtration units with IoT telemetry sensors across rural schools in Kanke block.' },
+        team: { title: 'Assigned R&D Team' },
+        ms: { title: 'Milestone Progress' },
+        doc: { title: 'Project Documents & Code', uploadBtn: 'Upload Deliverable' },
+        footer: { copy: '© 2026 JharInnovate / SamadhanSetu — Project Collaboration Workspace' }
+      },
+      hi: {
+        pageTitle: 'प्रोजेक्ट आरएंडडी कार्यस्थान — झारइन्नोवेट / समाधानसेतु',
+        nav: { subtitle: 'परियोजना सहयोग कार्यस्थान', dashboard: 'डैशबोर्ड' },
+        tab: { overview: 'अवलोकन', team: 'टीम', milestones: 'माइलस्टोन', documents: 'दस्तावेज़' },
+        over: { title: 'परियोजना अवलोकन एवं उद्देश्य', desc: 'कांके प्रखंड के ग्रामीण स्कूलों में आईओटी टेलीमेट्री सेंसर के साथ 14 कम लागत वाली सौर जल निस्पंदन इकाइयों का डिजाइन और तैनाती।' },
+        team: { title: 'नियुक्त आरएंडडी टीम' },
+        ms: { title: 'माइलस्टोन प्रगति' },
+        doc: { title: 'परियोजना दस्तावेज और कोड', uploadBtn: 'सबमिशन अपलोड करें' },
+        footer: { copy: '© 2026 झारइन्नोवेट / समाधानसेतु — परियोजना सहयोग कार्यस्थान' }
+      }
+    };
+
+    function getLanguage() { return localStorage.getItem(CONFIG.STORAGE_KEYS.LANG) || 'en'; }
+    function t(key) {
+      const lang = getLanguage();
+      const keys = key.split('.');
+      let obj = I18N[lang] || I18N['en'];
+      for (const k of keys) {
+        if (!obj || obj[k] === undefined) return key;
+        obj = obj[k];
+      }
+      return obj;
+    }
+    function applyLanguage(lang) {
+      const currentLang = lang || getLanguage();
+      localStorage.setItem(CONFIG.STORAGE_KEYS.LANG, currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = t(key);
+        if (val && val !== key) el.textContent = val;
+      });
+
+      const toggleBtn = document.getElementById('langToggleBtn');
+      if (toggleBtn) toggleBtn.textContent = currentLang === 'en' ? 'EN | हिंदी' : 'हिंदी | EN';
+    }
+    function toggleLanguage() {
+      applyLanguage(getLanguage() === 'en' ? 'hi' : 'en');
+    }
+
+    function switchTab(name, el) {
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+
+      document.getElementById('paneOverview').classList.add('hidden');
+      document.getElementById('paneTeam').classList.add('hidden');
+      document.getElementById('paneMilestones').classList.add('hidden');
+      document.getElementById('paneDocuments').classList.add('hidden');
+
+      if (name === 'overview') document.getElementById('paneOverview').classList.remove('hidden');
+      if (name === 'team') document.getElementById('paneTeam').classList.remove('hidden');
+      if (name === 'milestones') document.getElementById('paneMilestones').classList.remove('hidden');
+      if (name === 'documents') document.getElementById('paneDocuments').classList.remove('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(getLanguage());
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="pageTitle">State Analytics & Intelligence — JharInnovate / SamadhanSetu</title>
+
+  <!-- CDN Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --primary: #1D4ED8;
+      --primary-dark: #172554;
+      --primary-light: #EFF6FF;
+      --accent: #F59E0B;
+      --background: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 2px rgba(15,23,42,0.05);
+      --shadow-md: 0 4px 12px rgba(15,23,42,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--background); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    .civic-nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary-dark); }
+    .brand-logo { width: 36px; height: 36px; background: var(--primary); color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+
+    .container { max-width: 1100px; margin: 24px auto; padding: 0 20px; width: 100%; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-md); }
+    .card-title { font-size: 18px; font-weight: 800; color: var(--primary-dark); margin-bottom: 16px; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius-md); font-weight: 700; font-size: 13px; text-decoration: none; border: 1px solid transparent; cursor: pointer; }
+    .btn-secondary { background: var(--background); color: var(--text); border-color: var(--border); }
+    .lang-toggle { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--primary); font-weight: 800; cursor: pointer; font-size: 12px; }
+
+    .civic-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px; text-align: center; margin-top: auto; font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <nav class="civic-nav">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">A</div>
+      <div>
+        <div style="font-weight: 900; font-size: 18px;">JharInnovate</div>
+        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;" data-i18n="nav.subtitle">ANALYTICS & STATE INTELLIGENCE</div>
+      </div>
+    </a>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">EN | हिंदी</button>
+      <a href="index.html" class="btn btn-secondary" data-i18n="nav.home">Home</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div style="margin-bottom: 24px;">
+      <h1 style="font-size: 26px; font-weight: 900; color: var(--primary-dark);" data-i18n="head.title">State Innovation Analytics</h1>
+      <p style="font-size: 14px; color: var(--text-muted);" data-i18n="head.sub">Real-time statistics across 24 Jharkhand districts, problem categories, and R&D pipeline stages.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h2 class="card-title" data-i18n="chart.districtTitle">District Problem Distribution</h2>
+        <canvas id="districtChart"></canvas>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title" data-i18n="chart.categoryTitle">Category Breakdown</h2>
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title" data-i18n="chart.pipelineTitle">Project R&D Pipeline Progression</h2>
+      <canvas id="pipelineChart"></canvas>
+    </div>
+  </div>
+
+  <footer class="civic-footer">
+    <div data-i18n="footer.copy">&copy; 2026 JharInnovate / SamadhanSetu — Analytics Engine</div>
+  </footer>
+
+  <script>
+    const CONFIG = {
+      API_BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000/api' : '/api',
+      STORAGE_KEYS: { LANG: 'jhar_language' }
+    };
+
+    const I18N = {
+      en: {
+        pageTitle: 'State Analytics & Intelligence — JharInnovate / SamadhanSetu',
+        nav: { subtitle: 'ANALYTICS & STATE INTELLIGENCE', home: 'Home' },
+        head: { title: 'State Innovation Analytics', sub: 'Real-time statistics across 24 Jharkhand districts, problem categories, and R&D pipeline stages.' },
+        chart: {
+          districtTitle: 'District Problem Distribution',
+          categoryTitle: 'Category Breakdown',
+          pipelineTitle: 'Project R&D Pipeline Progression',
+          reportedLabel: 'Reported Challenges',
+          water: 'Water', agri: 'Agriculture', health: 'Healthcare', edu: 'Education', roads: 'Roads',
+          submitted: 'Submitted', verified: 'Verified', matched: 'Matched', inProject: 'Active Project', completed: 'Completed'
+        },
+        footer: { copy: '© 2026 JharInnovate / SamadhanSetu — Analytics Engine' }
+      },
+      hi: {
+        pageTitle: 'राज्य विश्लेषण और इंटेलिजेंस — झारइन्नोवेट / समाधानसेतु',
+        nav: { subtitle: 'राज्य विश्लेषण और इंटेलिजेंस', home: 'होम' },
+        head: { title: 'राज्य नवाचार विश्लेषण', sub: '24 झारखंड जिलों, समस्या श्रेणियों और आरएंडडी पाइपलाइन चरणों में वास्तविक समय आंकड़े।' },
+        chart: {
+          districtTitle: 'जिला समस्या वितरण',
+          categoryTitle: 'श्रेणी विभाजन',
+          pipelineTitle: 'प्रोजेक्ट आरएंडडी पाइपलाइन प्रगति',
+          reportedLabel: 'दर्ज चुनौतियां',
+          water: 'जल', agri: 'कृषि', health: 'स्वास्थ्य सेवा', edu: 'शिक्षा', roads: 'सड़कें',
+          submitted: 'जमा हुआ', verified: 'सत्यापित', matched: 'मिलान हुआ', inProject: 'सक्रिय प्रोजेक्ट', completed: 'पूर्ण'
+        },
+        footer: { copy: '© 2026 झारइन्नोवेट / समाधानसेतु — एनालिटिक्स इंजन' }
+      }
+    };
+
+    function getLanguage() { return localStorage.getItem(CONFIG.STORAGE_KEYS.LANG) || 'en'; }
+    function t(key) {
+      const lang = getLanguage();
+      const keys = key.split('.');
+      let obj = I18N[lang] || I18N['en'];
+      for (const k of keys) {
+        if (!obj || obj[k] === undefined) return key;
+        obj = obj[k];
+      }
+      return obj;
+    }
+
+    let chart1, chart2, chart3;
+
+    function renderCharts() {
+      if (chart1) chart1.destroy();
+      if (chart2) chart2.destroy();
+      if (chart3) chart3.destroy();
+
+      // District Chart
+      const ctx1 = document.getElementById('districtChart').getContext('2d');
+      chart1 = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: ['Ranchi', 'Dhanbad', 'E. Singhbhum', 'Bokaro', 'Hazaribagh', 'Deoghar'],
+          datasets: [{
+            label: t('chart.reportedLabel'),
+            data: [320, 240, 190, 150, 110, 85],
+            backgroundColor: '#1D4ED8'
+          }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+      });
+
+      // Category Chart
+      const ctx2 = document.getElementById('categoryChart').getContext('2d');
+      chart2 = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: [t('chart.water'), t('chart.agri'), t('chart.health'), t('chart.edu'), t('chart.roads')],
+          datasets: [{
+            data: [40, 25, 15, 12, 8],
+            backgroundColor: ['#1D4ED8', '#F59E0B', '#4F46E5', '#2563EB', '#475569']
+          }]
+        },
+        options: { responsive: true }
+      });
+
+      // Pipeline Chart
+      const ctx3 = document.getElementById('pipelineChart').getContext('2d');
+      chart3 = new Chart(ctx3, {
+        type: 'line',
+        data: {
+          labels: [t('chart.submitted'), t('chart.verified'), t('chart.matched'), t('chart.inProject'), t('chart.completed')],
+          datasets: [{
+            label: t('chart.reportedLabel'),
+            data: [1248, 820, 340, 142, 48],
+            borderColor: '#1D4ED8',
+            backgroundColor: 'rgba(29, 78, 216, 0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: { responsive: true }
+      });
+    }
+
+    function applyLanguage(lang) {
+      const currentLang = lang || getLanguage();
+      localStorage.setItem(CONFIG.STORAGE_KEYS.LANG, currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = t(key);
+        if (val && val !== key) el.textContent = val;
+      });
+
+      const toggleBtn = document.getElementById('langToggleBtn');
+      if (toggleBtn) toggleBtn.textContent = currentLang === 'en' ? 'EN | हिंदी' : 'हिंदी | EN';
+
+      renderCharts();
+    }
+
+    function toggleLanguage() {
+      applyLanguage(getLanguage() === 'en' ? 'hi' : 'en');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(getLanguage());
+    });
+  </script>
+</body>
+</html>

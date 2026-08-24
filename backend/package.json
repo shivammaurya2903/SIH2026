@@ -7,7 +7,9 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "test": "jest --runInBand",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "seed:demo": "node src/seed/seedDemoData.js",
+    "seed:clear": "node src/seed/seedDemoData.js --clear"
   },
   "keywords": [
     "sih2026",

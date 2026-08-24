@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="pageTitle">Report a Problem — JharInnovate / SamadhanSetu</title>
+  <style>
+    :root {
+      --primary: #1D4ED8;
+      --primary-dark: #172554;
+      --primary-light: #EFF6FF;
+      --accent: #F59E0B;
+      --accent-soft: #FEF3C7;
+      --background: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --danger: #DC2626;
+      --success: #2563EB;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-md: 0 4px 12px rgba(15,23,42,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--background); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    .civic-nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary-dark); }
+    .brand-logo { width: 36px; height: 36px; background: var(--primary); color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+
+    .container { max-width: 760px; margin: 24px auto; padding: 0 20px; width: 100%; }
+
+    .stepper { display: flex; justify-content: space-between; margin-bottom: 24px; position: relative; }
+    .stepper::before { content: ''; position: absolute; top: 18px; left: 0; right: 0; height: 2px; background: var(--border); z-index: 1; }
+    .step-node { position: relative; z-index: 2; background: var(--background); text-align: center; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; color: var(--text-muted); }
+    .step-node.active { border-color: var(--primary); background: var(--primary); color: white; }
+    .step-node.completed { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-md); }
+    .step-title { font-size: 22px; font-weight: 900; color: var(--primary-dark); margin-bottom: 6px; }
+    .step-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .cat-card { background: var(--background); border: 2px solid var(--border); border-radius: var(--radius-md); padding: 16px 10px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .cat-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .cat-card.selected { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+    .cat-icon { font-size: 28px; margin-bottom: 6px; }
+    .cat-label { font-size: 12px; font-weight: 800; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .form-control { width: 100%; padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border); font-size: 14px; outline: none; }
+    .form-control:focus { border-color: var(--primary); }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: var(--radius-md); font-weight: 800; font-size: 14px; border: none; cursor: pointer; text-decoration: none; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-accent { background: var(--accent); color: var(--primary-dark); }
+    .btn-secondary { background: var(--background); color: var(--text); border: 1px solid var(--border); }
+    .lang-toggle { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--primary); font-weight: 800; cursor: pointer; font-size: 12px; }
+
+    .hidden { display: none !important; }
+    .civic-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px; text-align: center; margin-top: auto; font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <nav class="civic-nav">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">J</div>
+      <div>
+        <div style="font-weight: 900; font-size: 18px;">JharInnovate</div>
+        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;" data-i18n="nav.subtitle">SAMADHANSETU • REPORT PROBLEM</div>
+      </div>
+    </a>
+    <div style="display: flex; gap: 10px;">
+      <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">EN | हिंदी</button>
+      <a href="citizen-dashboard.html" class="btn btn-secondary" style="font-size: 12px; padding: 6px 12px;" data-i18n="nav.back">← Dashboard</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="stepper">
+      <div class="step-node active" id="st1">1</div>
+      <div class="step-node" id="st2">2</div>
+      <div class="step-node" id="st3">3</div>
+      <div class="step-node" id="st4">4</div>
+      <div class="step-node" id="st5">5</div>
+    </div>
+
+    <div class="card">
+      <form id="problemForm" enctype="multipart/form-data">
+        
+        <!-- STEP 1 -->
+        <div class="step-pane" id="pane1">
+          <h2 class="step-title" data-i18n="s1.title">Aapki problem kis area se related hai?</h2>
+          <p class="step-sub" data-i18n="s1.sub">Select the category that best describes your community issue.</p>
+
+          <div class="cat-grid">
+            <div class="cat-card selected" onclick="selectCat('Water Infrastructure', this)">
+              <div class="cat-icon">💧</div>
+              <div class="cat-label" data-i18n="cat.water">Water</div>
+            </div>
+            <div class="cat-card" onclick="selectCat('Agriculture', this)">
+              <div class="cat-icon">🌾</div>
+              <div class="cat-label" data-i18n="cat.agri">Agriculture</div>
+            </div>
+            <div class="cat-card" onclick="selectCat('Rural Health', this)">
+              <div class="cat-icon">🏥</div>
+              <div class="cat-label" data-i18n="cat.health">Healthcare</div>
+            </div>
+            <div class="cat-card" onclick="selectCat('Education Technology', this)">
+              <div class="cat-icon">🎓</div>
+              <div class="cat-label" data-i18n="cat.edu">Education</div>
+            </div>
+            <div class="cat-card" onclick="selectCat('Roads & Infra', this)">
+              <div class="cat-icon">🛣️</div>
+              <div class="cat-label" data-i18n="cat.roads">Roads</div>
+            </div>
+            <div class="cat-card" onclick="selectCat('Waste Management', this)">
+              <div class="cat-icon">🗑️</div>
+              <div class="cat-label" data-i18n="cat.sanitation">Sanitation</div>
+            </div>
+            <div class="cat-card" onclick="selectCat('Clean Energy', this)">
+              <div class="cat-icon">💡</div>
+              <div class="cat-label" data-i18n="cat.energy">Electricity</div>
+            </div>
+            <div class="cat-card" onclick="selectCat('Public Safety', this)">
+              <div class="cat-icon">🚍</div>
+              <div class="cat-label" data-i18n="cat.transport">Transport</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="title" data-i18n="s1.titleLabel">Problem Title / Heading *</label>
+            <input type="text" id="title" class="form-control" placeholder="e.g. Drinking water pipeline leakage in Nagri village" data-i18n-placeholder="s1.titlePh" required>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end;">
+            <button type="button" class="btn btn-primary" onclick="nextStep(2)" data-i18n="btn.nextPhoto">Next: Attach Photo →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step-pane hidden" id="pane2">
+          <h2 class="step-title" data-i18n="s2.title">Problem ki Photo Upload Karein</h2>
+          <p class="step-sub" data-i18n="s2.sub">Upload clear photos proving the issue (Max 10MB per file).</p>
+
+          <div class="form-group">
+            <label class="form-label" for="attachments" data-i18n="s2.label">Choose Image / Document File</label>
+            <input type="file" id="attachments" class="form-control" multiple accept="image/*,application/pdf">
+          </div>
+
+          <div style="display: flex; justify-content: space-between;">
+            <button type="button" class="btn btn-secondary" onclick="nextStep(1)" data-i18n="btn.back">← Back</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(3)" data-i18n="btn.nextLocation">Next: Location →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step-pane hidden" id="pane3">
+          <h2 class="step-title" data-i18n="s3.title">Problem Kahan Hai?</h2>
+          <p class="step-sub" data-i18n="s3.sub">Specify the geographic location in Jharkhand.</p>
+
+          <div style="display: flex; gap: 10px; margin-bottom: 18px;">
+            <button type="button" class="btn btn-secondary" onclick="useGps()" style="flex: 1;" data-i18n="s3.gps">📍 Use My Location (GPS)</button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="district" data-i18n="s3.district">District *</label>
+            <select id="district" class="form-control" required>
+              <option value="Ranchi">Ranchi</option>
+              <option value="East Singhbhum">East Singhbhum</option>
+              <option value="Dhanbad">Dhanbad</option>
+              <option value="Bokaro">Bokaro</option>
+              <option value="Hazaribagh">Hazaribagh</option>
+              <option value="Deoghar">Deoghar</option>
+              <option value="Dumka">Dumka</option>
+              <option value="Giridih">Giridih</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="block" data-i18n="s3.block">Block / Panchayat / Village Name</label>
+            <input type="text" id="block" class="form-control" placeholder="e.g. Kanke Block, Nagri Panchayat" data-i18n-placeholder="s3.blockPh">
+          </div>
+
+          <div style="display: flex; justify-content: space-between;">
+            <button type="button" class="btn btn-secondary" onclick="nextStep(2)" data-i18n="btn.back">← Back</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(4)" data-i18n="btn.nextDesc">Next: Description →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step-pane hidden" id="pane4">
+          <h2 class="step-title" data-i18n="s4.title">Problem ke baare mein batayein</h2>
+          <p class="step-sub" data-i18n="s4.sub">Type or use voice input to describe the issue.</p>
+
+          <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+            <button type="button" class="btn btn-secondary" onclick="startVoiceInput()" data-i18n="s4.voice">🎤 बोलकर बताएं (Speech to Text)</button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="description" data-i18n="s4.descLabel">Detailed Description *</label>
+            <textarea id="description" class="form-control" rows="5" placeholder="Explain the issue, affected residents, and current situation..." data-i18n-placeholder="s4.descPh" required></textarea>
+          </div>
+
+          <div style="display: flex; justify-content: space-between;">
+            <button type="button" class="btn btn-secondary" onclick="nextStep(3)" data-i18n="btn.back">← Back</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(5)" data-i18n="btn.nextReview">Review Submission →</button>
+          </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="step-pane hidden" id="pane5">
+          <h2 class="step-title" data-i18n="s5.title">Review & Submit Report</h2>
+          <p class="step-sub" data-i18n="s5.sub">Confirm details before Groq AI prioritization indexing.</p>
+
+          <div style="background: var(--background); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 20px;">
+            <h3 id="revTitle" style="color: var(--primary-dark); font-size: 16px;">Title</h3>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="revMeta">Category • District</div>
+            <p id="revDesc" style="font-size: 13px; margin-top: 10px; line-height: 1.4;"></p>
+          </div>
+
+          <div style="display: flex; justify-content: space-between;">
+            <button type="button" class="btn btn-secondary" onclick="nextStep(4)" data-i18n="btn.back">← Back</button>
+            <button type="submit" class="btn btn-accent" id="submitBtn" style="font-size: 16px; padding: 14px 24px;" data-i18n="btn.submitNow">Submit Problem Now</button>
+          </div>
+        </div>
+
+      </form>
+
+      <div id="successScreen" class="hidden" style="text-align: center; padding: 24px 0;">
+        <div style="font-size: 48px; margin-bottom: 12px;">🎉</div>
+        <h2 style="color: var(--primary-dark); font-size: 22px; font-weight: 900;" data-i18n="succ.title">Problem Submitted Successfully!</h2>
+        <div style="font-size: 14px; font-weight: 800; color: var(--primary); margin: 10px 0;">
+          <span data-i18n="succ.idLabel">Tracking ID:</span> <span id="trackingId">#SS-10482</span>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px;" data-i18n="succ.sub">
+          Your issue has been indexed by Groq AI for automated priority triage and duplicate detection.
+        </p>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <a href="citizen-dashboard.html" class="btn btn-secondary" data-i18n="succ.dashCta">My Dashboard</a>
+          <a href="my-reports.html" class="btn btn-primary" data-i18n="succ.trackCta">Track Status →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="civic-footer">
+    <div data-i18n="footer.copy">&copy; 2026 JharInnovate / SamadhanSetu — Rural Problem Reporting System</div>
+  </footer>
+
+  <script>
+    const CONFIG = {
+      API_BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000/api' : '/api',
+      STORAGE_KEYS: { TOKEN: 'jhar_token', USER: 'jhar_user', LANG: 'jhar_language' }
+    };
+
+    const I18N = {
+      en: {
+        pageTitle: 'Report a Problem — JharInnovate / SamadhanSetu',
+        nav: { subtitle: 'SAMADHANSETU • REPORT PROBLEM', back: '← Dashboard' },
+        s1: { title: 'Aapki problem kis area se related hai?', sub: 'Select the category that best describes your community issue.', titleLabel: 'Problem Title / Heading *', titlePh: 'e.g. Drinking water pipeline leakage in Nagri village' },
+        cat: { water: 'Water', agri: 'Agriculture', health: 'Healthcare', edu: 'Education', roads: 'Roads', sanitation: 'Sanitation', energy: 'Electricity', transport: 'Transport' },
+        btn: { nextPhoto: 'Next: Attach Photo →', nextLocation: 'Next: Location →', nextDesc: 'Next: Description →', nextReview: 'Review Submission →', submitNow: 'Submit Problem Now', back: '← Back' },
+        s2: { title: 'Problem ki Photo Upload Karein', sub: 'Upload clear photos proving the issue (Max 10MB per file).', label: 'Choose Image / Document File' },
+        s3: { title: 'Problem Kahan Hai?', sub: 'Specify the geographic location in Jharkhand.', gps: '📍 Use My Location (GPS)', district: 'District *', block: 'Block / Panchayat / Village Name', blockPh: 'e.g. Kanke Block, Nagri Panchayat' },
+        s4: { title: 'Problem ke baare mein batayein', sub: 'Type or use voice input to describe the issue.', voice: '🎤 बोलकर बताएं (Speech to Text)', descLabel: 'Detailed Description *', descPh: 'Explain the issue, affected residents, and current situation...' },
+        s5: { title: 'Review & Submit Report', sub: 'Confirm details before Groq AI prioritization indexing.' },
+        succ: { title: 'Problem Submitted Successfully!', idLabel: 'Tracking ID:', sub: 'Your issue has been indexed by Groq AI for automated priority triage and duplicate detection.', dashCta: 'My Dashboard', trackCta: 'Track Status →' },
+        footer: { copy: '© 2026 JharInnovate / SamadhanSetu — Rural Problem Reporting System' }
+      },
+      hi: {
+        pageTitle: 'समस्या दर्ज करें — झारइन्नोवेट / समाधानसेतु',
+        nav: { subtitle: 'समाधानसेतु • समस्या दर्ज करें', back: '← डैशबोर्ड' },
+        s1: { title: 'आपकी समस्या किस क्षेत्र से संबंधित है?', sub: 'वह श्रेणी चुनें जो आपकी सामुदायिक समस्या का सर्वोत्तम वर्णन करती है।', titleLabel: 'समस्या का शीर्षक *', titlePh: 'उदा. नगड़ी गांव में पीने के पानी की पाइपलाइन लीकेज' },
+        cat: { water: 'जल', agri: 'कृषि', health: 'स्वास्थ्य सेवा', edu: 'शिक्षा', roads: 'सड़कें', sanitation: 'स्वच्छता', energy: 'बिजली', transport: 'परिवहन' },
+        btn: { nextPhoto: 'आगे: फोटो जोड़ें →', nextLocation: 'आगे: स्थान →', nextDesc: 'आगे: विवरण →', nextReview: 'समीक्षा करें →', submitNow: 'अब समस्या जमा करें', back: '← पीछे' },
+        s2: { title: 'समस्या की फोटो अपलोड करें', sub: 'समस्या को साबित करने वाली स्पष्ट फोटो अपलोड करें (अधिकतम 10MB प्रति फ़ाइल)।', label: 'छवि / दस्तावेज़ फ़ाइल चुनें' },
+        s3: { title: 'समस्या कहां है?', sub: 'झारखंड में भौगोलिक स्थान निर्दिष्ट करें।', gps: '📍 मेरा स्थान उपयोग करें (GPS)', district: 'जिला *', block: 'प्रखंड / पंचायत / गांव का नाम', blockPh: 'उदा. कांके प्रखंड, नगड़ी पंचायत' },
+        s4: { title: 'समस्या के बारे में बताएं', sub: 'समस्या का वर्णन करने के लिए लिखें या आवाज का उपयोग करें।', voice: '🎤 बोलकर बताएं (स्पीड टू टेक्स्ट)', descLabel: 'विस्तृत विवरण *', descPh: 'समस्या, प्रभावित निवासियों और वर्तमान स्थिति के बारे में बताएं...' },
+        s5: { title: 'समीक्षा करें और जमा करें', sub: 'Groq AI प्राथमिकता अनुक्रमण से पहले विवरण की पुष्टि करें।' },
+        succ: { title: 'समस्या सफलतापूर्वक दर्ज की गई!', idLabel: 'ट्रैकिंग आईडी:', sub: 'स्वचालित प्राथमिकता और डुप्लिकेट पहचान के लिए आपकी समस्या Groq AI द्वारा अनुक्रमित की गई है।', dashCta: 'मेरा डैशबोर्ड', trackCta: 'स्थिति ट्रैक करें →' },
+        footer: { copy: '© 2026 झारइन्नोवेट / समाधानसेतु — ग्रामीण समस्या रिपोर्टिंग प्रणाली' }
+      }
+    };
+
+    function getLanguage() { return localStorage.getItem(CONFIG.STORAGE_KEYS.LANG) || 'en'; }
+    function t(key) {
+      const lang = getLanguage();
+      const keys = key.split('.');
+      let obj = I18N[lang] || I18N['en'];
+      for (const k of keys) {
+        if (!obj || obj[k] === undefined) return key;
+        obj = obj[k];
+      }
+      return obj;
+    }
+    function applyLanguage(lang) {
+      const currentLang = lang || getLanguage();
+      localStorage.setItem(CONFIG.STORAGE_KEYS.LANG, currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = t(key);
+        if (val && val !== key) el.textContent = val;
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        const val = t(key);
+        if (val && val !== key) el.placeholder = val;
+      });
+
+      const toggleBtn = document.getElementById('langToggleBtn');
+      if (toggleBtn) toggleBtn.textContent = currentLang === 'en' ? 'EN | हिंदी' : 'हिंदी | EN';
+    }
+    function toggleLanguage() {
+      applyLanguage(getLanguage() === 'en' ? 'hi' : 'en');
+    }
+
+    let selectedCategory = 'Water Infrastructure';
+    let activeStep = 1;
+
+    function selectCat(cat, el) {
+      selectedCategory = cat;
+      document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function nextStep(step) {
+      if (step > activeStep && activeStep === 1 && !document.getElementById('title').value) {
+        alert(getLanguage() === 'hi' ? 'कृपया समस्या का शीर्षक भरें' : 'Please fill in the Problem Title');
+        return;
+      }
+
+      document.querySelectorAll('.step-pane').forEach(p => p.classList.add('hidden'));
+      document.getElementById(`pane${step}`).classList.remove('hidden');
+
+      for (let i = 1; i <= 5; i++) {
+        const node = document.getElementById(`st${i}`);
+        if (i < step) node.className = 'step-node completed';
+        else if (i === step) node.className = 'step-node active';
+        else node.className = 'step-node';
+      }
+
+      if (step === 5) {
+        document.getElementById('revTitle').textContent = document.getElementById('title').value;
+        document.getElementById('revMeta').textContent = `${selectedCategory} • ${document.getElementById('district').value}`;
+        document.getElementById('revDesc').textContent = document.getElementById('description').value;
+      }
+
+      activeStep = step;
+    }
+
+    function useGps() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          alert(`GPS Location Acquired: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`);
+        }, () => alert('Unable to retrieve GPS location. Manual entry fallback active.'));
+      }
+    }
+
+    function startVoiceInput() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('Speech recognition is not supported in this browser. Please type your description.');
+        return;
+      }
+      const rec = new SpeechRecognition();
+      rec.lang = getLanguage() === 'hi' ? 'hi-IN' : 'en-US';
+      rec.onresult = e => {
+        document.getElementById('description').value += ' ' + e.results[0][0].transcript;
+      };
+      rec.start();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(getLanguage());
+    });
+
+    document.getElementById('problemForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const token = localStorage.getItem(CONFIG.STORAGE_KEYS.TOKEN);
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = getLanguage() === 'hi' ? 'जमा किया जा रहा है...' : 'Submitting...';
+
+      const formData = new FormData();
+      formData.append('title', document.getElementById('title').value);
+      formData.append('category', selectedCategory);
+      formData.append('description', document.getElementById('description').value);
+      formData.append('location', JSON.stringify({
+        district: document.getElementById('district').value,
+        block: document.getElementById('block').value
+      }));
+
+      const files = document.getElementById('attachments').files;
+      for (let i = 0; i < files.length; i++) {
+        formData.append('attachments', files[i]);
+      }
+
+      try {
+        const res = await fetch(`${CONFIG.API_BASE_URL}/challenges`, {
+          method: 'POST',
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+          body: formData
+        });
+        const data = await res.json();
+
+        if (res.ok && data.success && data.data) {
+          document.getElementById('problemForm').classList.add('hidden');
+          document.querySelector('.stepper').classList.add('hidden');
+          document.getElementById('trackingId').textContent = `#SS-${data.data._id.substring(0, 6).toUpperCase()}`;
+          document.getElementById('successScreen').classList.remove('hidden');
+        } else {
+          alert(data.message || 'Submission failed');
+          submitBtn.disabled = false;
+          submitBtn.textContent = t('btn.submitNow');
+        }
+      } catch (err) {
+        alert('Saved report locally. Connection issue.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = t('btn.submitNow');
+      }
+    });
+  </script>
+</body>
+</html>

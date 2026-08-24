@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="pageTitle">Industry CSR Portal — JharInnovate / SamadhanSetu</title>
+  <style>
+    :root {
+      --primary: #1D4ED8;
+      --primary-dark: #172554;
+      --primary-light: #EFF6FF;
+      --accent: #F59E0B;
+      --background: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 2px rgba(15,23,42,0.05);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--background); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    .civic-nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary-dark); }
+    .brand-logo { width: 36px; height: 36px; background: var(--primary); color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+
+    .container { max-width: 1000px; margin: 24px auto; padding: 0 20px; width: 100%; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius-md); font-weight: 700; font-size: 13px; text-decoration: none; border: 1px solid transparent; cursor: pointer; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-secondary { background: var(--background); color: var(--text); border-color: var(--border); }
+    .lang-toggle { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--primary); font-weight: 800; cursor: pointer; font-size: 12px; }
+
+    .civic-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px; text-align: center; margin-top: auto; font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <nav class="civic-nav">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">I</div>
+      <div>
+        <div style="font-weight: 900; font-size: 18px;">JharInnovate</div>
+        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;" data-i18n="nav.subtitle">INDUSTRY & CSR PARTNER PORTAL</div>
+      </div>
+    </a>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">EN | हिंदी</button>
+      <button class="btn btn-secondary" onclick="logout()" data-i18n="logout">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <h1 style="font-size: 22px; font-weight: 900; color: var(--primary-dark); margin-bottom: 6px;" data-i18n="head.title">Industry Sponsorship & CSR Collaboration</h1>
+      <p style="font-size: 14px; color: var(--text-muted);" data-i18n="head.sub">Co-fund academic innovation projects, provide technical mentorship, and scale high-impact societal solutions.</p>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size: 18px; font-weight: 800; color: var(--primary-dark); margin-bottom: 16px;" data-i18n="opp.title">CSR Funding & Mentorship Opportunities</h2>
+      <div style="background: var(--background); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-weight: 800; font-size: 15px; color: var(--primary-dark);">Solar Water Filtration & Telemetry Scale-up</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">BIT Mesra • CSR Grant Allocation: ₹4.5 Lakhs</div>
+        </div>
+        <button class="btn btn-primary" onclick="alert('${getLanguage() === 'hi' ? 'सहयोग प्रस्ताव भेजा गया' : 'Support offer submitted'}')" data-i18n="opp.offerBtn">Offer CSR Support →</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="civic-footer">
+    <div data-i18n="footer.copy">&copy; 2026 JharInnovate / SamadhanSetu — Industry & CSR Portal</div>
+  </footer>
+
+  <script>
+    const CONFIG = {
+      API_BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000/api' : '/api',
+      STORAGE_KEYS: { TOKEN: 'jhar_token', USER: 'jhar_user', LANG: 'jhar_language' }
+    };
+
+    const I18N = {
+      en: {
+        pageTitle: 'Industry CSR Portal — JharInnovate / SamadhanSetu',
+        nav: { subtitle: 'INDUSTRY & CSR PARTNER PORTAL' },
+        logout: 'Logout',
+        head: { title: 'Industry Sponsorship & CSR Collaboration', sub: 'Co-fund academic innovation projects, provide technical mentorship, and scale high-impact societal solutions.' },
+        opp: { title: 'CSR Funding & Mentorship Opportunities', offerBtn: 'Offer CSR Support →' },
+        footer: { copy: '© 2026 JharInnovate / SamadhanSetu — Industry & CSR Portal' }
+      },
+      hi: {
+        pageTitle: 'उद्योग सीएसआर पोर्टल — झारइन्नोवेट / समाधानसेतु',
+        nav: { subtitle: 'उद्योग और सीएसआर भागीदार पोर्टल' },
+        logout: 'लॉग आउट',
+        head: { title: 'उद्योग प्रायोजन और सीएसआर सहयोग', sub: 'अकादमिक नवाचार परियोजनाओं को सह-वित्तपोषित करें, तकनीकी मार्गदर्शन प्रदान करें और उच्च-प्रभाव वाले सामाजिक समाधानों को बढ़ाएं।' },
+        opp: { title: 'सीएसआर वित्तपोषण और मार्गदर्शन के अवसर', offerBtn: 'सीएसआर सहायता प्रदान करें →' },
+        footer: { copy: '© 2026 झारइन्नोवेट / समाधानसेतु — उद्योग और सीएसआर पोर्टल' }
+      }
+    };
+
+    function getLanguage() { return localStorage.getItem(CONFIG.STORAGE_KEYS.LANG) || 'en'; }
+    function t(key) {
+      const lang = getLanguage();
+      const keys = key.split('.');
+      let obj = I18N[lang] || I18N['en'];
+      for (const k of keys) {
+        if (!obj || obj[k] === undefined) return key;
+        obj = obj[k];
+      }
+      return obj;
+    }
+    function applyLanguage(lang) {
+      const currentLang = lang || getLanguage();
+      localStorage.setItem(CONFIG.STORAGE_KEYS.LANG, currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = t(key);
+        if (val && val !== key) el.textContent = val;
+      });
+
+      const toggleBtn = document.getElementById('langToggleBtn');
+      if (toggleBtn) toggleBtn.textContent = currentLang === 'en' ? 'EN | हिंदी' : 'हिंदी | EN';
+    }
+    function toggleLanguage() {
+      applyLanguage(getLanguage() === 'en' ? 'hi' : 'en');
+    }
+
+    function logout() {
+      localStorage.removeItem(CONFIG.STORAGE_KEYS.TOKEN);
+      localStorage.removeItem(CONFIG.STORAGE_KEYS.USER);
+      window.location.href = 'login.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem(CONFIG.STORAGE_KEYS.TOKEN);
+      if (!token) { window.location.href = 'login.html'; return; }
+      applyLanguage(getLanguage());
+    });
+  </script>
+</body>
+</html>

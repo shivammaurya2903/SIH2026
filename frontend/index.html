@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="pageTitle">JharInnovate — SamadhanSetu | Societal Innovation Platform</title>
+  <style>
+    :root {
+      --primary: #1D4ED8;
+      --primary-dark: #172554;
+      --primary-light: #EFF6FF;
+      --secondary: #4F46E5;
+      --accent: #F59E0B;
+      --accent-soft: #FEF3C7;
+      --background: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --danger: #DC2626;
+      --success: #2563EB;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 2px rgba(15,23,42,0.05);
+      --shadow-md: 0 4px 12px rgba(15,23,42,0.08);
+      --shadow-lg: 0 10px 25px rgba(15,23,42,0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--background); color: var(--text); line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+    
+    /* Topbar Nav */
+    .civic-nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary-dark); }
+    .brand-logo { width: 36px; height: 36px; background: var(--primary); color: white; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; }
+    .brand-title { font-weight: 800; font-size: 18px; letter-spacing: -0.3px; }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; border-radius: var(--radius-md); font-weight: 700; font-size: 14px; text-decoration: none; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1e40af; }
+    .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+    .btn-secondary:hover { background: var(--primary-light); }
+    .btn-accent { background: var(--accent); color: var(--primary-dark); }
+    .btn-accent:hover { background: #d97706; }
+    .btn-lg { padding: 14px 24px; font-size: 16px; border-radius: var(--radius-lg); }
+
+    /* Lang & Network Switcher */
+    .top-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; color: var(--text-muted); }
+    .lang-toggle { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: var(--radius-sm); cursor: pointer; border: 1px solid var(--primary); font-weight: 800; }
+
+    /* Hero Section */
+    .hero-section { padding: 48px 20px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    @media (max-width: 868px) { .hero-section { grid-template-columns: 1fr; text-align: center; } }
+    
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-soft); color: #b45309; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; text-transform: uppercase; margin-bottom: 16px; }
+    .hero-title { font-size: 42px; font-weight: 900; color: var(--primary-dark); line-height: 1.15; margin-bottom: 16px; letter-spacing: -0.5px; }
+    .hero-sub { font-size: 18px; color: var(--text-muted); margin-bottom: 28px; }
+    .hero-cta-group { display: flex; gap: 12px; flex-wrap: wrap; }
+    @media (max-width: 868px) { .hero-cta-group { justify-content: center; } }
+
+    /* Rural Map Component */
+    .map-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-md); position: relative; }
+    .map-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .map-title { font-weight: 800; font-size: 15px; color: var(--primary-dark); }
+    .jharkhand-svg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; background: var(--primary-light); padding: 16px; border-radius: var(--radius-md); border: 1px dashed var(--primary); }
+    .district-pill { background: white; padding: 8px; border-radius: var(--radius-sm); text-align: center; font-size: 11px; font-weight: 700; color: var(--text); border: 1px solid var(--border); cursor: pointer; transition: transform 0.2s; }
+    .district-pill:hover { transform: translateY(-2px); border-color: var(--primary); color: var(--primary); }
+    .district-pill.active { background: var(--primary); color: white; }
+
+    /* Live Metrics Bar */
+    .metrics-bar { background: var(--surface); border-y: 1px solid var(--border); padding: 32px 20px; margin: 20px 0; }
+    .metrics-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .metric-box { background: var(--background); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border); text-align: center; }
+    .metric-val { font-size: 32px; font-weight: 900; color: var(--primary); }
+    .metric-label { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-top: 4px; text-transform: uppercase; }
+
+    /* Workflow Pipeline Section */
+    .workflow-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+    .section-title { text-align: center; font-size: 26px; font-weight: 900; color: var(--primary-dark); margin-bottom: 8px; }
+    .section-sub { text-align: center; color: var(--text-muted); margin-bottom: 32px; font-size: 15px; }
+    
+    .pipeline-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+    .pipe-step { background: var(--surface); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); text-align: center; position: relative; }
+    .pipe-num { width: 28px; height: 28px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; margin: 0 auto 10px; }
+    .pipe-title { font-weight: 800; font-size: 13px; margin-bottom: 4px; }
+    .pipe-desc { font-size: 11px; color: var(--text-muted); }
+
+    /* Stakeholders Grid */
+    .stakeholder-grid { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .stake-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; transition: transform 0.2s; }
+    .stake-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .stake-icon { font-size: 32px; margin-bottom: 12px; }
+    .stake-title { font-size: 18px; font-weight: 800; color: var(--primary-dark); margin-bottom: 6px; }
+    .stake-desc { font-size: 13px; color: var(--text-muted); }
+
+    /* Footer */
+    .civic-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 32px 20px; margin-top: auto; font-size: 13px; color: var(--text-muted); text-align: center; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="civic-nav">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">J</div>
+      <div>
+        <div class="brand-title">JharInnovate</div>
+        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;" data-i18n="nav.subtitle">SAMADHANSETU • SIH 2026</div>
+      </div>
+    </a>
+
+    <div class="nav-actions">
+      <div class="top-meta">
+        <span id="netStatus">📶 <span data-i18n="netGood">Good Connection</span></span>
+        <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">EN | हिंदी</button>
+      </div>
+      <a href="login.html" class="btn btn-secondary" id="navSignIn" data-i18n="nav.signIn">Sign In</a>
+      <a href="report-problem.html" class="btn btn-primary" id="navReportBtn" data-i18n="nav.reportProblem">📝 Report Problem</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div>
+      <div class="hero-badge" data-i18n="hero.badge">JHARKHAND • SIH 2026</div>
+      <h1 class="hero-title" data-i18n="hero.title">Your Problem Can Become a Solution.</h1>
+      <p class="hero-sub" data-i18n="hero.sub">
+        Report a problem in your area. Help government understand it. Connect with universities and industries to build real solutions for all 24 Jharkhand districts.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="report-problem.html" class="btn btn-primary btn-lg" data-i18n="hero.reportCta">📝 Report a Problem</a>
+        <a href="challenges.html" class="btn btn-secondary btn-lg" data-i18n="hero.exploreCta">🔍 Explore Challenges</a>
+      </div>
+    </div>
+
+    <!-- 3D Rural Jharkhand Map Visual -->
+    <div class="map-card">
+      <div class="map-header">
+        <span class="map-title" data-i18n="map.title">JHARKHAND • 24 DISTRICTS</span>
+        <span style="font-size: 11px; font-weight: 700; color: var(--primary);" data-i18n="map.sub">Live Innovation Grid</span>
+      </div>
+
+      <div class="jharkhand-svg-grid" id="districtGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Metrics Bar -->
+  <section class="metrics-bar">
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h2 style="font-size: 18px; font-weight: 800; color: var(--primary-dark);" data-i18n="metrics.title">What's happening in Jharkhand?</h2>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-box">
+        <div class="metric-val" id="mTotal">1,248</div>
+        <div class="metric-label" data-i18n="metrics.reported">Challenges Reported</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val" style="color: var(--accent);" id="mUnderReview">142</div>
+        <div class="metric-label" data-i18n="metrics.review">Problems Under Review</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val" style="color: var(--secondary);" id="mActive">48</div>
+        <div class="metric-label" data-i18n="metrics.solutions">Solutions in Progress</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val" style="color: var(--success);" id="mImpact">124K+</div>
+        <div class="metric-label" data-i18n="metrics.impact">People Impacted</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workflow Pipeline -->
+  <section class="workflow-section">
+    <h2 class="section-title" data-i18n="wf.title">From Problem to Measurable Impact</h2>
+    <p class="section-sub" data-i18n="wf.sub">A 6-step collaborative journey solving rural community issues.</p>
+
+    <div class="pipeline-grid">
+      <div class="pipe-step">
+        <div class="pipe-num">1</div>
+        <div class="pipe-title" data-i18n="wf.step1Title">CITIZEN</div>
+        <div class="pipe-desc" data-i18n="wf.step1Desc">Reports local issue via mobile or voice</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">2</div>
+        <div class="pipe-title" data-i18n="wf.step2Title">AI ANALYZE</div>
+        <div class="pipe-desc" data-i18n="wf.step2Desc">Scores priority & checks duplicates</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">3</div>
+        <div class="pipe-title" data-i18n="wf.step3Title">GOVERNMENT</div>
+        <div class="pipe-desc" data-i18n="wf.step3Desc">Verifies & approves problem for R&D</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">4</div>
+        <div class="pipe-title" data-i18n="wf.step4Title">MATCHING</div>
+        <div class="pipe-desc" data-i18n="wf.step4Desc">Pairs with University & Industry CSR</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">5</div>
+        <div class="pipe-title" data-i18n="wf.step5Title">SOLUTION</div>
+        <div class="pipe-desc" data-i18n="wf.step5Desc">Teams build prototype & pilot project</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">6</div>
+        <div class="pipe-title" data-i18n="wf.step6Title">IMPACT</div>
+        <div class="pipe-desc" data-i18n="wf.step6Desc">Field deployment & citizen confirmation</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stakeholders Section -->
+  <section style="background: var(--surface); padding: 48px 0; border-top: 1px solid var(--border);">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <h2 class="section-title" data-i18n="stk.title">Built for Every Stakeholder</h2>
+    </div>
+    <div class="stakeholder-grid">
+      <div class="stake-card">
+        <div class="stake-icon">👨‍🌾</div>
+        <div class="stake-title" data-i18n="stk.citizenTitle">Citizens</div>
+        <div class="stake-desc" data-i18n="stk.citizenDesc">Report community issues in under 1 minute using photo or voice. Track resolution status transparently.</div>
+      </div>
+      <div class="stake-card">
+        <div class="stake-icon">🏛️</div>
+        <div class="stake-title" data-i18n="stk.govTitle">Government</div>
+        <div class="stake-desc" data-i18n="stk.govDesc">Review AI-triaged priority issues, assign R&D projects to universities, and monitor state-wide progress.</div>
+      </div>
+      <div class="stake-card">
+        <div class="stake-icon">🎓</div>
+        <div class="stake-title" data-i18n="stk.uniTitle">Universities</div>
+        <div class="stake-desc" data-i18n="stk.uniDesc">Discover AI-matched societal challenges fitting academic department capabilities and submit R&D proposals.</div>
+      </div>
+      <div class="stake-card">
+        <div class="stake-icon">🏭</div>
+        <div class="stake-title" data-i18n="stk.indTitle">Industry CSR</div>
+        <div class="stake-desc" data-i18n="stk.indDesc">Fund and mentor high-impact innovation projects aligned with corporate social responsibility mandates.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="civic-footer">
+    <div data-i18n="footer.copy">&copy; 2026 JharInnovate / SamadhanSetu — Government of Jharkhand & SIH 2026 Innovation Platform</div>
+    <div style="margin-top: 6px; font-size: 11px; color: var(--text-muted);" data-i18n="footer.tagline">Rural-First • Low-Bandwidth Optimized • Accessible Technology</div>
+  </footer>
+
+  <script>
+    const CONFIG = {
+      API_BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000/api' : '/api',
+      STORAGE_KEYS: { TOKEN: 'jhar_token', USER: 'jhar_user', LANG: 'jhar_language' },
+      DISTRICTS: ['Ranchi', 'Dhanbad', 'East Singhbhum', 'Bokaro', 'Hazaribagh', 'Deoghar', 'Dumka', 'Giridih', 'Palamu', 'Ramgarh', 'Khunti', 'West Singhbhum', 'Koderma', 'Chatra', 'Garhwa', 'Latehar', 'Lohardaga', 'Pakur', 'Sahibganj', 'Simdega', 'Seraikela Kharsawan', 'Jamtara', 'Godda', 'Gumla']
+    };
+
+    const I18N = {
+      en: {
+        pageTitle: 'JharInnovate — SamadhanSetu | Societal Innovation Platform',
+        nav: { subtitle: 'SAMADHANSETU • SIH 2026', signIn: 'Sign In', reportProblem: '📝 Report Problem', dashboard: 'Dashboard' },
+        netGood: 'Good Connection',
+        hero: {
+          badge: 'JHARKHAND • SIH 2026',
+          title: 'Your Problem Can Become a Solution.',
+          sub: 'Report a problem in your area. Help government understand it. Connect with universities and industries to build real solutions for all 24 Jharkhand districts.',
+          reportCta: '📝 Report a Problem',
+          exploreCta: '🔍 Explore Challenges'
+        },
+        map: { title: 'JHARKHAND • 24 DISTRICTS', sub: 'Live Innovation Grid' },
+        metrics: { title: "What's happening in Jharkhand?", reported: 'Challenges Reported', review: 'Problems Under Review', solutions: 'Solutions in Progress', impact: 'People Impacted' },
+        wf: {
+          title: 'From Problem to Measurable Impact',
+          sub: 'A 6-step collaborative journey solving rural community issues.',
+          step1Title: 'CITIZEN', step1Desc: 'Reports local issue via mobile or voice',
+          step2Title: 'AI ANALYZE', step2Desc: 'Scores priority & checks duplicates',
+          step3Title: 'GOVERNMENT', step3Desc: 'Verifies & approves problem for R&D',
+          step4Title: 'MATCHING', step4Desc: 'Pairs with University & Industry CSR',
+          step5Title: 'SOLUTION', step5Desc: 'Teams build prototype & pilot project',
+          step6Title: 'IMPACT', step6Desc: 'Field deployment & citizen confirmation'
+        },
+        stk: {
+          title: 'Built for Every Stakeholder',
+          citizenTitle: 'Citizens', citizenDesc: 'Report community issues in under 1 minute using photo or voice. Track resolution status transparently.',
+          govTitle: 'Government', govDesc: 'Review AI-triaged priority issues, assign R&D projects to universities, and monitor state-wide progress.',
+          uniTitle: 'Universities', uniDesc: 'Discover AI-matched societal challenges fitting academic department capabilities and submit R&D proposals.',
+          indTitle: 'Industry CSR', indDesc: 'Fund and mentor high-impact innovation projects aligned with corporate social responsibility mandates.'
+        },
+        footer: { copy: '© 2026 JharInnovate / SamadhanSetu — Government of Jharkhand & SIH 2026 Innovation Platform', tagline: 'Rural-First • Low-Bandwidth Optimized • Accessible Technology' }
+      },
+      hi: {
+        pageTitle: 'झारइन्नोवेट — समाधानसेतु | सामाजिक नवाचार मंच',
+        nav: { subtitle: 'समाधानसेतु • एसआईएच 2026', signIn: 'साइन इन करें', reportProblem: '📝 समस्या दर्ज करें', dashboard: 'डैशबोर्ड' },
+        netGood: 'अच्छा कनेक्शन',
+        hero: {
+          badge: 'झारखंड • एसआईएच 2026',
+          title: 'आपकी समस्या बन सकती है एक समाधान।',
+          sub: 'अपने क्षेत्र की समस्या दर्ज करें। सरकार को इसे समझने में मदद करें। झारखंड के सभी 24 जिलों के लिए वास्तविक समाधान बनाने हेतु विश्वविद्यालयों और उद्योगों से जुड़ें।',
+          reportCta: '📝 समस्या दर्ज करें',
+          exploreCta: '🔍 चुनौतियां देखें'
+        },
+        map: { title: 'झारखंड • 24 जिले', sub: 'लाइव नवाचार ग्रिड' },
+        metrics: { title: 'झारखंड में क्या हो रहा है?', reported: 'दर्ज चुनौतियां', review: 'समीक्षाधीन समस्याएं', solutions: 'प्रगति पर समाधान', impact: 'प्रभावित नागरिक' },
+        wf: {
+          title: 'समस्या से मापने योग्य प्रभाव तक',
+          sub: 'ग्रामीण सामुदायिक समस्याओं को हल करने की 6-चरण सहयोगात्मक यात्रा।',
+          step1Title: 'नागरिक', step1Desc: 'मोबाइल या आवाज से स्थानीय समस्या दर्ज करते हैं',
+          step2Title: 'एआई विश्लेषण', step2Desc: 'प्राथमिकता स्कोर और डुप्लिकेट की जांच',
+          step3Title: 'सरकार', step3Desc: 'अनुसंधान के लिए समस्या का सत्यापन और अनुमोदन',
+          step4Title: 'मैचिंग', step4Desc: 'विश्वविद्यालय और उद्योग सीएसआर के साथ जोड़ी',
+          step5Title: 'समाधान', step5Desc: 'टीमें प्रोटोटाइप और पायलट प्रोजेक्ट बनाती हैं',
+          step6Title: 'प्रभाव', step6Desc: 'क्षेत्रीय तैनाती और नागरिक पुष्टि'
+        },
+        stk: {
+          title: 'हर हितधारक के लिए निर्मित',
+          citizenTitle: 'नागरिक', citizenDesc: 'फोटो या आवाज का उपयोग करके 1 मिनट से भी कम समय में सामुदायिक समस्याओं को दर्ज करें।',
+          govTitle: 'सरकार', govDesc: 'एआई-प्राथमिकता प्राप्त समस्याओं की समीक्षा करें और राज्य भर में प्रगति की निगरानी करें।',
+          uniTitle: 'विश्वविद्यालय', uniDesc: 'अकादमिक विभाग क्षमताओं के अनुकूल एआई-मिलान वाली सामाजिक चुनौतियों की खोज करें।',
+          indTitle: 'उद्योग सीएसआर', indDesc: 'कॉर्पोरेट सामाजिक उत्तरदायित्व शासनादेशों के साथ संरेखित उच्च-प्रभाव वाली नवाचार परियोजनाओं का वित्तपोषण करें।'
+        },
+        footer: { copy: '© 2026 झारइन्नोवेट / समाधानसेतु — झारखंड सरकार और एसआईएच 2026 नवाचार मंच', tagline: 'ग्रामीण-प्रथम • कम-बैंडविड्थ अनुकूलित • सुलभ तकनीक' }
+      }
+    };
+
+    function getLanguage() {
+      return localStorage.getItem(CONFIG.STORAGE_KEYS.LANG) || 'en';
+    }
+
+    function t(key) {
+      const lang = getLanguage();
+      const keys = key.split('.');
+      let obj = I18N[lang] || I18N['en'];
+      for (const k of keys) {
+        if (!obj || obj[k] === undefined) return key;
+        obj = obj[k];
+      }
+      return obj;
+    }
+
+    function applyLanguage(lang) {
+      const currentLang = lang || getLanguage();
+      localStorage.setItem(CONFIG.STORAGE_KEYS.LANG, currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = t(key);
+        if (val && val !== key) el.textContent = val;
+      });
+
+      const toggleBtn = document.getElementById('langToggleBtn');
+      if (toggleBtn) {
+        toggleBtn.textContent = currentLang === 'en' ? 'EN | हिंदी' : 'हिंदी | EN';
+      }
+    }
+
+    function toggleLanguage() {
+      const cur = getLanguage();
+      const next = cur === 'en' ? 'hi' : 'en';
+      applyLanguage(next);
+    }
+
+    const Auth = {
+      getUser() {
+        const raw = localStorage.getItem(CONFIG.STORAGE_KEYS.USER);
+        if (!raw) return null;
+        try {
+          const u = JSON.parse(raw);
+          if (u) {
+            if (!u.id && u._id) u.id = String(u._id);
+            if (!u._id && u.id) u._id = String(u.id);
+          }
+          return u;
+        } catch (e) { return null; }
+      },
+      getToken() { return localStorage.getItem(CONFIG.STORAGE_KEYS.TOKEN); },
+      isAuthenticated() { return !!this.getToken() && !!this.getUser(); },
+      getRoleDashboardPath(role) {
+        switch (role) {
+          case 'citizen': return 'citizen-dashboard.html';
+          case 'government': return 'government-dashboard.html';
+          case 'university': return 'university-dashboard.html';
+          case 'faculty': return 'faculty-dashboard.html';
+          case 'student': return 'student-dashboard.html';
+          case 'industry': return 'industry-dashboard.html';
+          case 'admin': return 'admin-dashboard.html';
+          default: return 'citizen-dashboard.html';
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(getLanguage());
+
+      const grid = document.getElementById('districtGrid');
+      grid.innerHTML = CONFIG.DISTRICTS.map(d => `
+        <div class="district-pill ${d === 'Ranchi' ? 'active' : ''}" onclick="selectDistrict('${d}')">
+          ${d}
+        </div>
+      `).join('');
+
+      if (Auth.isAuthenticated()) {
+        const user = Auth.getUser();
+        const signInBtn = document.getElementById('navSignIn');
+        if (signInBtn) {
+          signInBtn.textContent = t('nav.dashboard');
+          signInBtn.href = Auth.getRoleDashboardPath(user.role);
+        }
+      }
+    });
+
+    function selectDistrict(name) {
+      window.location.href = `challenges.html?district=${encodeURIComponent(name)}`;
+    }
+  </script>
+</body>
+</html>

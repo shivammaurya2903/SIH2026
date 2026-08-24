@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
+const path = require('path');
 
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
@@ -99,6 +100,10 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/impact', impactRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/milestones', milestoneRoutes);
+
+// Serve Frontend Static Files
+const frontendPath = path.join(__dirname, '../../frontend');
+app.use(express.static(frontendPath));
 
 app.use(notFound);
 app.use(errorHandler);

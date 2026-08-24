@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="pageTitle">User Profile — JharInnovate / SamadhanSetu</title>
+  <style>
+    :root {
+      --primary: #1D4ED8;
+      --primary-dark: #172554;
+      --primary-light: #EFF6FF;
+      --background: #F8FAFC;
+      --surface: #FFFFFF;
+      --border: #E2E8F0;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 2px rgba(15,23,42,0.05);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--background); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+    .civic-nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary-dark); }
+    .brand-logo { width: 36px; height: 36px; background: var(--primary); color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+
+    .container { max-width: 700px; margin: 24px auto; padding: 0 20px; width: 100%; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 12px; font-weight: 800; margin-bottom: 4px; }
+    .form-control { width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border); font-size: 14px; outline: none; background: var(--surface); }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 16px; border-radius: var(--radius-md); font-weight: 800; font-size: 14px; border: 1px solid transparent; cursor: pointer; text-decoration: none; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-secondary { background: var(--background); color: var(--text); border-color: var(--border); }
+    .lang-toggle { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--primary); font-weight: 800; cursor: pointer; font-size: 12px; }
+
+    .civic-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 20px; text-align: center; margin-top: auto; font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <nav class="civic-nav">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">P</div>
+      <div>
+        <div style="font-weight: 900; font-size: 18px;">JharInnovate</div>
+        <div style="font-size: 10px; color: var(--text-muted); font-weight: 700;" data-i18n="nav.subtitle">USER PROFILE & PREFERENCES</div>
+      </div>
+    </a>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">EN | हिंदी</button>
+      <a href="citizen-dashboard.html" class="btn btn-secondary" data-i18n="nav.dashboard">Dashboard</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <h1 style="font-size: 22px; font-weight: 900; color: var(--primary-dark); margin-bottom: 20px;" data-i18n="head.title">User Profile Settings</h1>
+
+      <div class="form-group">
+        <label class="form-label" data-i18n="p.name">Full Name</label>
+        <input type="text" id="profName" class="form-control" readonly>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-i18n="p.email">Email Address</label>
+        <input type="email" id="profEmail" class="form-control" readonly>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-i18n="p.role">Role</label>
+        <input type="text" id="profRole" class="form-control" readonly style="text-transform: uppercase; font-weight: 800; color: var(--primary);">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-i18n="p.district">District</label>
+        <input type="text" id="profDistrict" class="form-control" readonly>
+      </div>
+
+      <button class="btn btn-primary" onclick="alert('${getLanguage() === 'hi' ? 'प्रोफ़ाइल अपडेट सहेजा गया' : 'Profile update saved'}')" data-i18n="p.saveBtn">Save Preferences</button>
+    </div>
+  </div>
+
+  <footer class="civic-footer">
+    <div data-i18n="footer.copy">&copy; 2026 JharInnovate / SamadhanSetu — User Profile</div>
+  </footer>
+
+  <script>
+    const CONFIG = { STORAGE_KEYS: { USER: 'jhar_user', LANG: 'jhar_language' } };
+
+    const I18N = {
+      en: {
+        pageTitle: 'User Profile — JharInnovate / SamadhanSetu',
+        nav: { subtitle: 'USER PROFILE & PREFERENCES', dashboard: 'Dashboard' },
+        head: { title: 'User Profile Settings' },
+        p: { name: 'Full Name', email: 'Email Address', role: 'Role', district: 'District', saveBtn: 'Save Preferences' },
+        footer: { copy: '© 2026 JharInnovate / SamadhanSetu — User Profile' }
+      },
+      hi: {
+        pageTitle: 'उपयोगकर्ता प्रोफ़ाइल — झारइन्नोवेट / समाधानसेतु',
+        nav: { subtitle: 'उपयोगकर्ता प्रोफ़ाइल और प्राथमिकताएं', dashboard: 'डैशबोर्ड' },
+        head: { title: 'उपयोगकर्ता प्रोफ़ाइल सेटिंग्स' },
+        p: { name: 'पूरा नाम', email: 'ईमेल पता', role: 'भूमिका', district: 'जिला', saveBtn: 'प्राथमिकताएं सहेजें' },
+        footer: { copy: '© 2026 झारइन्नोवेट / समाधानसेतु — उपयोगकर्ता प्रोफ़ाइल' }
+      }
+    };
+
+    function getLanguage() { return localStorage.getItem(CONFIG.STORAGE_KEYS.LANG) || 'en'; }
+    function t(key) {
+      const lang = getLanguage();
+      const keys = key.split('.');
+      let obj = I18N[lang] || I18N['en'];
+      for (const k of keys) {
+        if (!obj || obj[k] === undefined) return key;
+        obj = obj[k];
+      }
+      return obj;
+    }
+    function applyLanguage(lang) {
+      const currentLang = lang || getLanguage();
+      localStorage.setItem(CONFIG.STORAGE_KEYS.LANG, currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const val = t(key);
+        if (val && val !== key) el.textContent = val;
+      });
+
+      const toggleBtn = document.getElementById('langToggleBtn');
+      if (toggleBtn) toggleBtn.textContent = currentLang === 'en' ? 'EN | हिंदी' : 'हिंदी | EN';
+    }
+    function toggleLanguage() {
+      applyLanguage(getLanguage() === 'en' ? 'hi' : 'en');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLanguage(getLanguage());
+      const raw = localStorage.getItem(CONFIG.STORAGE_KEYS.USER);
+      if (raw) {
+        try {
+          const user = JSON.parse(raw);
+          document.getElementById('profName').value = user.name || '';
+          document.getElementById('profEmail').value = user.email || '';
+          document.getElementById('profRole').value = user.role || '';
+          document.getElementById('profDistrict').value = (user.location && user.location.district) ? user.location.district : 'Ranchi';
+        } catch (e) {}
+      }
+    });
+  </script>
+</body>
+</html>
