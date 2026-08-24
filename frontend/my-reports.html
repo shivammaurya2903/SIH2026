@@ -192,11 +192,14 @@
                 <div class="report-header">
                   <div>
                     <div class="report-title">${item.title}</div>
-                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
-                      ${typeof getCategoryLabel === 'function' ? getCategoryLabel(item.category, getLanguage()) : (item.category || 'General')} • ${(item.location && item.location.district) ? item.location.district : 'Ranchi'}
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                      ${typeof getCategoryLabel === 'function' ? getCategoryLabel(item.category, getLanguage()) : (item.category || 'General')} • 📍 <strong>${item.location?.district || 'Ranchi'}</strong> ${item.location?.block ? '• ' + item.location.block : ''} • Submitted: ${item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Recent'}
                     </div>
                   </div>
-                  <span class="report-id">#SS-${item._id.substring(0, 6).toUpperCase()}</span>
+                  <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                    <span class="report-id">${item.challengeId || ('CH-' + item._id.substring(0, 6).toUpperCase())}</span>
+                    <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; background: #FEF3C7; color: #b45309; padding: 2px 6px; border-radius: 4px;">${item.priority || 'medium'} priority</span>
+                  </div>
                 </div>
 
                 <div class="timeline">

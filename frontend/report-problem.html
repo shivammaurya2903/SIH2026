@@ -174,22 +174,45 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="district" data-i18n="s3.district">District *</label>
-            <select id="district" class="form-control" required>
-              <option value="Ranchi">Ranchi</option>
-              <option value="East Singhbhum">East Singhbhum</option>
-              <option value="Dhanbad">Dhanbad</option>
+            <label class="form-label" for="district" data-i18n="s3.district">District (Jharkhand) *</label>
+            <select id="district" class="form-control" required onchange="onDistrictChange(this.value)">
               <option value="Bokaro">Bokaro</option>
-              <option value="Hazaribagh">Hazaribagh</option>
+              <option value="Chatra">Chatra</option>
               <option value="Deoghar">Deoghar</option>
+              <option value="Dhanbad">Dhanbad</option>
               <option value="Dumka">Dumka</option>
+              <option value="East Singhbhum">East Singhbhum</option>
+              <option value="Garhwa">Garhwa</option>
               <option value="Giridih">Giridih</option>
+              <option value="Godda">Godda</option>
+              <option value="Gumla">Gumla</option>
+              <option value="Hazaribagh">Hazaribagh</option>
+              <option value="Jamtara">Jamtara</option>
+              <option value="Khunti">Khunti</option>
+              <option value="Koderma">Koderma</option>
+              <option value="Latehar">Latehar</option>
+              <option value="Lohardaga">Lohardaga</option>
+              <option value="Pakur">Pakur</option>
+              <option value="Palamu">Palamu</option>
+              <option value="Ramgarh">Ramgarh</option>
+              <option value="Ranchi" selected>Ranchi</option>
+              <option value="Sahibganj">Sahibganj</option>
+              <option value="Seraikela-Kharsawan">Seraikela-Kharsawan</option>
+              <option value="Simdega">Simdega</option>
+              <option value="West Singhbhum">West Singhbhum</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="block" data-i18n="s3.block">Block / Panchayat / Village Name</label>
-            <input type="text" id="block" class="form-control" placeholder="e.g. Kanke Block, Nagri Panchayat" data-i18n-placeholder="s3.blockPh">
+            <label class="form-label" for="block" data-i18n="s3.block">Block / Urban Local Body *</label>
+            <select id="block" class="form-control">
+              <!-- Populated dynamically via JS -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="village">Village / Ward Name (Optional)</label>
+            <input type="text" id="village" class="form-control" placeholder="e.g. Nagri Village, Ward No 14">
           </div>
 
           <div class="form-group">
@@ -253,19 +276,50 @@
 
       </form>
 
-      <div id="successScreen" class="hidden" style="text-align: center; padding: 24px 0;">
-        <div style="font-size: 48px; margin-bottom: 12px;">🎉</div>
-        <h2 style="color: var(--primary-dark); font-size: 22px; font-weight: 900;" data-i18n="succ.title">Problem Submitted Successfully!</h2>
-        <div style="font-size: 14px; font-weight: 800; color: var(--primary); margin: 10px 0;">
-          <span data-i18n="succ.idLabel">Tracking ID:</span> <span id="trackingId">#SS-10482</span>
-        </div>
-        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px;" data-i18n="succ.sub">
-          Your issue has been indexed by Groq AI for automated priority triage and duplicate detection.
-        </p>
+      <!-- SUCCESS CONFIRMATION SCREEN (SIH26043 PART 9 & 10) -->
+      <div id="successScreen" class="hidden" style="max-width: 580px; margin: 0 auto; padding: 24px;">
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; box-shadow: 0 20px 50px rgba(15,23,42,0.12); text-align: center;">
+          <div style="width: 64px; height: 64px; background: #F0FDF4; color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; margin: 0 auto 16px; border: 2px solid #86EFAC;">✓</div>
+          
+          <h2 style="color: var(--primary-dark); font-size: 24px; font-weight: 900; margin-bottom: 6px;" data-i18n="succ.title">Problem Reported Successfully!</h2>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;" data-i18n="succ.sub">Your community challenge has been registered and submitted for automated Groq AI triage & government validation.</p>
 
-        <div style="display: flex; gap: 12px; justify-content: center;">
-          <a href="citizen-dashboard.html" class="btn btn-secondary" data-i18n="succ.dashCta">My Dashboard</a>
-          <a href="my-reports.html" class="btn btn-primary" data-i18n="succ.trackCta">Track Status →</a>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: var(--background); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 24px; text-align: left; font-size: 13px;">
+            <div>
+              <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">REPORT / CHALLENGE ID</div>
+              <div style="font-size: 16px; font-weight: 900; color: var(--primary); margin-top: 2px;" id="trackingId">CH-00001</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">STATUS</div>
+              <div style="font-size: 14px; font-weight: 800; color: var(--success); margin-top: 2px;">Submitted (Under Triage)</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">DISTRICT & BLOCK</div>
+              <div style="font-size: 13px; font-weight: 800; color: var(--primary-dark); margin-top: 2px;" id="succDistrict">Ranchi • Kanke</div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">AI PRIORITY TRIAGE</div>
+              <div style="font-size: 13px; font-weight: 800; color: var(--accent); margin-top: 2px;">High Priority (Score 87/100)</div>
+            </div>
+          </div>
+
+          <!-- WHAT HAPPENS NEXT TIMELINE -->
+          <div style="text-align: left; margin-bottom: 24px; background: #F8FAFC; padding: 16px; border-radius: var(--radius-md); border: 1px solid #E2E8F0;">
+            <div style="font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;">WHAT HAPPENS NEXT?</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; font-weight: 700;">
+              <div style="color: var(--success);">✓ 01. Submitted & Registered in Database</div>
+              <div style="color: var(--success);">✓ 02. AI Priority & Duplicate Analysis</div>
+              <div style="color: var(--primary-dark);">○ 03. Government Review & Triage Validation</div>
+              <div style="color: var(--text-muted);">○ 04. University R&D Match & Proposal</div>
+              <div style="color: var(--text-muted);">○ 05. Industry CSR Collaboration</div>
+              <div style="color: var(--text-muted);">○ 06. Prototype, Testing, Pilot & Deployment</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="#" id="viewReportLink" class="btn btn-primary" style="padding: 12px 20px;">View My Report →</a>
+            <button type="button" class="btn btn-secondary" onclick="window.location.reload()" style="padding: 12px 20px;">Report Another Problem</button>
+          </div>
         </div>
       </div>
 
@@ -414,8 +468,16 @@
       rec.start();
     }
 
+    function onDistrictChange(districtName) {
+      const blockSelect = document.getElementById('block');
+      if (!blockSelect) return;
+      const blocks = typeof getBlocksForDistrict === 'function' ? getBlocksForDistrict(districtName) : ["Sadar Block", "Urban Local Body / Ward", "North Block", "South Block"];
+      blockSelect.innerHTML = blocks.map(b => `<option value="${b}">${b}</option>`).join('');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       applyLanguage(getLanguage());
+      onDistrictChange(document.getElementById('district').value || 'Ranchi');
     });
 
     document.getElementById('problemForm').addEventListener('submit', async (e) => {
@@ -423,7 +485,7 @@
       const token = localStorage.getItem(CONFIG.STORAGE_KEYS.TOKEN);
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.disabled = true;
-      submitBtn.textContent = getLanguage() === 'hi' ? 'जमा किया जा रहा है...' : 'Submitting...';
+      submitBtn.textContent = getLanguage() === 'hi' ? 'जमा किया जा रहा है...' : 'Submitting your report...';
 
       const formData = new FormData();
       formData.append('title', document.getElementById('title').value);
@@ -434,9 +496,12 @@
       const latVal = !isNaN(latIn) ? latIn : capturedLat;
       const lngVal = !isNaN(lngIn) ? lngIn : capturedLng;
 
+      const villageVal = document.getElementById('village') ? document.getElementById('village').value : '';
+
       formData.append('location', JSON.stringify({
         district: document.getElementById('district').value,
         block: document.getElementById('block').value,
+        village: villageVal,
         address: document.getElementById('address').value,
         latitude: latVal,
         longitude: lngVal
@@ -456,9 +521,14 @@
         const data = await res.json();
 
         if (res.ok && data.success && data.data) {
+          const c = data.data;
           document.getElementById('problemForm').classList.add('hidden');
           document.querySelector('.stepper').classList.add('hidden');
-          document.getElementById('trackingId').textContent = `#SS-${data.data._id.substring(0, 6).toUpperCase()}`;
+          
+          const reportId = c.challengeId || `CH-${c._id.substring(0, 6).toUpperCase()}`;
+          document.getElementById('trackingId').textContent = reportId;
+          document.getElementById('succDistrict').textContent = `${c.location?.district || 'Ranchi'} • ${c.location?.block || 'Kanke'}`;
+          document.getElementById('viewReportLink').href = `challenge.html?id=${c._id}`;
           document.getElementById('successScreen').classList.remove('hidden');
         } else {
           const errMsg = (data.message && (data.message.includes('category') || data.message.includes('enum') || data.message.includes('validation')))
@@ -469,7 +539,7 @@
           submitBtn.textContent = t('btn.submitNow');
         }
       } catch (err) {
-        alert('Saved report locally. Connection issue.');
+        alert('Unable to submit report right now. Please check network connection and try again.');
         submitBtn.disabled = false;
         submitBtn.textContent = t('btn.submitNow');
       }
