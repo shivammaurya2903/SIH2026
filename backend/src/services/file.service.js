@@ -25,7 +25,7 @@ const getFileUrl = (filename) => {
   return `/uploads/${filename}`;
 };
 
-const { uploadImageToCloudinary, deleteImageFromCloudinary, isConfigured: isCloudinaryConfigured } = require('./cloudinary.service');
+const cloudinaryService = require('./cloudinary.service');
 
 const formatFileMetadata = (file, userId = null, cloudinaryData = null) => {
   if (!file) return null;
@@ -101,18 +101,37 @@ const processAndUploadFiles = async (req, fieldName, existingArray = []) => {
     filesToProcess = [req.file];
   }
 
-  const existing = extractUploadedFiles(req, fieldName, existingArray);
+  let existing = [];
+  if (typeof existingArray === 'string') {
+    try {
+      const parsed = JSON.parse(existingArray);
+      if (Array.isArray(parsed)) {
+        existing = parsed.filter((item) => typeof item === 'object' && item !== null && !Array.isArray(item));
+      } else if (typeof parsed === 'object' && parsed !== null) {
+        existing = [parsed];
+      }
+    } catch (e) {
+      existing = [];
+    }
+  } else if (Array.isArray(existingArray)) {
+    existing = existingArray.filter((item) => typeof item === 'object' && item !== null && !Array.isArray(item));
+  }
+
   const newlyUploaded = [];
 
   for (const file of filesToProcess) {
     const isImage = (file.mimetype || '').startsWith('image/');
     let cRes = null;
 
-    if (isImage && isCloudinaryConfigured && file.path) {
+    const hasCloudinaryConfig = typeof cloudinaryService.isConfigured === 'function' 
+      ? cloudinaryService.isConfigured() 
+      : Boolean(cloudinaryService.isConfigured);
+
+    if (isImage && hasCloudinaryConfig && file.path) {
       try {
-        cRes = await uploadImageToCloudinary(file.path);
+        cRes = await cloudinaryService.uploadImageToCloudinary(file.path);
       } catch (err) {
-        console.error('Failed to upload image to Cloudinary:', err.message);
+        // Fallback gracefully if Cloudinary upload fails
       }
     }
 
@@ -127,7 +146,7 @@ const rollbackCloudinaryUploads = async (attachments = []) => {
   if (!Array.isArray(attachments)) return;
   for (const att of attachments) {
     if (att && att.publicId) {
-      await deleteImageFromCloudinary(att.publicId);
+      await cloudinaryService.deleteImageFromCloudinary(att.publicId);
     }
   }
 };

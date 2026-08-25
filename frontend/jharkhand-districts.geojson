@@ -1,0 +1,941 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "garhwa",
+        "district_name": "Garhwa",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.35,
+              24.58
+            ],
+            [
+              83.65,
+              24.62
+            ],
+            [
+              83.95,
+              24.32
+            ],
+            [
+              83.92,
+              23.95
+            ],
+            [
+              83.68,
+              23.6
+            ],
+            [
+              83.42,
+              23.82
+            ],
+            [
+              83.35,
+              24.58
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "palamu",
+        "district_name": "Palamu",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.95,
+              24.62
+            ],
+            [
+              84.68,
+              24.55
+            ],
+            [
+              84.78,
+              24.12
+            ],
+            [
+              84.58,
+              23.88
+            ],
+            [
+              84.22,
+              23.75
+            ],
+            [
+              83.92,
+              23.95
+            ],
+            [
+              83.95,
+              24.32
+            ],
+            [
+              83.95,
+              24.62
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "chatra",
+        "district_name": "Chatra",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.68,
+              24.55
+            ],
+            [
+              85.28,
+              24.48
+            ],
+            [
+              85.38,
+              24.02
+            ],
+            [
+              85.08,
+              23.78
+            ],
+            [
+              84.78,
+              24.12
+            ],
+            [
+              84.68,
+              24.55
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "hazaribagh",
+        "district_name": "Hazaribagh",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.28,
+              24.48
+            ],
+            [
+              85.92,
+              24.42
+            ],
+            [
+              85.98,
+              24.15
+            ],
+            [
+              85.78,
+              23.75
+            ],
+            [
+              85.42,
+              23.68
+            ],
+            [
+              85.08,
+              23.78
+            ],
+            [
+              85.38,
+              24.02
+            ],
+            [
+              85.28,
+              24.48
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "koderma",
+        "district_name": "Koderma",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.62,
+              24.72
+            ],
+            [
+              86.18,
+              24.68
+            ],
+            [
+              86.25,
+              24.32
+            ],
+            [
+              85.92,
+              24.42
+            ],
+            [
+              85.62,
+              24.72
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "giridih",
+        "district_name": "Giridih",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.92,
+              24.42
+            ],
+            [
+              86.25,
+              24.32
+            ],
+            [
+              86.85,
+              24.65
+            ],
+            [
+              86.92,
+              24.05
+            ],
+            [
+              86.48,
+              23.92
+            ],
+            [
+              85.98,
+              24.15
+            ],
+            [
+              85.92,
+              24.42
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "deoghar",
+        "district_name": "Deoghar",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.48,
+              24.68
+            ],
+            [
+              87.05,
+              24.65
+            ],
+            [
+              87.12,
+              24.18
+            ],
+            [
+              86.62,
+              24.02
+            ],
+            [
+              86.48,
+              24.68
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "dumka",
+        "district_name": "Dumka",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              87.05,
+              24.65
+            ],
+            [
+              87.58,
+              24.58
+            ],
+            [
+              87.52,
+              24.02
+            ],
+            [
+              87.05,
+              24.08
+            ],
+            [
+              87.12,
+              24.18
+            ],
+            [
+              87.05,
+              24.65
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "godda",
+        "district_name": "Godda",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              87.15,
+              25.12
+            ],
+            [
+              87.68,
+              25.22
+            ],
+            [
+              87.75,
+              24.82
+            ],
+            [
+              87.42,
+              24.68
+            ],
+            [
+              87.15,
+              25.12
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "sahibganj",
+        "district_name": "Sahibganj",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              87.68,
+              25.22
+            ],
+            [
+              88.02,
+              25.32
+            ],
+            [
+              88.02,
+              24.85
+            ],
+            [
+              87.75,
+              24.82
+            ],
+            [
+              87.68,
+              25.22
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "pakur",
+        "district_name": "Pakur",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              87.75,
+              24.82
+            ],
+            [
+              88.02,
+              24.85
+            ],
+            [
+              87.98,
+              24.32
+            ],
+            [
+              87.52,
+              24.42
+            ],
+            [
+              87.75,
+              24.82
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "jamtara",
+        "district_name": "Jamtara",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.62,
+              24.02
+            ],
+            [
+              87.05,
+              24.08
+            ],
+            [
+              87.48,
+              24.02
+            ],
+            [
+              87.08,
+              23.72
+            ],
+            [
+              86.58,
+              23.82
+            ],
+            [
+              86.62,
+              24.02
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "dhanbad",
+        "district_name": "Dhanbad",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.12,
+              23.95
+            ],
+            [
+              86.62,
+              23.82
+            ],
+            [
+              86.72,
+              23.45
+            ],
+            [
+              86.12,
+              23.48
+            ],
+            [
+              86.12,
+              23.95
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "bokaro",
+        "district_name": "Bokaro",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.78,
+              23.98
+            ],
+            [
+              86.48,
+              23.92
+            ],
+            [
+              86.48,
+              23.45
+            ],
+            [
+              85.88,
+              23.48
+            ],
+            [
+              85.58,
+              23.68
+            ],
+            [
+              85.78,
+              23.98
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "ramgarh",
+        "district_name": "Ramgarh",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.42,
+              23.68
+            ],
+            [
+              85.88,
+              23.48
+            ],
+            [
+              85.62,
+              23.22
+            ],
+            [
+              85.28,
+              23.35
+            ],
+            [
+              85.42,
+              23.68
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "latehar",
+        "district_name": "Latehar",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.22,
+              23.75
+            ],
+            [
+              84.88,
+              23.82
+            ],
+            [
+              85.08,
+              23.78
+            ],
+            [
+              84.88,
+              23.25
+            ],
+            [
+              84.22,
+              23.22
+            ],
+            [
+              83.68,
+              23.6
+            ],
+            [
+              84.22,
+              23.75
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "lohardaga",
+        "district_name": "Lohardaga",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.58,
+              23.52
+            ],
+            [
+              85.02,
+              23.55
+            ],
+            [
+              84.95,
+              23.22
+            ],
+            [
+              84.48,
+              23.22
+            ],
+            [
+              84.58,
+              23.52
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "ranchi",
+        "district_name": "Ranchi",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.02,
+              23.55
+            ],
+            [
+              85.88,
+              23.48
+            ],
+            [
+              85.98,
+              23.22
+            ],
+            [
+              85.82,
+              22.88
+            ],
+            [
+              85.22,
+              22.85
+            ],
+            [
+              84.95,
+              23.22
+            ],
+            [
+              85.02,
+              23.55
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "khunti",
+        "district_name": "Khunti",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.02,
+              23.08
+            ],
+            [
+              85.52,
+              23.12
+            ],
+            [
+              85.45,
+              22.62
+            ],
+            [
+              84.92,
+              22.68
+            ],
+            [
+              85.02,
+              23.08
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "gumla",
+        "district_name": "Gumla",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.68,
+              23.6
+            ],
+            [
+              84.48,
+              23.22
+            ],
+            [
+              84.95,
+              23.22
+            ],
+            [
+              85.02,
+              23.08
+            ],
+            [
+              84.92,
+              22.68
+            ],
+            [
+              84.32,
+              22.58
+            ],
+            [
+              83.88,
+              22.95
+            ],
+            [
+              83.68,
+              23.6
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "simdega",
+        "district_name": "Simdega",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.88,
+              22.95
+            ],
+            [
+              84.32,
+              22.58
+            ],
+            [
+              84.92,
+              22.68
+            ],
+            [
+              84.72,
+              22.02
+            ],
+            [
+              84.18,
+              22.08
+            ],
+            [
+              83.88,
+              22.95
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "west_singhbhum",
+        "district_name": "West Singhbhum",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.92,
+              22.68
+            ],
+            [
+              85.45,
+              22.62
+            ],
+            [
+              86.08,
+              22.68
+            ],
+            [
+              86.22,
+              21.98
+            ],
+            [
+              85.88,
+              21.88
+            ],
+            [
+              84.72,
+              22.02
+            ],
+            [
+              84.92,
+              22.68
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "seraikela_kharsawan",
+        "district_name": "Seraikela-Kharsawan",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.82,
+              22.88
+            ],
+            [
+              86.68,
+              22.95
+            ],
+            [
+              86.85,
+              22.45
+            ],
+            [
+              86.08,
+              22.68
+            ],
+            [
+              85.82,
+              22.88
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district_id": "east_singhbhum",
+        "district_name": "East Singhbhum",
+        "state": "Jharkhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.68,
+              22.95
+            ],
+            [
+              87.52,
+              23.02
+            ],
+            [
+              87.42,
+              22.25
+            ],
+            [
+              86.85,
+              22.45
+            ],
+            [
+              86.68,
+              22.95
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

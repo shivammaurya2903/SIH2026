@@ -173,7 +173,8 @@ const challengeSchema = new mongoose.Schema(
 challengeSchema.pre('save', async function () {
   if (!this.challengeId) {
     const count = await mongoose.model('Challenge').countDocuments();
-    this.challengeId = `CH-${String(count + 1).padStart(5, '0')}`;
+    const uniqueSuffix = Math.floor(1000 + Math.random() * 9000);
+    this.challengeId = `CH-${String(count + 1).padStart(4, '0')}-${uniqueSuffix}`;
   }
 });
 

@@ -65,5 +65,11 @@ const deleteImageFromCloudinary = async (publicId) => {
 module.exports = {
   uploadImageToCloudinary,
   deleteImageFromCloudinary,
-  isConfigured
+  get isConfigured() {
+    return Boolean(
+      process.env.CLOUDINARY_CLOUD_NAME &&
+      process.env.CLOUDINARY_API_KEY &&
+      process.env.CLOUDINARY_API_SECRET
+    );
+  }
 };
