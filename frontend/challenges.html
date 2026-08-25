@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">Societal Challenges Feed — SamadhanSetu</title>
   <script src="config.js"></script>
+  <script src="i18n.js"></script>
   <script src="categories.js"></script>
+  <script src="js/auth/auth-manager.js"></script>
+  <link rel="stylesheet" href="responsive.css">
+  <script src="js/mobile-nav.js" defer></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -245,22 +249,79 @@
         return;
       }
 
-      container.innerHTML = filtered.map(c => `
-        <div class="challenge-card">
-          <div>
-            <div class="c-header">
-              <span class="c-badge">${typeof getCategoryLabel === 'function' ? getCategoryLabel(c.category, getLanguage()) : (c.category || 'General')}</span>
-              <div class="c-score" title="Groq AI Priority Score">${c.priorityScore || 50}</div>
+      const user = (window.AuthManager && AuthManager.getUser()) || (localStorage.getItem('jhar_user') ? JSON.parse(localStorage.getItem('jhar_user')) : null);
+      const uId = user ? String(user.id || user._id) : null;
+
+      container.innerHTML = filtered.map(c => {
+        const count = c.facedCount || (c.facedBy ? c.facedBy.length : 0);
+        const hasFaced = uId && c.facedBy && Array.isArray(c.facedBy) && c.facedBy.some(id => String(id._id || id) === uId);
+        return `
+          <div class="challenge-card">
+            <div>
+              <div class="c-header">
+                <span class="c-badge">${typeof getCategoryLabel === 'function' ? getCategoryLabel(c.category, getLanguage()) : (c.category || 'General')}</span>
+                <div class="c-score" title="Groq AI Priority Score">${c.priorityScore || 50}</div>
+              </div>
+              <div class="c-title">${c.title}</div>
+              <div class="c-meta">📍 ${(c.location && c.location.district) ? c.location.district : 'Ranchi'}, Jharkhand • 🙋 <span id="feedFacedCount-${c._id}">${count}</span> faced</div>
             </div>
-            <div class="c-title">${c.title}</div>
-            <div class="c-meta">📍 ${(c.location && c.location.district) ? c.location.district : 'Ranchi'}, Jharkhand</div>
+            <div class="c-footer">
+              <button id="feedFacedBtn-${c._id}" class="btn ${hasFaced ? 'btn-primary' : 'btn-secondary'}" style="${hasFaced ? 'background:#DBEAFE; color:#1E40AF;' : ''}" onclick="toggleFacedFromFeed('${c._id}', event)">
+                ${hasFaced ? '🙋 Marked' : t('card.facingBtn')}
+              </button>
+              <a href="challenge.html?id=${c._id}" class="btn btn-primary">${t('card.detailsBtn')}</a>
+            </div>
           </div>
-          <div class="c-footer">
-            <button class="btn btn-secondary" onclick="alert('${getLanguage() === 'hi' ? 'संकेत देने के लिए धन्यवाद कि आपको भी यह समस्या है!' : 'Thank you for indicating you face this issue too!'}')">${t('card.facingBtn')}</button>
-            <a href="challenge.html?id=${c._id}" class="btn btn-primary">${t('card.detailsBtn')}</a>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
+    }
+
+    async function toggleFacedFromFeed(id, event) {
+      if (event) event.stopPropagation();
+      const token = localStorage.getItem('jhar_token');
+      if (!token) {
+        alert('Please sign in to mark that you faced this problem.');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const btn = document.getElementById(`feedFacedBtn-${id}`);
+      if (btn) btn.disabled = true;
+
+      try {
+        const res = await fetch(`${CONFIG.API_BASE_URL}/challenges/${id}/faced`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await res.json();
+        if (res.ok && data.success && data.data) {
+          const faced = data.data.faced;
+          const count = data.data.facedCount;
+          const countEl = document.getElementById(`feedFacedCount-${id}`);
+          if (countEl) countEl.textContent = count;
+          if (btn) {
+            btn.textContent = faced ? '🙋 Marked' : (t('card.facingBtn') || 'I Faced This');
+            if (faced) {
+              btn.style.background = '#DBEAFE';
+              btn.style.color = '#1E40AF';
+              btn.className = 'btn btn-primary';
+            } else {
+              btn.style.background = '';
+              btn.style.color = '';
+              btn.className = 'btn btn-secondary';
+            }
+          }
+        } else {
+          alert(data.message || 'Failed to record interaction.');
+        }
+      } catch (err) {
+        alert('Network error recording interaction.');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
     }
   </script>
 </body>

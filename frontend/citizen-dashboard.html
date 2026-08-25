@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">Citizen Dashboard — SamadhanSetu</title>
   <script src="config.js"></script>
+  <script src="i18n.js"></script>
   <script src="categories.js"></script>
+  <script src="js/auth/auth-manager.js"></script>
+  <link rel="stylesheet" href="responsive.css">
+  <script src="js/mobile-nav.js" defer></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -269,15 +273,11 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      const token = getToken();
-      const user = getUser();
-
-      if (!token || !user) {
-        window.location.href = 'login.html';
-        return;
+      if (window.AuthManager && !AuthManager.requireRole(['citizen', 'admin'])) return;
+      const user = (window.AuthManager && AuthManager.getUser()) || getUser();
+      if (user && document.getElementById('userNameDisplay')) {
+        document.getElementById('userNameDisplay').textContent = user.name || 'Citizen';
       }
-
-      document.getElementById('userNameDisplay').textContent = user.name || 'Citizen';
       applyLanguage(getLanguage());
     });
   </script>

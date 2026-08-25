@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">Create Account & Sign In — SamadhanSetu</title>
   <script src="config.js"></script>
+  <script src="i18n.js"></script>
+  <script src="js/auth/auth-manager.js"></script>
+  <link rel="stylesheet" href="responsive.css">
+  <script src="js/mobile-nav.js" defer></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -375,11 +379,11 @@
         <div class="form-panel sign-in-panel">
           <a href="index.html" class="brand-logo">
             <div class="logo-badge">J</div>
-            <span class="brand-name">JharInnovate</span>
+            <span class="brand-name">SamadhanSetu</span>
           </a>
 
           <h1 class="form-title" data-i18n="login.title">Welcome Back</h1>
-          <p class="form-sub" data-i18n="login.sub">Sign in to continue to JharInnovate</p>
+          <p class="form-sub" data-i18n="login.sub">Sign in to continue to SamadhanSetu</p>
 
           <div id="loginError" class="error-alert"></div>
 
@@ -409,7 +413,7 @@
         <div class="form-panel sign-up-panel">
           <a href="index.html" class="brand-logo">
             <div class="logo-badge">J</div>
-            <span class="brand-name">JharInnovate</span>
+            <span class="brand-name">SamadhanSetu</span>
           </a>
 
           <h1 class="form-title" data-i18n="reg.title">Create Your Account</h1>
@@ -538,7 +542,7 @@
               </svg>
             </div>
 
-            <h2 style="font-size: 24px; font-weight: 900; margin-bottom: 6px;">JharInnovate</h2>
+            <h2 style="font-size: 24px; font-weight: 900; margin-bottom: 6px;">SamadhanSetu</h2>
             <p style="font-size: 14px; opacity: 0.9; max-width: 310px; margin-bottom: 12px; line-height: 1.4;" data-i18n="overlay.tagline">From Community Problems to Collaborative Solutions</p>
 
             <div class="benefits-list">
@@ -559,8 +563,8 @@
   <script>
     const I18N = {
       en: {
-        pageTitle: 'Create Account & Sign In — JharInnovate / SamadhanSetu',
-        login: { title: 'Welcome Back', sub: 'Sign in to continue to JharInnovate', email: 'Email Address', emailPlaceholder: 'name@domain.com', password: 'Password', btn: 'SIGN IN', noAccount: "Don't have an account?", createAccountCta: 'Create Account →', signingIn: 'Signing In...' },
+        pageTitle: 'Create Account & Sign In — SamadhanSetu / SamadhanSetu',
+        login: { title: 'Welcome Back', sub: 'Sign in to continue to SamadhanSetu', email: 'Email Address', emailPlaceholder: 'name@domain.com', password: 'Password', btn: 'SIGN IN', noAccount: "Don't have an account?", createAccountCta: 'Create Account →', signingIn: 'Signing In...' },
         reg: { title: 'Create Your Account', sub: "Join Jharkhand's innovation community", name: 'Full Name / Organization *', namePlaceholder: 'Dr. Ramesh Kumar', email: 'Email Address *', phone: 'Phone Number', role: 'Register As (Public Role) *', district: 'District (Jharkhand)', password: 'Password *', confirmPassword: 'Confirm Password *', btn: 'CREATE ACCOUNT', alreadyAccount: 'Already have an account?', signInCta: '← Sign In', creatingAccount: 'Creating Account...' },
         roles: { citizen: 'Citizen / Community Member', university: 'University / Higher Ed Hub', faculty: 'Faculty / Researcher', student: 'Student / Innovator', industry: 'Industry / CSR Partner' },
         overlay: { alreadyTitle: 'Already Registered?', alreadySub: 'Sign in to track your community problem reports and active R&D projects.', signInBtn: 'SIGN IN', tagline: 'From Community Problems to Collaborative Solutions', b1: '✓ Share Community Problems', b2: '✓ Collaborate with R&D Hubs', b3: '✓ Create Measurable Social Impact', createBtn: 'CREATE ACCOUNT' },

@@ -396,6 +396,78 @@ const getDuplicates = async (req, res) => {
   }
 };
 
+const facedThisProblem = async (req, res) => {
+  try {
+    const challenge = await Challenge.findById(req.params.id);
+    if (!challenge) {
+      return errorResponse(res, 'Challenge not found', 404);
+    }
+
+    const userId = req.user._id.toString();
+    if (!Array.isArray(challenge.facedBy)) {
+      challenge.facedBy = [];
+    }
+
+    const index = challenge.facedBy.findIndex((id) => id.toString() === userId);
+    let faced = false;
+
+    if (index > -1) {
+      challenge.facedBy.splice(index, 1);
+      faced = false;
+    } else {
+      challenge.facedBy.push(req.user._id);
+      faced = true;
+    }
+
+    challenge.facedCount = challenge.facedBy.length;
+    await challenge.save();
+
+    return successResponse(
+      res,
+      {
+        faced,
+        facedCount: challenge.facedCount
+      },
+      faced ? 'Marked as faced this problem' : 'Unmarked problem',
+      200
+    );
+  } catch (error) {
+    return errorResponse(res, error.message, 500);
+  }
+};
+
+const updateStatus = async (req, res) => {
+  try {
+    if (!['government', 'admin'].includes(req.user.role)) {
+      return errorResponse(res, 'Only government or admin can update challenge status', 403);
+    }
+
+    const { status, remarks, priority } = req.body;
+    const challenge = await Challenge.findById(req.params.id);
+    if (!challenge) {
+      return errorResponse(res, 'Challenge not found', 404);
+    }
+
+    if (status) challenge.status = status;
+    if (priority) challenge.priority = priority;
+
+    if (remarks) {
+      if (!Array.isArray(challenge.officialRemarks)) challenge.officialRemarks = [];
+      challenge.officialRemarks.push({
+        by: req.user._id,
+        role: req.user.role,
+        remark: remarks,
+        createdAt: new Date()
+      });
+    }
+
+    await challenge.save();
+    return successResponse(res, challenge, 'Challenge status updated successfully', 200);
+  } catch (error) {
+    return errorResponse(res, error.message, 500);
+  }
+};
+
 module.exports = {
   createChallenge,
   getChallenges,
@@ -406,5 +478,7 @@ module.exports = {
   approveChallenge,
   rejectChallenge,
   getMatches,
-  getDuplicates
+  getDuplicates,
+  facedThisProblem,
+  updateStatus
 };

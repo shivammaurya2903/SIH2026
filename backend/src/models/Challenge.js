@@ -163,7 +163,31 @@ const challengeSchema = new mongoose.Schema(
     expectedOutcome: {
       type: String,
       trim: true
-    }
+    },
+    facedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
+    facedCount: {
+      type: Number,
+      default: 0
+    },
+    officialRemarks: [
+      {
+        by: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+        },
+        role: String,
+        remark: String,
+        createdAt: {
+          type: Date,
+          default: Date.now
+        }
+      }
+    ]
   },
   {
     timestamps: true

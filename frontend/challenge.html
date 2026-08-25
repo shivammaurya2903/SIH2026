@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">Challenge Details & AI Triage — SamadhanSetu</title>
   <script src="config.js"></script>
+  <script src="i18n.js"></script>
   <script src="categories.js"></script>
+  <script src="js/auth/auth-manager.js"></script>
+  <link rel="stylesheet" href="responsive.css">
+  <script src="js/mobile-nav.js" defer></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -97,6 +101,17 @@
           <p id="cOutcome" style="font-size: 13px; color: var(--text-muted);">
             Automated solar-powered filtration units with telemetry sensors deployed across 14 rural schools.
           </p>
+
+          <!-- I Faced This Problem Interaction Card -->
+          <div style="margin-top: 20px; padding: 16px; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <div style="font-weight: 800; font-size: 14px; color: var(--primary-dark);" id="facedTitle">Are you or your community affected by this issue?</div>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;"><strong id="facedCountNum" style="color: var(--primary);">0</strong> citizens marked that they faced this problem.</div>
+            </div>
+            <button id="facedBtn" class="btn btn-primary" onclick="toggleFacedThisProblem()" style="gap: 8px;">
+              <span>🙋</span> <span id="facedBtnText">I Faced This Problem</span>
+            </button>
+          </div>
 
           <h3 style="font-size: 14px; font-weight: 800; color: var(--primary-dark); margin-top: 20px; margin-bottom: 6px;">Uploaded Evidence & Images (Cloudinary)</h3>
           <div id="cAttachmentsGallery" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;">
@@ -231,6 +246,25 @@
           document.getElementById('cOutcome').textContent = c.expectedOutcome || 'Community impact solution development.';
           document.getElementById('cScore').textContent = c.aiAnalysis?.priorityScore || c.priorityScore || 50;
 
+          // Populate Faced Count & Initial Marked State
+          const countNumEl = document.getElementById('facedCountNum');
+          if (countNumEl) {
+            countNumEl.textContent = (c.facedCount || (c.facedBy ? c.facedBy.length : 0)).toLocaleString();
+          }
+
+          const user = (window.AuthManager && AuthManager.getUser()) || (localStorage.getItem('jhar_user') ? JSON.parse(localStorage.getItem('jhar_user')) : null);
+          if (user && c.facedBy && Array.isArray(c.facedBy)) {
+            const uId = String(user.id || user._id);
+            const hasFaced = c.facedBy.some(id => String(id._id || id) === uId);
+            const btnText = document.getElementById('facedBtnText');
+            const btn = document.getElementById('facedBtn');
+            if (hasFaced && btnText && btn) {
+              btnText.textContent = 'Marked — You Faced This Problem';
+              btn.style.background = '#DBEAFE';
+              btn.style.color = '#1E40AF';
+            }
+          }
+
           if (c.attachments && c.attachments.length > 0) {
             const gallery = document.getElementById('cAttachmentsGallery');
             if (gallery) {
@@ -296,6 +330,53 @@
         }
       } catch (err) {}
     });
+
+    async function toggleFacedThisProblem() {
+      const token = localStorage.getItem('jhar_token');
+      if (!token) {
+        alert('Please sign in to mark that you faced this problem.');
+        window.location.href = 'login.html';
+        return;
+      }
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      if (!id) return;
+
+      const btn = document.getElementById('facedBtn');
+      if (btn) btn.disabled = true;
+
+      try {
+        const res = await fetch(`${CONFIG.API_BASE_URL}/challenges/${id}/faced`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await res.json();
+        if (res.ok && data.success && data.data) {
+          const faced = data.data.faced;
+          const count = data.data.facedCount;
+          document.getElementById('facedCountNum').textContent = Number(count).toLocaleString();
+          const btnText = document.getElementById('facedBtnText');
+          if (faced) {
+            btnText.textContent = 'Marked — You Faced This Problem';
+            btn.style.background = '#DBEAFE';
+            btn.style.color = '#1E40AF';
+          } else {
+            btnText.textContent = 'I Faced This Problem';
+            btn.style.background = 'var(--primary)';
+            btn.style.color = 'white';
+          }
+        } else {
+          alert(data.message || 'Failed to record interaction.');
+        }
+      } catch (err) {
+        alert('Network error recording interaction.');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
   </script>
 </body>
 </html>

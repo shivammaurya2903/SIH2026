@@ -9,7 +9,9 @@ const {
   approveChallenge,
   rejectChallenge,
   getMatches,
-  getDuplicates
+  getDuplicates,
+  facedThisProblem,
+  updateStatus
 } = require('../controllers/challenge.controller');
 const { protect } = require('../middleware/auth.middleware');
 const { authorize } = require('../middleware/role.middleware');
@@ -26,6 +28,8 @@ router.put('/:id', protect, validateObjectId('id'), upload.array('attachments', 
 router.delete('/:id', protect, validateObjectId('id'), deleteChallenge);
 
 router.post('/:id/analyze', protect, validateObjectId('id'), analyzeChallenge);
+router.post('/:id/faced', protect, validateObjectId('id'), facedThisProblem);
+router.patch('/:id/status', protect, authorize('government', 'admin'), validateObjectId('id'), updateStatus);
 router.get('/:id/matches', protect, validateObjectId('id'), getMatches);
 router.get('/:id/duplicates', protect, validateObjectId('id'), getDuplicates);
 

@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="responsive.css">
+  <script src="i18n.js"></script>
+  <script src="js/mobile-nav.js" defer></script>
 
   <style>
     :root {
@@ -98,18 +101,61 @@
     .samadhan-map-img { display: block; width: 100%; height: 100%; object-fit: contain; user-select: none; }
     
     .district-hotspots-layer { position: absolute; inset: 0; pointer-events: none; }
-    .district-hotspot { position: absolute; border: 0; background: transparent; padding: 0; cursor: pointer; pointer-events: auto; border-radius: 30%; transition: all 0.15s ease; outline: none; }
-    .district-hotspot:hover, .district-hotspot:focus-visible, .district-hotspot.active {
+    .district-hotspot {
+      position: absolute;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      pointer-events: auto;
+      border-radius: 30%;
+      transition: background-color 150ms ease, box-shadow 150ms ease, opacity 150ms ease, outline 150ms ease;
+      outline: none;
+    }
+    .district-hotspot:hover, .district-hotspot:focus-visible {
+      background: rgba(37, 99, 235, 0.10);
+      outline: 2px solid rgba(37, 99, 235, 0.75);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+    }
+    .district-hotspot.active {
       background: rgba(37, 99, 235, 0.16);
-      outline: 2px solid rgba(37, 99, 235, 0.85);
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
+      outline: 2px solid #2563EB;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
     }
 
-    /* Floating Info Card (Positioned Bottom Right inside Map Container) */
-    .district-info-card { position: absolute; bottom: 16px; right: 16px; width: 250px; background: rgba(255,255,255,0.98); backdrop-filter: blur(8px); border: 1px solid #BFDBFE; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); z-index: 600; padding: 14px; animation: fadeIn 0.2s ease-out; }
-    @media (max-width: 576px) { .district-info-card { position: static; width: 100%; margin-top: 12px; box-shadow: none; } }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .dist-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    /* Floating Info Card with Smooth CSS Transitions */
+    .district-info-card {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      width: 250px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(8px);
+      border: 1px solid #BFDBFE;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      z-index: 600;
+      padding: 14px;
+      opacity: 0;
+      transform: translateY(6px);
+      visibility: hidden;
+      transition: opacity 200ms ease-out, transform 200ms ease-out, visibility 200ms ease-out;
+      pointer-events: auto;
+    }
+    .district-info-card.show {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+    @media (max-width: 576px) {
+      .district-info-card {
+        position: static;
+        width: 100%;
+        margin-top: 12px;
+        box-shadow: none;
+      }
+    }
+    .dist-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
     .dist-card-name { font-size: 17px; font-weight: 900; color: var(--primary-dark); }
     .dist-card-sub { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; font-weight: 600; }
     .dist-card-close { background: none; border: none; font-size: 18px; font-weight: 900; color: var(--text-muted); cursor: pointer; line-height: 1; }
@@ -319,44 +365,44 @@
 
       <div class="map-svg-container" id="mapSvgContainer">
         <!-- High-Resolution Jharkhand Map PNG Visual Asset -->
-        <img class="samadhan-map-img" src="assets/jharkhand-map-visual.png" alt="Jharkhand 24 District Innovation Map" />
+        <img class="samadhan-map-img" src="assets/jharkhand-map-visual.png" alt="Jharkhand 24 district innovation map showing administrative boundaries" />
 
         <!-- 24 Interactive District Hotspots Layer -->
         <div class="district-hotspots-layer">
-          <button class="district-hotspot" style="left:10%;top:34%;width:12%;height:16%" data-district-id="garhwa" data-district-name="Garhwa" aria-label="View Garhwa district data"></button>
-          <button class="district-hotspot" style="left:23%;top:32%;width:13%;height:15%" data-district-id="palamu" data-district-name="Palamu" aria-label="View Palamu district data"></button>
-          <button class="district-hotspot" style="left:34%;top:35%;width:12%;height:14%" data-district-id="chatra" data-district-name="Chatra" aria-label="View Chatra district data"></button>
-          <button class="district-hotspot" style="left:45%;top:36%;width:14%;height:16%" data-district-id="hazaribagh" data-district-name="Hazaribagh" aria-label="View Hazaribagh district data"></button>
-          <button class="district-hotspot" style="left:50%;top:24%;width:11%;height:9%" data-district-id="koderma" data-district-name="Koderma" aria-label="View Koderma district data"></button>
-          <button class="district-hotspot" style="left:57%;top:31%;width:12%;height:14%" data-district-id="giridih" data-district-name="Giridih" aria-label="View Giridih district data"></button>
-          <button class="district-hotspot" style="left:66%;top:31%;width:10%;height:14%" data-district-id="deoghar" data-district-name="Deoghar" aria-label="View Deoghar district data"></button>
-          <button class="district-hotspot" style="left:75%;top:33%;width:10%;height:15%" data-district-id="dumka" data-district-name="Dumka" aria-label="View Dumka district data"></button>
-          <button class="district-hotspot" style="left:78%;top:18%;width:8%;height:11%" data-district-id="godda" data-district-name="Godda" aria-label="View Godda district data"></button>
-          <button class="district-hotspot" style="left:85%;top:17%;width:10%;height:11%" data-district-id="sahibganj" data-district-name="Sahibganj" aria-label="View Sahibganj district data"></button>
-          <button class="district-hotspot" style="left:85%;top:25%;width:8%;height:10%" data-district-id="pakur" data-district-name="Pakur" aria-label="View Pakur district data"></button>
-          <button class="district-hotspot" style="left:72%;top:40%;width:11%;height:8%" data-district-id="jamtara" data-district-name="Jamtara" aria-label="View Jamtara district data"></button>
-          <button class="district-hotspot" style="left:28%;top:48%;width:13%;height:12%" data-district-id="latehar" data-district-name="Latehar" aria-label="View Latehar district data"></button>
-          <button class="district-hotspot" style="left:32%;top:57%;width:11%;height:10%" data-district-id="lohardaga" data-district-name="Lohardaga" aria-label="View Lohardaga district data"></button>
-          <button class="district-hotspot" style="left:43%;top:48%;width:10%;height:9%" data-district-id="ramgarh" data-district-name="Ramgarh" aria-label="View Ramgarh district data"></button>
-          <button class="district-hotspot" style="left:54%;top:49%;width:11%;height:11%" data-district-id="bokaro" data-district-name="Bokaro" aria-label="View Bokaro district data"></button>
-          <button class="district-hotspot" style="left:65%;top:50%;width:11%;height:12%" data-district-id="dhanbad" data-district-name="Dhanbad" aria-label="View Dhanbad district data"></button>
-          <button class="district-hotspot active" style="left:44%;top:57%;width:15%;height:13%" data-district-id="ranchi" data-district-name="Ranchi" aria-label="View Ranchi district data"></button>
-          <button class="district-hotspot" style="left:34%;top:64%;width:14%;height:14%" data-district-id="gumla" data-district-name="Gumla" aria-label="View Gumla district data"></button>
-          <button class="district-hotspot" style="left:47%;top:68%;width:10%;height:11%" data-district-id="khunti" data-district-name="Khunti" aria-label="View Khunti district data"></button>
-          <button class="district-hotspot" style="left:35%;top:79%;width:13%;height:12%" data-district-id="simdega" data-district-name="Simdega" aria-label="View Simdega district data"></button>
-          <button class="district-hotspot" style="left:52%;top:80%;width:17%;height:14%" data-district-id="west_singhbhum" data-district-name="West Singhbhum" aria-label="View West Singhbhum district data"></button>
-          <button class="district-hotspot" style="left:63%;top:68%;width:15%;height:12%" data-district-id="seraikela_kharsawan" data-district-name="Seraikela-Kharsawan" aria-label="View Seraikela-Kharsawan district data"></button>
-          <button class="district-hotspot" style="left:75%;top:77%;width:15%;height:14%" data-district-id="east_singhbhum" data-district-name="East Singhbhum" aria-label="View East Singhbhum district data"></button>
+          <button class="district-hotspot" style="left:10%;top:34%;width:12%;height:16%" data-district-id="garhwa" data-district-name="Garhwa" aria-label="View Garhwa district information"></button>
+          <button class="district-hotspot" style="left:23%;top:32%;width:13%;height:15%" data-district-id="palamu" data-district-name="Palamu" aria-label="View Palamu district information"></button>
+          <button class="district-hotspot" style="left:34%;top:35%;width:12%;height:14%" data-district-id="chatra" data-district-name="Chatra" aria-label="View Chatra district information"></button>
+          <button class="district-hotspot" style="left:45%;top:36%;width:14%;height:16%" data-district-id="hazaribagh" data-district-name="Hazaribagh" aria-label="View Hazaribagh district information"></button>
+          <button class="district-hotspot" style="left:50%;top:24%;width:11%;height:9%" data-district-id="koderma" data-district-name="Koderma" aria-label="View Koderma district information"></button>
+          <button class="district-hotspot" style="left:57%;top:31%;width:12%;height:14%" data-district-id="giridih" data-district-name="Giridih" aria-label="View Giridih district information"></button>
+          <button class="district-hotspot" style="left:66%;top:31%;width:10%;height:14%" data-district-id="deoghar" data-district-name="Deoghar" aria-label="View Deoghar district information"></button>
+          <button class="district-hotspot" style="left:75%;top:33%;width:10%;height:15%" data-district-id="dumka" data-district-name="Dumka" aria-label="View Dumka district information"></button>
+          <button class="district-hotspot" style="left:78%;top:18%;width:8%;height:11%" data-district-id="godda" data-district-name="Godda" aria-label="View Godda district information"></button>
+          <button class="district-hotspot" style="left:85%;top:17%;width:10%;height:11%" data-district-id="sahibganj" data-district-name="Sahibganj" aria-label="View Sahibganj district information"></button>
+          <button class="district-hotspot" style="left:85%;top:25%;width:8%;height:10%" data-district-id="pakur" data-district-name="Pakur" aria-label="View Pakur district information"></button>
+          <button class="district-hotspot" style="left:72%;top:40%;width:11%;height:8%" data-district-id="jamtara" data-district-name="Jamtara" aria-label="View Jamtara district information"></button>
+          <button class="district-hotspot" style="left:28%;top:48%;width:13%;height:12%" data-district-id="latehar" data-district-name="Latehar" aria-label="View Latehar district information"></button>
+          <button class="district-hotspot" style="left:32%;top:57%;width:11%;height:10%" data-district-id="lohardaga" data-district-name="Lohardaga" aria-label="View Lohardaga district information"></button>
+          <button class="district-hotspot" style="left:43%;top:48%;width:10%;height:9%" data-district-id="ramgarh" data-district-name="Ramgarh" aria-label="View Ramgarh district information"></button>
+          <button class="district-hotspot" style="left:54%;top:49%;width:11%;height:11%" data-district-id="bokaro" data-district-name="Bokaro" aria-label="View Bokaro district information"></button>
+          <button class="district-hotspot" style="left:65%;top:50%;width:11%;height:12%" data-district-id="dhanbad" data-district-name="Dhanbad" aria-label="View Dhanbad district information"></button>
+          <button class="district-hotspot active" style="left:44%;top:57%;width:15%;height:13%" data-district-id="ranchi" data-district-name="Ranchi" aria-label="View Ranchi district information"></button>
+          <button class="district-hotspot" style="left:34%;top:64%;width:14%;height:14%" data-district-id="gumla" data-district-name="Gumla" aria-label="View Gumla district information"></button>
+          <button class="district-hotspot" style="left:47%;top:68%;width:10%;height:11%" data-district-id="khunti" data-district-name="Khunti" aria-label="View Khunti district information"></button>
+          <button class="district-hotspot" style="left:35%;top:79%;width:13%;height:12%" data-district-id="simdega" data-district-name="Simdega" aria-label="View Simdega district information"></button>
+          <button class="district-hotspot" style="left:52%;top:80%;width:17%;height:14%" data-district-id="west_singhbhum" data-district-name="West Singhbhum" aria-label="View West Singhbhum district information"></button>
+          <button class="district-hotspot" style="left:63%;top:68%;width:15%;height:12%" data-district-id="seraikela_kharsawan" data-district-name="Seraikela-Kharsawan" aria-label="View Seraikela-Kharsawan district information"></button>
+          <button class="district-hotspot" style="left:75%;top:77%;width:15%;height:14%" data-district-id="east_singhbhum" data-district-name="East Singhbhum" aria-label="View East Singhbhum district information"></button>
         </div>
 
-        <!-- Floating District Information Card (Positioned Bottom Right) -->
-        <div class="district-info-card" id="districtInfoCard">
+        <!-- Floating District Information Card with Smooth Transition (Positioned Bottom Right) -->
+        <div class="district-info-card show" id="districtInfoCard">
           <div class="dist-card-header">
             <span class="dist-card-name" id="distCardName">Ranchi</span>
-            <button class="dist-card-close" onclick="closeDistrictCard()" aria-label="Close district card">×</button>
+            <button class="dist-card-close" onclick="closeDistrictCard()" aria-label="Close district information card">×</button>
           </div>
           <div class="dist-card-sub" data-i18n="card.sub">District Innovation Snapshot</div>
-          <div class="dist-stat-list">
+          <div class="dist-stat-list" id="distCardStatList">
             <div class="dist-stat-item">
               <span class="dist-stat-label">📍 <span data-i18n="card.challenges">Challenges</span></span>
               <strong id="distStatChallenges">128</strong>
@@ -964,7 +1010,7 @@
       DISTRICTS: JHARKHAND_MAP_CONFIG.CANONICAL_DISTRICTS
     };
 
-    /* Centralized Baseline District Statistics Matrix */
+    /* Centralized Baseline District Statistics Matrix (Single Source of Truth) */
     const DISTRICT_DATA_MATRIX = {
       "Ranchi": { challenges: 128, projects: 18, solutions: 7, citizens: 4250, impact: 82 },
       "Dhanbad": { challenges: 96, projects: 14, solutions: 5, citizens: 3100, impact: 76 },
@@ -1018,7 +1064,8 @@
           solutions: 'Solutions Deployed',
           citizens: 'Citizens Engaged',
           impact: 'Impact Score',
-          viewDetails: 'View District Details →'
+          viewDetails: 'View District Details →',
+          noData: 'No data available'
         },
         m: {
           total: 'Total Challenges', projects: 'Active Projects', solutions: 'Solutions Deployed',
@@ -1127,7 +1174,8 @@
           solutions: 'लागू समाधान',
           citizens: 'जुड़े नागरिक',
           impact: 'प्रभाव स्कोर',
-          viewDetails: 'जिले का विवरण देखें →'
+          viewDetails: 'जिले का विवरण देखें →',
+          noData: 'कोई डेटा उपलब्ध नहीं'
         },
         m: {
           total: 'कुल चुनौतियां', projects: 'सक्रिय परियोजनाएं', solutions: 'लागू समाधान',
@@ -1307,12 +1355,18 @@
       return (typeof JHARKHAND_MAP_CONFIG !== 'undefined' && JHARKHAND_MAP_CONFIG.NORMALIZE_MAP) ? (JHARKHAND_MAP_CONFIG.NORMALIZE_MAP[key] || raw) : raw;
     }
 
+    function normalizeDistrictId(raw) {
+      if (!raw) return 'ranchi';
+      const canon = normalizeDistrictName(raw);
+      return canon.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+    }
+
     function selectDistrict(rawDistName, targetBtn = null) {
       const distName = normalizeDistrictName(rawDistName);
       currentSelectedDistrict = distName;
       const lang = getLanguage();
 
-      // Highlight active hotspot
+      // Highlight active hotspot button
       document.querySelectorAll('.district-hotspot').forEach(btn => {
         const btnDist = normalizeDistrictName(btn.getAttribute('data-district-name') || btn.getAttribute('data-district-id'));
         if (btnDist === distName) {
@@ -1322,20 +1376,8 @@
         }
       });
 
-      // Retrieve stats from matrix or target button data attributes or fallback
-      let stats = DISTRICT_DATA_MATRIX[distName];
-      if (!stats && targetBtn) {
-        stats = {
-          challenges: parseInt(targetBtn.getAttribute('data-challenges')) || 0,
-          projects: parseInt(targetBtn.getAttribute('data-projects')) || 0,
-          solutions: parseInt(targetBtn.getAttribute('data-solutions')) || 0,
-          citizens: parseInt(targetBtn.getAttribute('data-citizens')) || 0,
-          impact: parseInt(targetBtn.getAttribute('data-score')) || 50
-        };
-      }
-      if (!stats) {
-        stats = { challenges: 0, projects: 0, solutions: 0, citizens: 0, impact: 0 };
-      }
+      // Retrieve stats from single source of truth matrix
+      const stats = DISTRICT_DATA_MATRIX[distName];
 
       const card = document.getElementById('districtInfoCard');
       const nameEl = document.getElementById('distCardName');
@@ -1345,27 +1387,42 @@
       const citEl = document.getElementById('distStatCitizens');
       const impEl = document.getElementById('distStatImpact');
       const btnEl = document.getElementById('distCardBtn');
+      const statListEl = document.getElementById('distCardStatList');
 
       const distLabel = (typeof getDistrictLabel === 'function') ? getDistrictLabel(distName, lang) : distName;
 
       if (nameEl) nameEl.textContent = distLabel;
-      if (chEl) chEl.textContent = stats.challenges.toLocaleString();
-      if (prEl) prEl.textContent = stats.projects.toLocaleString();
-      if (solEl) solEl.textContent = stats.solutions.toLocaleString();
-      if (citEl) citEl.textContent = stats.citizens.toLocaleString();
-      if (impEl) impEl.textContent = stats.impact ? `${stats.impact} / 100` : '—';
+
+      if (stats) {
+        if (statListEl) statListEl.style.display = 'flex';
+        if (chEl) chEl.textContent = stats.challenges.toLocaleString();
+        if (prEl) prEl.textContent = stats.projects.toLocaleString();
+        if (solEl) solEl.textContent = stats.solutions.toLocaleString();
+        if (citEl) citEl.textContent = stats.citizens.toLocaleString();
+        if (impEl) impEl.textContent = stats.impact ? `${stats.impact} / 100` : '—';
+      } else {
+        if (statListEl) {
+          statListEl.style.display = 'block';
+          statListEl.innerHTML = `<div style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 12px 0;">${t('card.noData')}</div>`;
+        }
+      }
 
       if (btnEl) {
-        btnEl.href = `challenges.html?district=${encodeURIComponent(distName)}`;
+        const distId = normalizeDistrictId(distName);
+        btnEl.href = `challenges.html?district=${encodeURIComponent(distId)}`;
         btnEl.textContent = t('card.viewDetails');
       }
 
-      if (card) card.style.display = 'block';
+      if (card) {
+        card.classList.add('show');
+      }
     }
 
     function closeDistrictCard() {
       const card = document.getElementById('districtInfoCard');
-      if (card) card.style.display = 'none';
+      if (card) {
+        card.classList.remove('show');
+      }
       document.querySelectorAll('.district-hotspot').forEach(btn => btn.classList.remove('active'));
       currentSelectedDistrict = null;
     }
@@ -1378,6 +1435,13 @@
           btn.addEventListener(evtType, (e) => {
             selectDistrict(rawName, btn);
           });
+        });
+
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectDistrict(rawName, btn);
+          }
         });
       });
 
@@ -1399,7 +1463,7 @@
           if (currentSelectedDistrict) selectDistrict(currentSelectedDistrict);
         }
       } catch (err) {
-        console.warn('District analytics fetch fallback to matrix.');
+        // Fallback to static matrix
       }
     }
 
@@ -1417,7 +1481,7 @@
           if (d.totalIndustries !== undefined) document.getElementById('mInd').textContent = d.totalIndustries.toLocaleString();
         }
       } catch (err) {
-        console.warn('Metrics live fetch fallback to seed data.');
+        // Fallback to static seed data
       }
     }
 

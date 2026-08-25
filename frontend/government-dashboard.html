@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">Government Command Center — SamadhanSetu</title>
   <script src="config.js"></script>
+  <script src="i18n.js"></script>
   <script src="categories.js"></script>
+  <script src="js/auth/auth-manager.js"></script>
+  <link rel="stylesheet" href="responsive.css">
+  <script src="js/mobile-nav.js" defer></script>
   <style>
     :root {
       --primary: #1D4ED8;
@@ -111,8 +115,36 @@
     </div>
 
     <div class="grid-2">
-      <div class="card">
-        <h2 class="card-title" data-i18n="table.title">Pending Citizen Challenges Triage</h2>
+      <div class="card" id="pendingSection">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+          <h2 class="card-title" style="margin-bottom: 0;" data-i18n="table.title">Government Reports & Challenges Command Table</h2>
+          
+          <!-- Filters -->
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <input type="text" id="govSearch" placeholder="Search keyword..." style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 12px; outline: none;" onkeyup="filterGovTable()">
+            <select id="govDistrictFilter" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 12px;" onchange="filterGovTable()">
+              <option value="">All 24 Districts</option>
+              <option value="Ranchi">Ranchi</option>
+              <option value="Dhanbad">Dhanbad</option>
+              <option value="East Singhbhum">East Singhbhum</option>
+              <option value="Bokaro">Bokaro</option>
+              <option value="Hazaribagh">Hazaribagh</option>
+              <option value="Deoghar">Deoghar</option>
+              <option value="Giridih">Giridih</option>
+              <option value="Palamu">Palamu</option>
+            </select>
+            <select id="govStatusFilter" style="padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 12px;" onchange="filterGovTable()">
+              <option value="">All Statuses</option>
+              <option value="submitted">Pending Review</option>
+              <option value="approved">Approved / Validated</option>
+              <option value="matched">R&D Matched</option>
+              <option value="in_progress">In Progress</option>
+              <option value="deployed">Deployed</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+        </div>
+
         <div style="overflow-x: auto;">
           <table class="data-table">
             <thead>
@@ -120,6 +152,7 @@
                 <th data-i18n="th.title">Title</th>
                 <th data-i18n="th.category">Category</th>
                 <th data-i18n="th.district">District</th>
+                <th>Status</th>
                 <th data-i18n="th.score">AI Score</th>
                 <th data-i18n="th.actions">Actions</th>
               </tr>
@@ -234,6 +267,8 @@
       window.location.href = 'login.html';
     }
 
+    let allGovChallenges = [];
+
     async function loadGovChallenges() {
       const token = localStorage.getItem(CONFIG.STORAGE_KEYS.TOKEN);
       if (!token) return;
@@ -245,37 +280,63 @@
         const data = await res.json();
 
         if (res.ok && data.success && data.data) {
-          const list = data.data;
-          document.getElementById('kpiTotal').textContent = list.length;
-          document.getElementById('kpiReview').textContent = list.filter(c => c.status === 'submitted').length;
-          document.getElementById('kpiProjects').textContent = list.filter(c => c.status === 'in_project').length;
+          allGovChallenges = data.data;
+          document.getElementById('kpiTotal').textContent = allGovChallenges.length;
+          document.getElementById('kpiReview').textContent = allGovChallenges.filter(c => c.status === 'submitted' || c.status === 'under_review').length;
+          document.getElementById('kpiProjects').textContent = allGovChallenges.filter(c => c.status === 'in_progress' || c.status === 'matched' || c.status === 'approved').length;
+          document.getElementById('kpiDeployed').textContent = allGovChallenges.filter(c => c.status === 'deployed' || c.status === 'completed').length;
 
-          const tbody = document.getElementById('govChallengesTbody');
-          tbody.innerHTML = list.map(c => `
-            <tr>
-              <td style="font-weight: 700; color: var(--primary-dark);">${c.title}</td>
-              <td>${typeof getCategoryLabel === 'function' ? getCategoryLabel(c.category, getLanguage()) : (c.category || 'General')}</td>
-              <td>${(c.location && c.location.district) ? c.location.district : 'Ranchi'}</td>
-              <td><span style="font-weight: 800; color: var(--accent);">${c.priorityScore || 50}/100</span></td>
-              <td style="display: flex; gap: 4px;">
-                <a href="challenge.html?id=${c._id}" class="btn btn-secondary">${t('btn.inspect')}</a>
-                ${c.status === 'submitted' ? `
-                  <button class="btn btn-primary" onclick="approveChallenge('${c._id}')">${t('btn.approve')}</button>
-                  <button class="btn btn-danger" onclick="rejectChallenge('${c._id}')">${t('btn.reject')}</button>
-                ` : `<span class="badge badge-${c.status}">${c.status}</span>`}
-              </td>
-            </tr>
-          `).join('');
+          renderGovTable(allGovChallenges);
         }
       } catch (err) {}
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const token = localStorage.getItem(CONFIG.STORAGE_KEYS.TOKEN);
-      if (!token) {
-        window.location.href = 'login.html';
+    function filterGovTable() {
+      const search = (document.getElementById('govSearch')?.value || '').toLowerCase();
+      const dist = document.getElementById('govDistrictFilter')?.value || '';
+      const stat = document.getElementById('govStatusFilter')?.value || '';
+
+      let filtered = allGovChallenges;
+      if (search) {
+        filtered = filtered.filter(c => (c.title || '').toLowerCase().includes(search) || (c.description || '').toLowerCase().includes(search));
+      }
+      if (dist) {
+        filtered = filtered.filter(c => c.location && c.location.district === dist);
+      }
+      if (stat) {
+        filtered = filtered.filter(c => c.status === stat);
+      }
+      renderGovTable(filtered);
+    }
+
+    function renderGovTable(list) {
+      const tbody = document.getElementById('govChallengesTbody');
+      if (!tbody) return;
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 24px; color: var(--text-muted);">No reports match the selected filters.</td></tr>`;
         return;
       }
+
+      tbody.innerHTML = list.map(c => `
+        <tr>
+          <td style="font-weight: 700; color: var(--primary-dark);">${c.title}</td>
+          <td>${typeof getCategoryLabel === 'function' ? getCategoryLabel(c.category, getLanguage()) : (c.category || 'General')}</td>
+          <td>${(c.location && c.location.district) ? c.location.district : 'Ranchi'}</td>
+          <td><span class="badge badge-${c.status}">${c.status}</span></td>
+          <td><span style="font-weight: 800; color: var(--accent);">${c.aiAnalysis?.priorityScore || c.priorityScore || 50}/100</span></td>
+          <td style="display: flex; gap: 4px; flex-wrap: wrap;">
+            <a href="challenge.html?id=${c._id}" class="btn btn-secondary">${t('btn.inspect')}</a>
+            ${['submitted', 'under_review', 'ai_analyzed'].includes(c.status) ? `
+              <button class="btn btn-primary" onclick="approveChallenge('${c._id}')">${t('btn.approve')}</button>
+              <button class="btn btn-danger" onclick="rejectChallenge('${c._id}')">${t('btn.reject')}</button>
+            ` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.AuthManager && !AuthManager.requireRole(['government', 'admin'])) return;
       applyLanguage(getLanguage());
     });
 
