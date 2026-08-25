@@ -27,14 +27,25 @@ const app = express();
 
 app.use(helmet());
 
-const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
-const allowedOrigins = [
-  clientUrl,
+const clientUrl = process.env.CLIENT_URL || '';
+const frontendUrl = process.env.FRONTEND_URL || '';
+const frontendUrlsEnv = process.env.FRONTEND_URLS || '';
+const envOrigins = [clientUrl, frontendUrl, ...frontendUrlsEnv.split(',')].map(u => u.trim()).filter(Boolean);
+
+const defaultAllowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:5000',
   'http://localhost:5500',
+  'http://localhost:8080',
   'http://127.0.0.1:3000',
-  'http://127.0.0.1:5500'
-].filter(Boolean);
+  'http://127.0.0.1:5000',
+  'http://127.0.0.1:5500',
+  'http://127.0.0.1:8080',
+  'https://smadhansetu.netlify.app',
+  ...envOrigins
+];
+
+const allowedOrigins = [...new Set(defaultAllowedOrigins)];
 
 app.use(
   cors({
@@ -42,7 +53,11 @@ app.use(
       if (!origin) {
         return callback(null, true);
       }
-      if (allowedOrigins.includes(origin) || (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost:'))) {
+      if (
+        allowedOrigins.includes(origin) ||
+        origin === 'https://smadhansetu.netlify.app' ||
+        (process.env.NODE_ENV === 'development' && (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')))
+      ) {
         return callback(null, true);
       }
       return callback(new Error('Not allowed by CORS'));

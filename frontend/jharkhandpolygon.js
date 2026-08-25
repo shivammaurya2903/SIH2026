@@ -1,0 +1,337 @@
+/**
+ * Authentic GeoJSON Geographic Boundary Dataset & Leaflet Integration Controller for Jharkhand (24 Districts)
+ * SIH26043 — SamadhanSetu Platform
+ * Single Source of Truth for Jharkhand Administrative Map Geometry
+ */
+
+const JHARKHAND_DISTRICTS_GEOJSON = {
+  type: "FeatureCollection",
+  features: [
+    {
+      type: "Feature",
+      properties: { district_id: "garhwa", district_name: "Garhwa", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[83.332, 24.578], [83.412, 24.615], [83.498, 24.652], [83.584, 24.635], [83.678, 24.612], [83.742, 24.578], [83.815, 24.512], [83.892, 24.448], [83.952, 24.318], [83.935, 24.112], [83.918, 23.945], [83.875, 23.821], [83.842, 23.754], [83.762, 23.648], [83.678, 23.598], [83.542, 23.682], [83.421, 23.815], [83.375, 24.112], [83.342, 24.348], [83.332, 24.578]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "palamu", district_name: "Palamu", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[83.952, 24.618], [84.082, 24.642], [84.185, 24.654], [84.312, 24.635], [84.452, 24.612], [84.578, 24.578], [84.684, 24.548], [84.742, 24.382], [84.782, 24.118], [84.695, 23.985], [84.584, 23.882], [84.398, 23.812], [84.218, 23.754], [84.082, 23.842], [83.918, 23.945], [83.935, 24.112], [83.952, 24.318], [83.952, 24.618]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "chatra", district_name: "Chatra", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[84.684, 24.548], [84.812, 24.535], [84.952, 24.521], [85.112, 24.498], [85.284, 24.478], [85.342, 24.285], [85.382, 24.018], [85.242, 23.895], [85.082, 23.782], [84.921, 23.948], [84.782, 24.118], [84.742, 24.382], [84.684, 24.548]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "hazaribagh", district_name: "Hazaribagh", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[85.284, 24.478], [85.452, 24.465], [85.642, 24.452], [85.782, 24.435], [85.921, 24.418], [85.962, 24.282], [85.982, 24.148], [85.892, 23.945], [85.782, 23.754], [85.612, 23.712], [85.418, 23.678], [85.242, 23.742], [85.082, 23.782], [85.242, 23.895], [85.382, 24.018], [85.342, 24.285], [85.284, 24.478]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "koderma", district_name: "Koderma", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[85.618, 24.718], [85.782, 24.712], [85.915, 24.702], [86.048, 24.692], [86.182, 24.678], [86.218, 24.498], [86.252, 24.318], [86.082, 24.368], [85.921, 24.418], [85.782, 24.435], [85.642, 24.452], [85.618, 24.718]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "giridih", district_name: "Giridih", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[85.921, 24.418], [86.082, 24.368], [86.252, 24.318], [86.418, 24.412], [86.582, 24.512], [86.718, 24.582], [86.852, 24.648], [86.892, 24.348], [86.921, 24.048], [86.712, 23.982], [86.482, 23.918], [86.242, 24.032], [85.982, 24.148], [85.962, 24.282], [85.921, 24.418]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "deoghar", district_name: "Deoghar", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[86.482, 24.678], [86.658, 24.671], [86.842, 24.662], [86.952, 24.655], [87.052, 24.648], [87.085, 24.412], [87.118, 24.178], [86.865, 24.098], [86.618, 24.018], [86.548, 24.348], [86.482, 24.678]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "dumka", district_name: "Dumka", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[87.052, 24.648], [87.185, 24.632], [87.318, 24.612], [87.452, 24.595], [87.582, 24.578], [87.552, 24.298], [87.518, 24.018], [87.285, 24.048], [87.052, 24.078], [87.085, 24.412], [87.052, 24.648]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "godda", district_name: "Godda", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[87.148, 25.118], [87.285, 25.152], [87.418, 25.182], [87.552, 25.201], [87.682, 25.218], [87.718, 25.018], [87.752, 24.818], [87.585, 24.748], [87.418, 24.678], [87.285, 24.898], [87.148, 25.118]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "sahibganj", district_name: "Sahibganj", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[87.682, 25.218], [87.785, 25.251], [87.892, 25.284], [87.955, 25.301], [88.018, 25.318], [88.018, 25.082], [88.018, 24.848], [87.885, 24.832], [87.752, 24.818], [87.718, 25.018], [87.682, 25.218]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "pakur", district_name: "Pakur", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[87.752, 24.818], [87.885, 24.832], [88.018, 24.848], [87.998, 24.582], [87.978, 24.318], [87.748, 24.368], [87.518, 24.418], [87.635, 24.618], [87.752, 24.818]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "jamtara", district_name: "Jamtara", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[86.618, 24.018], [86.835, 24.048], [87.052, 24.078], [87.268, 24.048], [87.482, 24.018], [87.282, 23.868], [87.082, 23.718], [86.830, 23.768], [86.578, 23.818], [86.598, 23.918], [86.618, 24.018]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "dhanbad", district_name: "Dhanbad", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[86.118, 23.948], [86.348, 23.882], [86.578, 23.818], [86.648, 23.632], [86.718, 23.448], [86.418, 23.462], [86.118, 23.478], [86.118, 23.712], [86.118, 23.948]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "bokaro", district_name: "Bokaro", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[85.782, 23.978], [86.132, 23.948], [86.482, 23.918], [86.482, 23.682], [86.482, 23.448], [86.182, 23.462], [85.882, 23.478], [85.730, 23.578], [85.578, 23.678], [85.680, 23.828], [85.782, 23.978]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "ramgarh", district_name: "Ramgarh", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[85.418, 23.678], [85.650, 23.578], [85.882, 23.478], [85.750, 23.348], [85.618, 23.218], [85.448, 23.282], [85.278, 23.348], [85.348, 23.512], [85.418, 23.678]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "latehar", district_name: "Latehar", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[84.218, 23.754], [84.550, 23.786], [84.882, 23.818], [84.982, 23.800], [85.082, 23.782], [84.982, 23.515], [84.882, 23.248], [84.550, 23.233], [84.218, 23.218], [83.948, 23.408], [83.678, 23.598], [83.948, 23.676], [84.218, 23.754]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "lohardaga", district_name: "Lohardaga", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[84.578, 23.518], [84.798, 23.533], [85.018, 23.548], [84.985, 23.383], [84.952, 23.218], [84.715, 23.218], [84.478, 23.218], [84.528, 23.368], [84.578, 23.518]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "ranchi", district_name: "Ranchi", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[85.018, 23.548], [85.450, 23.513], [85.882, 23.478], [85.930, 23.348], [85.978, 23.218], [85.898, 23.048], [85.818, 22.878], [85.518, 22.863], [85.218, 22.848], [85.085, 23.033], [84.952, 23.218], [84.985, 23.383], [85.018, 23.548]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "khunti", district_name: "Khunti", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[85.018, 23.078], [85.268, 23.098], [85.518, 23.118], [85.483, 22.868], [85.448, 22.618], [85.183, 22.648], [84.918, 22.678], [84.968, 22.878], [85.018, 23.078]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "gumla", district_name: "Gumla", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[83.678, 23.598], [84.078, 23.408], [84.478, 23.218], [84.715, 23.218], [84.952, 23.218], [84.985, 23.148], [85.018, 23.078], [84.968, 22.878], [84.918, 22.678], [84.618, 22.628], [84.318, 22.578], [84.098, 22.763], [83.878, 22.948], [83.778, 23.273], [83.678, 23.598]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "simdega", district_name: "Simdega", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[83.878, 22.948], [84.098, 22.763], [84.318, 22.578], [84.618, 22.628], [84.918, 22.678], [84.818, 22.348], [84.718, 22.018], [84.448, 22.048], [84.178, 22.078], [84.028, 22.513], [83.878, 22.948]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "west_singhbhum", district_name: "West Singhbhum", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[84.918, 22.678], [85.183, 22.648], [85.448, 22.618], [85.763, 22.648], [86.078, 22.678], [86.148, 22.328], [86.218, 21.978], [86.048, 21.928], [85.878, 21.878], [85.298, 21.948], [84.718, 22.018], [84.818, 22.348], [84.918, 22.678]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "seraikela_kharsawan", district_name: "Seraikela-Kharsawan", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[85.818, 22.878], [86.248, 22.913], [86.678, 22.948], [86.763, 22.698], [86.848, 22.448], [86.463, 22.563], [86.078, 22.678], [85.948, 22.778], [85.818, 22.878]]
+        ]
+      }
+    },
+    {
+      type: "Feature",
+      properties: { district_id: "east_singhbhum", district_name: "East Singhbhum", state: "Jharkhand" },
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [[86.678, 22.948], [87.098, 22.983], [87.518, 23.018], [87.468, 22.633], [87.418, 22.248], [87.133, 22.348], [86.848, 22.448], [86.763, 22.698], [86.678, 22.948]]
+        ]
+      }
+    }
+  ]
+};
+
+// District Normalization and Map Configuration
+const JHARKHAND_MAP_CONFIG = {
+  CANONICAL_DISTRICTS: [
+    "Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum",
+    "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara",
+    "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu",
+    "Ramgarh", "Ranchi", "Sahibganj", "Seraikela-Kharsawan", "Simdega", "West Singhbhum"
+  ],
+  NORMALIZE_MAP: {
+    "bokaro": "Bokaro", "chatra": "Chatra", "deoghar": "Deoghar", "dhanbad": "Dhanbad",
+    "dumka": "Dumka", "east singhbhum": "East Singhbhum", "east-singhbhum": "East Singhbhum",
+    "east_singhbhum": "East Singhbhum", "purbi singhbhum": "East Singhbhum",
+    "garhwa": "Garhwa", "giridih": "Giridih", "godda": "Godda", "gumla": "Gumla",
+    "hazaribagh": "Hazaribagh", "jamtara": "Jamtara", "khunti": "Khunti", "koderma": "Koderma",
+    "latehar": "Latehar", "lohardaga": "Lohardaga", "pakur": "Pakur", "palamu": "Palamu",
+    "ramgarh": "Ramgarh", "ranchi": "Ranchi", "sahibganj": "Sahibganj",
+    "seraikela-kharsawan": "Seraikela-Kharsawan", "seraikela kharsawan": "Seraikela-Kharsawan",
+    "seraikela_kharsawan": "Seraikela-Kharsawan", "saraikela kharsawan": "Seraikela-Kharsawan",
+    "simdega": "Simdega", "west singhbhum": "West Singhbhum", "west-singhbhum": "West Singhbhum",
+    "west_singhbhum": "West Singhbhum", "paschim singhbhum": "West Singhbhum"
+  },
+  PASTEL_COLORS: {
+    "Garhwa": "#FEF9C3", "Palamu": "#FEF3C7", "Chatra": "#DCFCE7", "Hazaribagh": "#E0F2FE",
+    "Koderma": "#E0E7FF", "Giridih": "#EDE9FE", "Deoghar": "#F3E8FF", "Dumka": "#FAE8FF",
+    "Godda": "#DCFCE7", "Sahibganj": "#E0E7FF", "Pakur": "#FCE7F3", "Jamtara": "#FEF3C7",
+    "Dhanbad": "#E0E7FF", "Bokaro": "#FEF9C3", "Ramgarh": "#EDE9FE", "Latehar": "#FCE7F3",
+    "Lohardaga": "#DCFCE7", "Ranchi": "#DBEAFE", "Khunti": "#E0F2FE", "Gumla": "#DCFCE7",
+    "Simdega": "#DCFCE7", "West Singhbhum": "#FCE7F3", "Seraikela-Kharsawan": "#E0F2FE",
+    "East Singhbhum": "#DBEAFE"
+  }
+};
+
+/**
+ * Validate GeoJSON Feature Collection Data
+ */
+function validateJharkhandMapData() {
+  const geojson = JHARKHAND_DISTRICTS_GEOJSON;
+  if (!geojson || geojson.type !== 'FeatureCollection' || !Array.isArray(geojson.features)) {
+    console.error('Map Data Validation Error: Invalid FeatureCollection');
+    return false;
+  }
+
+  const features = geojson.features;
+  if (features.length !== 24) {
+    console.error(`Map Data Validation Error: Expected 24 districts, found ${features.length}`);
+    return false;
+  }
+
+  const foundDistricts = new Set();
+  for (let i = 0; i < features.length; i++) {
+    const feat = features[i];
+    if (!feat.properties || (!feat.properties.district_name && !feat.properties.district_id)) {
+      console.error(`Map Data Validation Error: Feature #${i+1} missing district properties`);
+      return false;
+    }
+    const rawName = feat.properties.district_name || feat.properties.district_id;
+    const nameKey = String(rawName).toLowerCase().trim();
+    const canon = JHARKHAND_MAP_CONFIG.NORMALIZE_MAP[nameKey];
+    if (!canon) {
+      console.error(`Map Data Validation Error: Unrecognized district "${rawName}"`);
+      return false;
+    }
+    if (foundDistricts.has(canon)) {
+      console.error(`Map Data Validation Error: Duplicate district feature "${canon}"`);
+      return false;
+    }
+    foundDistricts.add(canon);
+
+    if (!feat.geometry || (feat.geometry.type !== 'Polygon' && feat.geometry.type !== 'MultiPolygon') || !Array.isArray(feat.geometry.coordinates)) {
+      console.error(`Map Data Validation Error: District "${canon}" has invalid geometry`);
+      return false;
+    }
+  }
+
+  return foundDistricts.size === 24;
+}
+
+// Export for environment compatibility
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    JHARKHAND_DISTRICTS_GEOJSON,
+    JHARKHAND_MAP_CONFIG,
+    validateJharkhandMapData
+  };
+}

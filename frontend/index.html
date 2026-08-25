@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Official Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
     :root {
@@ -87,24 +89,21 @@
     .view-grid-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; color: var(--primary); text-decoration: none; background: var(--primary-light); padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid #BFDBFE; transition: all 0.2s; }
     .view-grid-link:hover { background: #DBEAFE; }
 
-    /* SVG Canvas Area */
-    .map-svg-container { position: relative; width: 100%; height: 440px; background: #F8FAFC; border-radius: var(--radius-md); border: 1px solid var(--border); overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 8px; }
-    .jharkhand-svg { width: 100%; height: 100%; transition: transform 0.3s ease; }
+    /* Leaflet Canvas Container Area */
+    .map-svg-container { position: relative; width: 100%; height: 440px; background: #F8FAFC; border-radius: var(--radius-md); border: 1px solid var(--border); overflow: hidden; }
+    #jharkhandMap { width: 100%; height: 100%; min-height: 420px; background: #F8FAFC; }
 
     /* Compact Controls Overlay (Top Left) */
-    .map-controls-stack { position: absolute; top: 16px; left: 16px; display: flex; flex-direction: column; gap: 4px; z-index: 20; }
+    .map-controls-stack { position: absolute; top: 16px; left: 16px; display: flex; flex-direction: column; gap: 4px; z-index: 500; }
     .map-ctrl-btn { background: var(--surface); border: 1px solid var(--border); width: 32px; height: 32px; border-radius: var(--radius-sm); font-weight: 800; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); color: var(--text); transition: all 0.2s; }
     .map-ctrl-btn:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 
-    /* Verified GeoJSON Projected District Path Styles */
-    .jharkhand-district-path { stroke: #FFFFFF; stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; cursor: pointer; transition: fill 0.2s ease, stroke 0.2s ease, stroke-width 0.2s ease; outline: none; }
-    .jharkhand-district-path:hover, .jharkhand-district-path:focus { fill: #DBEAFE !important; stroke: #1D4ED8 !important; stroke-width: 2.5 !important; filter: drop-shadow(0 4px 8px rgba(29,78,216,0.3)); }
-    .jharkhand-district-path.selected { fill: #DBEAFE !important; stroke: #1D4ED8 !important; stroke-width: 2.8 !important; }
-    .jharkhand-district-text { font-size: 11px; font-weight: 800; fill: #1E293B; pointer-events: none; text-anchor: middle; user-select: none; }
-    .jharkhand-district-text.active { fill: #1D4ED8; font-weight: 900; }
+    /* Leaflet District Label Markers */
+    .leaflet-district-label { background: transparent !important; border: none !important; text-align: center; }
+    .dist-label-text { font-size: 11px; font-weight: 800; color: #0F172A; pointer-events: none; user-select: none; text-shadow: 0 0 4px rgba(255,255,255,0.9); }
 
-    /* Floating Info Card (Bottom Right inside Map Container) */
-    .district-info-card { position: absolute; bottom: 16px; right: 16px; width: 245px; background: rgba(255,255,255,0.98); backdrop-filter: blur(8px); border: 1px solid #BFDBFE; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); z-index: 30; padding: 14px; animation: fadeIn 0.2s ease-out; }
+    /* Floating Info Card (Positioned Bottom Right inside Map Container) */
+    .district-info-card { position: absolute; bottom: 16px; right: 16px; width: 245px; background: rgba(255,255,255,0.98); backdrop-filter: blur(8px); border: 1px solid #BFDBFE; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); z-index: 600; padding: 14px; animation: fadeIn 0.2s ease-out; }
     @media (max-width: 576px) { .district-info-card { position: static; width: 100%; margin-top: 12px; box-shadow: none; } }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     .dist-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
@@ -226,106 +225,8 @@
           <button class="map-ctrl-btn" onclick="resetMapZoom()" title="Reset Scale">⤢</button>
         </div>
 
-        <!-- Verified GeoJSON Projected Administrative Map of Jharkhand (24 Districts) -->
-        <svg viewBox="0 0 820 620" preserveAspectRatio="xMidYMid meet" class="jharkhand-svg" id="jharkhandSvg" xmlns="http://www.w3.org/2000/svg">
-          <g id="mapViewport">
-            <!-- 1. Garhwa -->
-            <path id="path-Garhwa" data-district="Garhwa" aria-label="Garhwa district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #FEF9C3;" d="M 38 153 L 86 147 L 134 195 L 129 254 L 91 310 L 49 275 Z" />
-            <text x="88" y="222" class="jharkhand-district-text" id="text-Garhwa">Garhwa</text>
-
-            <!-- 2. Palamu -->
-            <path id="path-Palamu" data-district="Palamu" aria-label="Palamu district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #FEF3C7;" d="M 134 147 L 251 158 L 267 227 L 235 265 L 177 286 L 129 254 Z" />
-            <text x="199" y="223" class="jharkhand-district-text" id="text-Palamu">Palamu</text>
-
-            <!-- 3. Chatra -->
-            <path id="path-Chatra" data-district="Chatra" aria-label="Chatra district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #DCFCE7;" d="M 251 158 L 347 169 L 363 243 L 315 281 L 267 227 Z" />
-            <text x="308" y="215" class="jharkhand-district-text" id="text-Chatra">Chatra</text>
-
-            <!-- 4. Hazaribagh -->
-            <path id="path-Hazaribagh" data-district="Hazaribagh" aria-label="Hazaribagh district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #E0F2FE;" d="M 347 169 L 449 179 L 459 222 L 427 286 L 369 297 L 315 281 Z" />
-            <text x="394" y="239" class="jharkhand-district-text" id="text-Hazaribagh">Hazaribagh</text>
-
-            <!-- 5. Koderma -->
-            <path id="path-Koderma" data-district="Koderma" aria-label="Koderma district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #E0E7FF;" d="M 401 131 L 491 137 L 502 195 L 449 179 Z" />
-            <text x="460" y="160" class="jharkhand-district-text" id="text-Koderma">Koderma</text>
-
-            <!-- 6. Giridih -->
-            <path id="path-Giridih" data-district="Giridih" aria-label="Giridih district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #EDE9FE;" d="M 449 179 L 502 195 L 598 142 L 609 238 L 539 259 L 459 222 Z" />
-            <text x="526" y="205" class="jharkhand-district-text" id="text-Giridih">Giridih</text>
-
-            <!-- 7. Deoghar -->
-            <path id="path-Deoghar" data-district="Deoghar" aria-label="Deoghar district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #F3E8FF;" d="M 539 137 L 630 142 L 641 217 L 561 243 Z" />
-            <text x="593" y="185" class="jharkhand-district-text" id="text-Deoghar">Deoghar</text>
-
-            <!-- 8. Dumka -->
-            <path id="path-Dumka" data-district="Dumka" aria-label="Dumka district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #FAE8FF;" d="M 630 142 L 715 153 L 705 243 L 630 233 L 641 217 Z" />
-            <text x="664" y="197" class="jharkhand-district-text" id="text-Dumka">Dumka</text>
-
-            <!-- 9. Godda -->
-            <path id="path-Godda" data-district="Godda" aria-label="Godda district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #DCFCE7;" d="M 646 67 L 731 51 L 742 115 L 689 137 Z" />
-            <text x="702" y="92" class="jharkhand-district-text" id="text-Godda">Godda</text>
-
-            <!-- 10. Sahibganj -->
-            <path id="path-Sahibganj" data-district="Sahibganj" aria-label="Sahibganj district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #E0E7FF;" d="M 731 51 L 785 35 L 785 110 L 742 115 Z" />
-            <text x="760" y="78" class="jharkhand-district-text" id="text-Sahibganj">Sahibganj</text>
-
-            <!-- 11. Pakur -->
-            <path id="path-Pakur" data-district="Pakur" aria-label="Pakur district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #FCE7F3;" d="M 742 115 L 785 110 L 779 195 L 705 179 Z" />
-            <text x="752" y="149" class="jharkhand-district-text" id="text-Pakur">Pakur</text>
-
-            <!-- 12. Jamtara -->
-            <path id="path-Jamtara" data-district="Jamtara" aria-label="Jamtara district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #FEF3C7;" d="M 561 243 L 630 233 L 699 243 L 635 291 L 555 275 Z" />
-            <text x="616" y="257" class="jharkhand-district-text" id="text-Jamtara">Jamtara</text>
-
-            <!-- 13. Dhanbad -->
-            <path id="path-Dhanbad" data-district="Dhanbad" aria-label="Dhanbad district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #E0E7FF;" d="M 481 254 L 561 275 L 577 334 L 481 329 Z" />
-            <text x="525" y="298" class="jharkhand-district-text" id="text-Dhanbad">Dhanbad</text>
-
-            <!-- 14. Bokaro -->
-            <path id="path-Bokaro" data-district="Bokaro" aria-label="Bokaro district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #FEF9C3;" d="M 427 249 L 539 259 L 539 334 L 443 329 L 395 297 Z" />
-            <text x="468" y="293" class="jharkhand-district-text" id="text-Bokaro">Bokaro</text>
-
-            <!-- 15. Ramgarh -->
-            <path id="path-Ramgarh" data-district="Ramgarh" aria-label="Ramgarh district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #EDE9FE;" d="M 369 297 L 443 329 L 401 371 L 347 350 Z" />
-            <text x="390" y="337" class="jharkhand-district-text" id="text-Ramgarh">Ramgarh</text>
-
-            <!-- 16. Latehar -->
-            <path id="path-Latehar" data-district="Latehar" aria-label="Latehar district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #FCE7F3;" d="M 177 286 L 283 275 L 315 281 L 283 366 L 177 371 L 91 310 Z" />
-            <text x="221" y="315" class="jharkhand-district-text" id="text-Latehar">Latehar</text>
-
-            <!-- 17. Lohardaga -->
-            <path id="path-Lohardaga" data-district="Lohardaga" aria-label="Lohardaga district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #DCFCE7;" d="M 235 323 L 305 318 L 294 371 L 219 371 Z" />
-            <text x="263" y="346" class="jharkhand-district-text" id="text-Lohardaga">Lohardaga</text>
-
-            <!-- 18. Ranchi (Selected Highlight) -->
-            <path id="path-Ranchi" data-district="Ranchi" aria-label="Ranchi district" role="button" tabindex="0" class="jharkhand-district-path selected" style="fill: #DBEAFE; stroke: #1D4ED8; stroke-width: 2.8px;" d="M 305 318 L 443 329 L 459 371 L 433 425 L 337 430 L 294 371 Z" />
-            <text x="378" y="374" class="jharkhand-district-text active" id="text-Ranchi">Ranchi</text>
-
-            <!-- 19. Khunti -->
-            <path id="path-Khunti" data-district="Khunti" aria-label="Khunti district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #E0F2FE;" d="M 305 393 L 385 387 L 374 467 L 289 457 Z" />
-            <text x="338" y="426" class="jharkhand-district-text" id="text-Khunti">Khunti</text>
-
-            <!-- 20. Gumla -->
-            <path id="path-Gumla" data-district="Gumla" aria-label="Gumla district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #DCFCE7;" d="M 91 310 L 219 371 L 294 371 L 305 393 L 289 457 L 193 473 L 123 414 Z" />
-            <text x="215" y="398" class="jharkhand-district-text" id="text-Gumla">Gumla</text>
-
-            <!-- 21. Simdega -->
-            <path id="path-Simdega" data-district="Simdega" aria-label="Simdega district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #DCFCE7;" d="M 123 414 L 193 473 L 289 457 L 257 563 L 171 553 Z" />
-            <text x="206" y="492" class="jharkhand-district-text" id="text-Simdega">Simdega</text>
-
-            <!-- 22. West Singhbhum -->
-            <path id="path-West-Singhbhum" data-district="West Singhbhum" aria-label="West Singhbhum district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #FCE7F3;" d="M 289 457 L 374 467 L 475 457 L 497 569 L 443 585 L 257 563 Z" />
-            <text x="389" y="516" class="jharkhand-district-text" id="text-West-Singhbhum">West Singhbhum</text>
-
-            <!-- 23. Seraikela-Kharsawan -->
-            <path id="path-Seraikela-Kharsawan" data-district="Seraikela-Kharsawan" aria-label="Seraikela-Kharsawan district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #E0F2FE;" d="M 433 425 L 571 414 L 598 494 L 475 457 Z" />
-            <text x="519" y="447" class="jharkhand-district-text" id="text-Seraikela-Kharsawan">Seraikela Kharsawan</text>
-
-            <!-- 24. East Singhbhum -->
-            <path id="path-East-Singhbhum" data-district="East Singhbhum" aria-label="East Singhbhum district" role="button" tabindex="0" class="jharkhand-district-path" style="fill: #DBEAFE;" d="M 571 414 L 705 403 L 689 526 L 598 494 Z" />
-            <text x="640" y="459" class="jharkhand-district-text" id="text-East-Singhbhum">East Singhbhum</text>
-          </g>
-        </svg>
+        <!-- Dynamically Rendered Leaflet Container from GeoJSON (No background tiles required) -->
+        <div id="jharkhandMap"></div>
 
         <!-- Floating District Information Card (Positioned Bottom Right) -->
         <div class="district-info-card" id="districtInfoCard" onmouseenter="cancelCardHideTimer()" onmouseleave="scheduleCardHideTimer()">
@@ -506,11 +407,15 @@
   </footer>
 
   <script src="categories.js"></script>
+  <!-- Official Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Single Source of Truth for GeoJSON District Geometry -->
+  <script src="jharkhandpolygon.js"></script>
   <script>
     const CONFIG = {
       API_BASE_URL: '/api',
       STORAGE_KEYS: { TOKEN: 'jhar_token', USER: 'jhar_user', LANG: 'jhar_language' },
-      DISTRICTS: ['Bokaro', 'Chatra', 'Deoghar', 'Dhanbad', 'Dumka', 'East Singhbhum', 'Garhwa', 'Giridih', 'Godda', 'Gumla', 'Hazaribagh', 'Jamtara', 'Khunti', 'Koderma', 'Latehar', 'Lohardaga', 'Pakur', 'Palamu', 'Ramgarh', 'Ranchi', 'Sahibganj', 'Seraikela-Kharsawan', 'Simdega', 'West Singhbhum']
+      DISTRICTS: JHARKHAND_MAP_CONFIG.CANONICAL_DISTRICTS
     };
 
     /* Centralized Baseline District Statistics Matrix */
@@ -539,19 +444,6 @@
       "Lohardaga": { challenges: 22, projects: 1, solutions: 0, citizens: 860, impact: 56 },
       "Gumla": { challenges: 20, projects: 1, solutions: 0, citizens: 800, impact: 55 },
       "Simdega": { challenges: 18, projects: 1, solutions: 0, citizens: 740, impact: 54 }
-    };
-
-    const DISTRICT_NORMALIZE_MAP = {
-      "bokaro": "Bokaro", "chatra": "Chatra", "deoghar": "Deoghar", "dhanbad": "Dhanbad",
-      "dumka": "Dumka", "east singhbhum": "East Singhbhum", "east-singhbhum": "East Singhbhum",
-      "east_singhbhum": "East Singhbhum", "garhwa": "Garhwa", "giridih": "Giridih",
-      "godda": "Godda", "gumla": "Gumla", "hazaribagh": "Hazaribagh", "jamtara": "Jamtara",
-      "khunti": "Khunti", "koderma": "Koderma", "latehar": "Latehar", "lohardaga": "Lohardaga",
-      "pakur": "Pakur", "palamu": "Palamu", "ramgarh": "Ramgarh", "ranchi": "Ranchi",
-      "sahibganj": "Sahibganj", "seraikela-kharsawan": "Seraikela-Kharsawan",
-      "seraikela kharsawan": "Seraikela-Kharsawan", "seraikela_kharsawan": "Seraikela-Kharsawan",
-      "simdega": "Simdega", "west singhbhum": "West Singhbhum", "west-singhbhum": "West Singhbhum",
-      "west_singhbhum": "West Singhbhum"
     };
 
     const I18N = {
@@ -736,32 +628,24 @@
       }
     }
 
-    /* Map Interaction & State */
+    /* Leaflet Map State & Functions */
+    let jharkhandMap = null;
+    let districtGeoJsonLayer = null;
+    let districtLayerMap = {};
     let currentSelectedDistrict = 'Ranchi';
-    let mapZoomScale = 1.0;
     let cardHideTimer = null;
 
     function zoomInMap() {
-      if (mapZoomScale < 1.8) mapZoomScale += 0.15;
-      applyMapTransform();
+      if (jharkhandMap) jharkhandMap.zoomIn();
     }
 
     function zoomOutMap() {
-      if (mapZoomScale > 0.85) mapZoomScale -= 0.15;
-      applyMapTransform();
+      if (jharkhandMap) jharkhandMap.zoomOut();
     }
 
     function resetMapZoom() {
-      mapZoomScale = 1.0;
-      applyMapTransform();
-    }
-
-    function applyMapTransform() {
-      const vp = document.getElementById('mapViewport');
-      if (vp) {
-        vp.style.transform = `scale(${mapZoomScale})`;
-        vp.style.transformOrigin = 'center center';
-        vp.style.transition = 'transform 0.2s ease-out';
+      if (jharkhandMap && districtGeoJsonLayer) {
+        jharkhandMap.fitBounds(districtGeoJsonLayer.getBounds(), { padding: [20, 20] });
       }
     }
 
@@ -782,7 +666,21 @@
     function normalizeDistrictName(raw) {
       if (!raw) return 'Ranchi';
       const key = String(raw).toLowerCase().trim();
-      return DISTRICT_NORMALIZE_MAP[key] || raw;
+      return JHARKHAND_MAP_CONFIG.NORMALIZE_MAP[key] || raw;
+    }
+
+    function districtStyle(feature) {
+      const rawName = feature.properties.district_name || feature.properties.district_id;
+      const distName = normalizeDistrictName(rawName);
+      const isSelected = distName === currentSelectedDistrict;
+      return {
+        fillColor: JHARKHAND_MAP_CONFIG.PASTEL_COLORS[distName] || '#E0F2FE',
+        fillOpacity: isSelected ? 0.9 : 0.75,
+        color: isSelected ? '#1D4ED8' : '#94A3B8',
+        weight: isSelected ? 2.5 : 1.2,
+        dashArray: isSelected ? null : '4, 3',
+        opacity: 0.9
+      };
     }
 
     function selectDistrict(rawDistName) {
@@ -791,24 +689,26 @@
       currentSelectedDistrict = distName;
       const lang = getLanguage();
 
-      // Update path styling classes
-      document.querySelectorAll('.jharkhand-district-path').forEach(p => {
-        const pDist = normalizeDistrictName(p.getAttribute('data-district'));
-        if (pDist === distName) {
-          p.classList.add('selected');
-        } else {
-          p.classList.remove('selected');
-        }
-      });
-
-      document.querySelectorAll('.jharkhand-district-text').forEach(tEl => {
-        const idStr = tEl.id || '';
-        if (idStr.toLowerCase().includes(distName.toLowerCase().replace(/\s+/g, '-'))) {
-          tEl.classList.add('active');
-        } else {
-          tEl.classList.remove('active');
-        }
-      });
+      // Reset Leaflet District Layer Styles
+      if (districtGeoJsonLayer) {
+        districtGeoJsonLayer.eachLayer(layer => {
+          if (layer.feature) {
+            const lDist = normalizeDistrictName(layer.feature.properties.district_name || layer.feature.properties.district_id);
+            if (lDist === distName) {
+              layer.setStyle({
+                fillColor: JHARKHAND_MAP_CONFIG.PASTEL_COLORS[distName] || '#DBEAFE',
+                fillOpacity: 0.9,
+                color: '#1D4ED8',
+                weight: 2.5,
+                dashArray: null
+              });
+              if (layer.bringToFront) layer.bringToFront();
+            } else {
+              districtGeoJsonLayer.resetStyle(layer);
+            }
+          }
+        });
+      }
 
       // Retrieve stats from matrix or live backend cache
       const stats = DISTRICT_DATA_MATRIX[distName] || { challenges: 15, projects: 2, solutions: 1, citizens: 650, impact: 60 };
@@ -843,36 +743,87 @@
       cancelCardHideTimer();
       const card = document.getElementById('districtInfoCard');
       if (card) card.style.display = 'none';
-      document.querySelectorAll('.jharkhand-district-path').forEach(p => p.classList.remove('selected'));
+      if (districtGeoJsonLayer) {
+        districtGeoJsonLayer.eachLayer(layer => districtGeoJsonLayer.resetStyle(layer));
+      }
       currentSelectedDistrict = null;
     }
 
-    function initJharkhandMap() {
-      const paths = document.querySelectorAll('.jharkhand-district-path');
-      paths.forEach(path => {
-        const rawDistName = path.getAttribute('data-district');
+    /**
+     * DYNAMIC LEAFLET GEOJSON MAP INITIALIZER
+     * Uses Leaflet.js with JHARKHAND_DISTRICTS_GEOJSON from jharkhandpolygon.js
+     */
+    function initLeafletJharkhandMap() {
+      const mapContainer = document.getElementById('jharkhandMap');
+      if (!mapContainer || !window.L || typeof validateJharkhandMapData !== 'function' || !validateJharkhandMapData()) return;
 
-        path.addEventListener('mouseenter', () => {
-          selectDistrict(rawDistName);
-        });
+      if (jharkhandMap) {
+        jharkhandMap.remove();
+        jharkhandMap = null;
+      }
 
-        path.addEventListener('mouseleave', () => {
-          scheduleCardHideTimer();
-        });
-
-        path.addEventListener('click', () => {
-          selectDistrict(rawDistName);
-        });
-
-        path.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            selectDistrict(rawDistName);
-          }
-        });
+      jharkhandMap = L.map('jharkhandMap', {
+        zoomControl: false,
+        attributionControl: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false
       });
 
-      // Default select Ranchi on load
+      districtLayerMap = {};
+
+      districtGeoJsonLayer = L.geoJSON(JHARKHAND_DISTRICTS_GEOJSON, {
+        style: districtStyle,
+        onEachFeature: function(feature, layer) {
+          const rawName = feature.properties.district_name || feature.properties.district_id;
+          const distName = normalizeDistrictName(rawName);
+          districtLayerMap[distName] = layer;
+
+          layer.on({
+            mouseover: function(e) {
+              const l = e.target;
+              l.setStyle({
+                weight: 2.2,
+                color: '#2563EB',
+                fillOpacity: 0.88,
+                dashArray: null
+              });
+              if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                l.bringToFront();
+              }
+              selectDistrict(distName);
+            },
+            mouseout: function(e) {
+              districtGeoJsonLayer.resetStyle(e.target);
+              if (currentSelectedDistrict && districtLayerMap[currentSelectedDistrict]) {
+                districtLayerMap[currentSelectedDistrict].setStyle({
+                  fillColor: JHARKHAND_MAP_CONFIG.PASTEL_COLORS[currentSelectedDistrict] || '#DBEAFE',
+                  fillOpacity: 0.9,
+                  color: '#1D4ED8',
+                  weight: 2.5,
+                  dashArray: null
+                });
+              }
+            },
+            click: function() {
+              selectDistrict(distName);
+            }
+          });
+
+          // Add Centroid Label Marker using L.divIcon
+          const center = layer.getBounds().getCenter();
+          L.marker(center, {
+            icon: L.divIcon({
+              className: 'leaflet-district-label',
+              html: `<span class="dist-label-text">${distName}</span>`,
+              iconSize: [80, 20],
+              iconAnchor: [40, 10]
+            }),
+            interactive: false
+          }).addTo(jharkhandMap);
+        }
+      }).addTo(jharkhandMap);
+
+      jharkhandMap.fitBounds(districtGeoJsonLayer.getBounds(), { padding: [20, 20] });
       selectDistrict('Ranchi');
     }
 
@@ -900,24 +851,12 @@
         const data = await res.json();
         if (res.ok && data.success && data.data) {
           const d = data.data;
-          if (d.totalChallenges !== undefined) {
-            document.getElementById('mTotal').textContent = d.totalChallenges.toLocaleString();
-          }
-          if (d.totalProjects !== undefined) {
-            document.getElementById('mProjects').textContent = d.totalProjects.toLocaleString();
-          }
-          if (d.deployedSolutions !== undefined) {
-            document.getElementById('mDeployed').textContent = d.deployedSolutions.toLocaleString();
-          }
-          if (d.totalBeneficiaries !== undefined) {
-            document.getElementById('mCitizens').textContent = d.totalBeneficiaries.toLocaleString();
-          }
-          if (d.totalUniversities !== undefined) {
-            document.getElementById('mUnis').textContent = d.totalUniversities.toLocaleString();
-          }
-          if (d.totalIndustries !== undefined) {
-            document.getElementById('mInd').textContent = d.totalIndustries.toLocaleString();
-          }
+          if (d.totalChallenges !== undefined) document.getElementById('mTotal').textContent = d.totalChallenges.toLocaleString();
+          if (d.totalProjects !== undefined) document.getElementById('mProjects').textContent = d.totalProjects.toLocaleString();
+          if (d.deployedSolutions !== undefined) document.getElementById('mDeployed').textContent = d.deployedSolutions.toLocaleString();
+          if (d.totalBeneficiaries !== undefined) document.getElementById('mCitizens').textContent = d.totalBeneficiaries.toLocaleString();
+          if (d.totalUniversities !== undefined) document.getElementById('mUnis').textContent = d.totalUniversities.toLocaleString();
+          if (d.totalIndustries !== undefined) document.getElementById('mInd').textContent = d.totalIndustries.toLocaleString();
         }
       } catch (err) {
         console.warn('Metrics live fetch fallback to seed data.');
@@ -926,9 +865,15 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       applyLanguage();
-      initJharkhandMap();
+      initLeafletJharkhandMap();
       loadDistrictBackendStats();
       loadBackendMetrics();
+    });
+
+    window.addEventListener('resize', () => {
+      if (jharkhandMap) {
+        jharkhandMap.invalidateSize();
+      }
     });
   </script>
 </body>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="pageTitle">Challenge Details & AI Triage — SamadhanSetu</title>
+  <script src="config.js"></script>
   <script src="categories.js"></script>
   <style>
     :root {
@@ -157,11 +158,6 @@
   </footer>
 
   <script>
-    const CONFIG = {
-      API_BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5000/api' : '/api',
-      STORAGE_KEYS: { LANG: 'jhar_language' }
-    };
-
     const I18N = {
       en: {
         pageTitle: 'Challenge Details & AI Triage — SamadhanSetu',
