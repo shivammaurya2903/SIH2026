@@ -42,6 +42,12 @@
     .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
     .brand-logo { width: 36px; height: 36px; background: var(--primary); color: white; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; }
     .brand-title { font-weight: 800; font-size: 18px; color: var(--primary-dark); letter-spacing: -0.5px; }
+    
+    .nav-links { display: flex; align-items: center; gap: 20px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 700; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--primary); }
+    @media (max-width: 900px) { .nav-links { display: none; } }
+
     .nav-actions { display: flex; align-items: center; gap: 16px; }
     
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; border-radius: var(--radius-md); font-weight: 700; font-size: 14px; text-decoration: none; cursor: pointer; transition: all 0.2s; border: none; }
@@ -124,10 +130,27 @@
     .map-metric-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
     .map-metric-val { font-size: 14px; font-weight: 900; color: var(--primary-dark); line-height: 1; }
 
-    /* How SamadhanSetu Works Pipeline Section */
-    .workflow-section { max-width: 1320px; margin: 48px auto; padding: 0 24px; text-align: center; }
-    .section-title { text-align: center; font-size: 28px; font-weight: 900; color: var(--primary-dark); margin-bottom: 24px; letter-spacing: -0.5px; }
+    /* Common Section Styling for Product Experience */
+    .content-block { max-width: 1320px; margin: 56px auto; padding: 0 24px; }
+    .section-title-wrap { text-align: center; max-width: 760px; margin: 0 auto 36px auto; }
+    .section-tag { display: inline-block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--primary); background: var(--primary-light); padding: 4px 12px; border-radius: 14px; margin-bottom: 8px; border: 1px solid #BFDBFE; }
+    .section-h2 { font-size: 32px; font-weight: 900; color: var(--primary-dark); letter-spacing: -0.5px; line-height: 1.25; margin-bottom: 12px; }
+    .section-p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
 
+    /* Section 1: Problem We Are Solving */
+    .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 36px; box-shadow: var(--shadow-sm); }
+    @media (max-width: 868px) { .problem-grid { grid-template-columns: 1fr; } }
+    .problem-left-h3 { font-size: 22px; font-weight: 800; color: var(--primary-dark); margin-bottom: 14px; }
+    .problem-left-p { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 16px; }
+    .problem-steps-col { display: flex; flex-direction: column; gap: 16px; }
+    .prob-step-box { background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; display: flex; gap: 16px; align-items: flex-start; transition: transform 0.2s; }
+    .prob-step-box:hover { transform: translateY(-2px); border-color: #BFDBFE; }
+    .prob-icon-wrap { width: 42px; height: 42px; border-radius: var(--radius-md); background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .prob-box-title { font-weight: 800; font-size: 14px; color: var(--primary-dark); margin-bottom: 4px; }
+    .prob-box-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Section 2: Workflow Pipeline */
+    .workflow-section { max-width: 1320px; margin: 48px auto; padding: 0 24px; text-align: center; }
     .pipeline-container { display: flex; align-items: center; justify-content: space-between; position: relative; max-width: 1200px; margin: 0 auto; overflow-x: auto; padding: 10px 0; }
     .pipeline-line { position: absolute; top: 32px; left: 40px; right: 40px; height: 3px; background: #DBEAFE; z-index: 1; }
     .pipe-step-node { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 110px; }
@@ -136,6 +159,77 @@
     .pipe-badge-num { position: absolute; top: -4px; left: -4px; width: 18px; height: 18px; background: var(--primary); color: white; border-radius: 50%; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
     .pipe-node-title { font-weight: 800; font-size: 12px; color: var(--primary-dark); margin-bottom: 2px; }
     .pipe-node-desc { font-size: 10px; color: var(--text-muted); max-width: 100px; line-height: 1.3; }
+
+    /* Section 3: Four Stakeholders Grid */
+    .stakeholder-four-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    @media (max-width: 1024px) { .stakeholder-four-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 576px) { .stakeholder-four-grid { grid-template-columns: 1fr; } }
+    .stake-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; transition: all 0.2s; }
+    .stake-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: #BFDBFE; }
+    .stake-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .stake-card-icon { width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--primary-light); font-size: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .stake-card-num { font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stake-card-h3 { font-size: 18px; font-weight: 800; color: var(--primary-dark); }
+    .stake-card-p { font-size: 13px; color: var(--text-muted); line-height: 1.55; margin-bottom: 18px; flex: 1; }
+    .stake-card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .stake-tag { font-size: 11px; font-weight: 700; color: var(--primary-dark); background: #F1F5F9; padding: 4px 10px; border-radius: var(--radius-sm); }
+
+    /* Section 4: Citizen Lifecycle Timeline */
+    .lifecycle-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm); }
+    .lifecycle-disclaimer { background: #FEF3C7; border-left: 4px solid #D97706; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; color: #92400E; margin-bottom: 28px; }
+    .timeline-flex { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; }
+    @media (max-width: 1024px) { .timeline-flex { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+    @media (max-width: 600px) { .timeline-flex { grid-template-columns: repeat(2, 1fr); } }
+    .time-node { background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 10px; text-align: center; }
+    .time-node-icon { font-size: 20px; margin-bottom: 6px; }
+    .time-status { font-size: 11px; font-weight: 800; color: var(--primary); margin-bottom: 2px; text-transform: uppercase; }
+    .time-desc { font-size: 10px; color: var(--text-muted); line-height: 1.3; }
+
+    /* Section 5 & 6: AI & Collaboration 2-Column Section */
+    .split-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    @media (max-width: 900px) { .split-grid-2 { grid-template-columns: 1fr; } }
+    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm); }
+    .ai-badge { display: inline-flex; align-items: center; gap: 6px; background: #EDE9FE; color: #6D28D9; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 12px; margin-bottom: 12px; }
+    
+    /* Section 7: Categories Explorer Grid */
+    .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    @media (max-width: 1024px) { .categories-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) { .categories-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .categories-grid { grid-template-columns: 1fr; } }
+    .cat-item-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; text-decoration: none; color: var(--text); transition: all 0.2s; display: flex; flex-direction: column; gap: 8px; }
+    .cat-item-card:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: var(--shadow-sm); }
+    .cat-item-head { display: flex; align-items: center; gap: 10px; }
+    .cat-item-icon { font-size: 22px; }
+    .cat-item-title { font-weight: 800; font-size: 14px; color: var(--primary-dark); }
+    .cat-item-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    /* Section 8: Illustrative Case Study */
+    .case-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-sm); }
+    .case-badge { display: inline-block; background: #FEF3C7; color: #B45309; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 12px; margin-bottom: 14px; text-transform: uppercase; }
+    .case-steps-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 20px; }
+    @media (max-width: 900px) { .case-steps-row { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 500px) { .case-steps-row { grid-template-columns: repeat(2, 1fr); } }
+    .case-step-card { background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; font-size: 11px; text-align: center; }
+    .case-step-lbl { font-weight: 800; color: var(--primary-dark); margin-bottom: 2px; }
+    .case-step-txt { color: var(--text-muted); font-size: 10px; }
+
+    /* Section 9: Why SamadhanSetu & Trust Grid */
+    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 900px) { .why-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 550px) { .why-grid { grid-template-columns: 1fr; } }
+    .why-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 22px; }
+    .why-icon { font-size: 24px; margin-bottom: 10px; }
+    .why-title { font-weight: 800; font-size: 15px; color: var(--primary-dark); margin-bottom: 6px; }
+    .why-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Section 10: Final CTA Section */
+    .final-cta-banner { background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%); color: white; border-radius: var(--radius-lg); padding: 48px 32px; text-align: center; box-shadow: var(--shadow-lg); }
+    .cta-h2 { font-size: 32px; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .cta-p { font-size: 16px; color: #93C5FD; max-width: 600px; margin: 0 auto 28px auto; line-height: 1.6; }
+    .cta-btn-row { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+    .role-links-row { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; font-size: 12px; font-weight: 700; color: #CBD5E1; }
+    .role-link-item { color: #93C5FD; text-decoration: none; transition: color 0.2s; }
+    .role-link-item:hover { color: white; text-decoration: underline; }
 
     /* Footer */
     .civic-footer { background: var(--surface); border-top: 1px solid var(--border); padding: 32px 24px; margin-top: auto; font-size: 13px; color: var(--text-muted); text-align: center; }
@@ -153,6 +247,14 @@
       </div>
     </a>
 
+    <ul class="nav-links">
+      <li><a href="#problem" data-i18n="nav.problem">The Problem</a></li>
+      <li><a href="#workflow" data-i18n="nav.workflow">How It Works</a></li>
+      <li><a href="#stakeholders" data-i18n="nav.stakeholders">Stakeholders</a></li>
+      <li><a href="#categories" data-i18n="nav.categories">Categories</a></li>
+      <li><a href="#trust" data-i18n="nav.trust">Trust & Impact</a></li>
+    </ul>
+
     <div class="nav-actions">
       <div class="top-meta">
         <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">🌐 English <span>∨</span></button>
@@ -162,7 +264,7 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero Section (Strictly Preserved - UNCHANGED) -->
   <section class="hero-section">
     <!-- Left Column -->
     <div>
@@ -308,9 +410,58 @@
     </div>
   </section>
 
-  <!-- How SamadhanSetu Works Pipeline Section -->
+  <!-- SECTION 1: THE PROBLEM WE ARE SOLVING -->
+  <section class="content-block" id="problem">
+    <div class="section-title-wrap">
+      <span class="section-tag" data-i18n="sec1.tag">THE CHALLENGE GAP</span>
+      <h2 class="section-h2" data-i18n="sec1.h2">From Community Problems to Real Solutions</h2>
+      <p class="section-p" data-i18n="sec1.p">Across Jharkhand, citizens face local challenges every day in water, healthcare, education, and infrastructure. SamadhanSetu bridges the gap between grassroots problem identification and structured academic-industry solution delivery.</p>
+    </div>
+
+    <div class="problem-grid">
+      <div>
+        <h3 class="problem-left-h3" data-i18n="sec1.leftH3">Why Traditional Grievance Systems Fall Short</h3>
+        <p class="problem-left-p" data-i18n="sec1.leftP">Standard complaint portals register issues but lack the research, technical expertise, and commercial partnerships required to solve complex societal problems. SamadhanSetu transforms citizen reports into research challenges for universities and implementation opportunities for industry.</p>
+        <div style="display: flex; gap: 12px;">
+          <a href="challenges.html" class="btn btn-secondary btn-sm" data-i18n="sec1.learnBtn">Learn More About SIH26043 →</a>
+        </div>
+      </div>
+
+      <div class="problem-steps-col">
+        <div class="prob-step-box">
+          <div class="prob-icon-wrap">📍</div>
+          <div>
+            <div class="prob-box-title" data-i18n="sec1.b1Title">1. Community Identifies Challenge</div>
+            <div class="prob-box-desc" data-i18n="sec1.b1Desc">Citizens report local issues with geo-tags, images, and descriptions.</div>
+          </div>
+        </div>
+
+        <div class="prob-step-box">
+          <div class="prob-icon-wrap">⚡</div>
+          <div>
+            <div class="prob-box-title" data-i18n="sec1.b2Title">2. Traditional Gap Resolved</div>
+            <div class="prob-box-desc" data-i18n="sec1.b2Desc">Instead of sitting idle, verified problems are converted into structured innovation briefs.</div>
+          </div>
+        </div>
+
+        <div class="prob-step-box">
+          <div class="prob-icon-wrap">🤝</div>
+          <div>
+            <div class="prob-box-title" data-i18n="sec1.b3Title">3. Quadruple-Helix Collaboration</div>
+            <div class="prob-box-desc" data-i18n="sec1.b3Desc">Government, Universities, Students, and Industry collaborate on deployable solutions.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: HOW SAMADHANSETU WORKS PIPELINE -->
   <section class="workflow-section" id="workflow">
-    <h2 class="section-title" data-i18n="wf.title">How SamadhanSetu Works</h2>
+    <div class="section-title-wrap">
+      <span class="section-tag" data-i18n="sec2.tag">INNOVATION PIPELINE</span>
+      <h2 class="section-h2" data-i18n="wf.title">From Problem to Impact</h2>
+      <p class="section-p" data-i18n="sec2.p">A transparent, 9-step lifecycle taking community needs from grassroots submission to field deployment.</p>
+    </div>
     
     <div class="pipeline-container">
       <div class="pipeline-line"></div>
@@ -398,6 +549,383 @@
     </div>
   </section>
 
+  <!-- SECTION 3: WHO IS PART OF SAMADHANSETU? -->
+  <section class="content-block" id="stakeholders">
+    <div class="section-title-wrap">
+      <span class="section-tag" data-i18n="sec3.tag">ECOSYSTEM FORCES</span>
+      <h2 class="section-h2" data-i18n="sec3.h2">One Platform. Four Forces. One Common Goal.</h2>
+      <p class="section-p" data-i18n="sec3.p">Empowering citizens, government officials, academic researchers, and industry leaders to collaborate on a single unified platform.</p>
+    </div>
+
+    <div class="stakeholder-four-grid">
+      <div class="stake-card">
+        <div class="stake-card-header">
+          <div class="stake-card-icon">👥</div>
+          <div>
+            <div class="stake-card-num">FORCE 01</div>
+            <h3 class="stake-card-h3" data-i18n="mini.citizens">Citizens</h3>
+          </div>
+        </div>
+        <p class="stake-card-p" data-i18n="sec3.c1Desc">Report real problems from your village, ward, or city and track real-time progress as solutions are built.</p>
+        <div class="stake-card-tags">
+          <span class="stake-tag">Report</span>
+          <span class="stake-tag">Track</span>
+          <span class="stake-tag">Feedback</span>
+        </div>
+      </div>
+
+      <div class="stake-card">
+        <div class="stake-card-header">
+          <div class="stake-card-icon">🏛️</div>
+          <div>
+            <div class="stake-card-num">FORCE 02</div>
+            <h3 class="stake-card-h3" data-i18n="mini.gov">Government</h3>
+          </div>
+        </div>
+        <p class="stake-card-p" data-i18n="sec3.c2Desc">Review AI-prioritized challenges, validate public needs across all 24 districts, and monitor solution deployment.</p>
+        <div class="stake-card-tags">
+          <span class="stake-tag">Review</span>
+          <span class="stake-tag">Prioritize</span>
+          <span class="stake-tag">Monitor</span>
+        </div>
+      </div>
+
+      <div class="stake-card">
+        <div class="stake-card-header">
+          <div class="stake-card-icon">🎓</div>
+          <div>
+            <div class="stake-card-num">FORCE 03</div>
+            <h3 class="stake-card-h3" data-i18n="mini.uni">Universities</h3>
+          </div>
+        </div>
+        <p class="stake-card-p" data-i18n="sec3.c3Desc">Turn societal challenges into faculty research projects, student capstones, and innovative prototypes.</p>
+        <div class="stake-card-tags">
+          <span class="stake-tag">Adopt</span>
+          <span class="stake-tag">Research</span>
+          <span class="stake-tag">Build</span>
+        </div>
+      </div>
+
+      <div class="stake-card">
+        <div class="stake-card-header">
+          <div class="stake-card-icon">🏭</div>
+          <div>
+            <div class="stake-card-num">FORCE 04</div>
+            <h3 class="stake-card-h3" data-i18n="mini.industry">Industry</h3>
+          </div>
+        </div>
+        <p class="stake-card-p" data-i18n="sec3.c4Desc">Provide technology mentorship, CSR funding, pilot testing, and pathways to commercialize scalable solutions.</p>
+        <div class="stake-card-tags">
+          <span class="stake-tag">Mentor</span>
+          <span class="stake-tag">Fund</span>
+          <span class="stake-tag">Deploy</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: CITIZEN REPORT LIFELINE & DISCLAIMER -->
+  <section class="content-block" id="lifecycle">
+    <div class="section-title-wrap">
+      <span class="section-tag" data-i18n="sec4.tag">TRANSPARENT LIFECYCLE</span>
+      <h2 class="section-h2" data-i18n="sec4.h2">What Happens to Your Report?</h2>
+      <p class="section-p" data-i18n="sec4.p">Every submission is tracked transparently from initial entry through AI triage, government validation, and university matching.</p>
+    </div>
+
+    <div class="lifecycle-wrap">
+      <div class="lifecycle-disclaimer" data-i18n="sec4.disclaimer">
+        ℹ️ Eligible and validated challenges can progress through the complete innovation lifecycle based on urgency and feasibility.
+      </div>
+
+      <div class="timeline-flex">
+        <div class="time-node">
+          <div class="time-node-icon">📄</div>
+          <div class="time-status">SUBMITTED</div>
+          <div class="time-desc">Citizen registers challenge with photo & location</div>
+        </div>
+        <div class="time-node">
+          <div class="time-node-icon">🤖</div>
+          <div class="time-status">AI TRIAGED</div>
+          <div class="time-desc">Categorized & priority score estimated</div>
+        </div>
+        <div class="time-node">
+          <div class="time-node-icon">🏛️</div>
+          <div class="time-status">VALIDATED</div>
+          <div class="time-desc">Government nodal officer reviews report</div>
+        </div>
+        <div class="time-node">
+          <div class="time-node-icon">🎓</div>
+          <div class="time-status">MATCHED</div>
+          <div class="time-desc">Matched with relevant university domain</div>
+        </div>
+        <div class="time-node">
+          <div class="time-node-icon">📁</div>
+          <div class="time-status">PROJECT</div>
+          <div class="time-desc">R&D team adopts project & builds prototype</div>
+        </div>
+        <div class="time-node">
+          <div class="time-node-icon">⚙️</div>
+          <div class="time-status">TESTED</div>
+          <div class="time-desc">Field pilot conducted in affected area</div>
+        </div>
+        <div class="time-node">
+          <div class="time-node-icon">📈</div>
+          <div class="time-status">IMPACTED</div>
+          <div class="time-desc">Solution deployed & social impact measured</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5 & 6: AI-ASSISTED TRIAGE & COLLABORATION -->
+  <section class="content-block">
+    <div class="split-grid-2">
+      <!-- AI Triage -->
+      <div class="feature-card" id="ai-triage">
+        <div class="ai-badge">🤖 AI-ASSISTED TRIAGE</div>
+        <h3 style="font-size: 22px; font-weight: 800; color: var(--primary-dark); margin-bottom: 12px;" data-i18n="sec5.h3">Smart Triage. Better Matching.</h3>
+        <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;" data-i18n="sec5.p">Powered by Groq LLM intelligence, SamadhanSetu assists government officers by automatically classifying problem domains, detecting duplicate entries, and recommending expert academic partners.</p>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; font-weight: 700; color: var(--text);">
+          <li>✅ Automatic Theme & Domain Classification</li>
+          <li>✅ Urgency & Severity Scoring</li>
+          <li>✅ Duplicate Detection across 24 Districts</li>
+          <li>✅ Smart Faculty & Research Matching</li>
+        </ul>
+      </div>
+
+      <!-- University + Industry Collaboration -->
+      <div class="feature-card" id="collaboration">
+        <div class="ai-badge" style="background: #DCFCE7; color: #15803D;">🤝 SYNERGY MATRIX</div>
+        <h3 style="font-size: 22px; font-weight: 800; color: var(--primary-dark); margin-bottom: 12px;" data-i18n="sec6.h3">From Academic Ideas to Scalable Solutions</h3>
+        <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;" data-i18n="sec6.p">Bridging academic research labs with corporate technology & CSR funding to ensure field-tested solutions reach community adoption.</p>
+        <div style="display: flex; gap: 12px; font-size: 12px; font-weight: 700;">
+          <div style="flex: 1; background: #F8FAFC; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+            <div style="color: var(--primary); margin-bottom: 4px;">🎓 UNIVERSITIES</div>
+            <div style="color: var(--text-muted); font-weight: 500;">Research, Faculty Labs, Student Teams & Prototypes</div>
+          </div>
+          <div style="flex: 1; background: #F8FAFC; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+            <div style="color: var(--primary); margin-bottom: 4px;">🏭 INDUSTRY</div>
+            <div style="color: var(--text-muted); font-weight: 500;">CSR Capital, Tech Support, Pilot Testing & Scale</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: CHALLENGE CATEGORIES EXPLORER -->
+  <section class="content-block" id="categories">
+    <div class="section-title-wrap">
+      <span class="section-tag" data-i18n="sec7.tag">THEMATIC AREAS</span>
+      <h2 class="section-h2" data-i18n="sec7.h2">Challenges We Can Solve Together</h2>
+      <p class="section-p" data-i18n="sec7.p">Explore problem domains crowdsourced from citizens across Jharkhand's 24 administrative districts.</p>
+    </div>
+
+    <div class="categories-grid">
+      <a href="challenges.html?category=Water" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">💧</span>
+          <span class="cat-item-title">Water & Sanitation</span>
+        </div>
+        <p class="cat-item-desc">Water quality monitoring, safe drinking water access, and rural sanitation infrastructure.</p>
+      </a>
+
+      <a href="challenges.html?category=Healthcare" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">🏥</span>
+          <span class="cat-item-title">Healthcare Services</span>
+        </div>
+        <p class="cat-item-desc">Telemedicine, maternal care tracking, and medical supply chain optimization.</p>
+      </a>
+
+      <a href="challenges.html?category=Education" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">📚</span>
+          <span class="cat-item-title">Education & Skills</span>
+        </div>
+        <p class="cat-item-desc">Digital classroom tools, vocational training, and STEM learning access.</p>
+      </a>
+
+      <a href="challenges.html?category=Agriculture" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">🌾</span>
+          <span class="cat-item-title">Agriculture & Farming</span>
+        </div>
+        <p class="cat-item-desc">Soil health sensors, crop disease detection, and direct farmer market linkages.</p>
+      </a>
+
+      <a href="challenges.html?category=Environment" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">🌱</span>
+          <span class="cat-item-title">Environment & Forest</span>
+        </div>
+        <p class="cat-item-desc">Afforestation monitoring, wildlife protection, and solid waste management.</p>
+      </a>
+
+      <a href="challenges.html?category=Energy" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">⚡</span>
+          <span class="cat-item-title">Renewable Energy</span>
+        </div>
+        <p class="cat-item-desc">Solar microgrids, biomass energy, and rural electrification monitoring.</p>
+      </a>
+
+      <a href="challenges.html?category=Rural" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">🏡</span>
+          <span class="cat-item-title">Rural Livelihoods</span>
+        </div>
+        <p class="cat-item-desc">Tribal handicraft promotion, SHG digital empowerment, and local employment.</p>
+      </a>
+
+      <a href="challenges.html?category=Accessibility" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">♿</span>
+          <span class="cat-item-title">Accessibility & Inclusion</span>
+        </div>
+        <p class="cat-item-desc">Assistive tech devices, barrier-free infrastructure, and inclusive digital tools.</p>
+      </a>
+
+      <a href="challenges.html?category=Urban" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">🏙️</span>
+          <span class="cat-item-title">Urban Infrastructure</span>
+        </div>
+        <p class="cat-item-desc">Smart traffic management, street lighting, and drainage maintenance.</p>
+      </a>
+
+      <a href="challenges.html?category=PublicServices" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">🏛️</span>
+          <span class="cat-item-title">Public Service Delivery</span>
+        </div>
+        <p class="cat-item-desc">Transparent welfare distribution, digital certificates, and grievance resolution.</p>
+      </a>
+
+      <a href="challenges.html?category=Disaster" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">🚨</span>
+          <span class="cat-item-title">Disaster Management</span>
+        </div>
+        <p class="cat-item-desc">Early flood warnings, drought resilience, and emergency response coordination.</p>
+      </a>
+
+      <a href="challenges.html?category=Mobility" class="cat-item-card">
+        <div class="cat-item-head">
+          <span class="cat-item-icon">🚌</span>
+          <span class="cat-item-title">Transport & Mobility</span>
+        </div>
+        <p class="cat-item-desc">Last-mile rural transit, road safety monitoring, and EV charging readiness.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 8: ILLUSTRATIVE CASE STUDY JOURNEY -->
+  <section class="content-block" id="case-study">
+    <div class="case-box">
+      <span class="case-badge">ILLUSTRATIVE EXAMPLE</span>
+      <h3 style="font-size: 22px; font-weight: 800; color: var(--primary-dark); margin-bottom: 8px;" data-i18n="sec8.title">See How One Challenge Becomes a Deployed Solution</h3>
+      <p style="font-size: 14px; color: var(--text-muted);" data-i18n="sec8.p">Walk through an example lifecycle of a water quality challenge reported in a rural panchayat.</p>
+
+      <div class="case-steps-row">
+        <div class="case-step-card">
+          <div class="case-step-lbl">1. REPORTED</div>
+          <div class="case-step-txt">Citizen uploads water quality photo & location</div>
+        </div>
+        <div class="case-step-card">
+          <div class="case-step-lbl">2. AI SCORED</div>
+          <div class="case-step-txt">High urgency score assigned in Water domain</div>
+        </div>
+        <div class="case-step-card">
+          <div class="case-step-lbl">3. APPROVED</div>
+          <div class="case-step-txt">District officer validates for research adoption</div>
+        </div>
+        <div class="case-step-card">
+          <div class="case-step-lbl">4. R&D MATCHED</div>
+          <div class="case-step-txt">BIT Mesra water lab adopts project</div>
+        </div>
+        <div class="case-step-card">
+          <div class="case-step-lbl">5. PILOT TESTED</div>
+          <div class="case-step-txt">Low-cost filtration prototype deployed in village</div>
+        </div>
+        <div class="case-step-card">
+          <div class="case-step-lbl">6. VERIFIED</div>
+          <div class="case-step-txt">Safe water restored & 1,200 residents impacted</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 9: WHY SAMADHANSETU & TRUST -->
+  <section class="content-block" id="trust">
+    <div class="section-title-wrap">
+      <span class="section-tag" data-i18n="sec9.tag">PLATFORM PRINCIPLES</span>
+      <h2 class="section-h2" data-i18n="sec9.h2">Why SamadhanSetu?</h2>
+      <p class="section-p" data-i18n="sec9.p">Designed specifically for Jharkhand's governance and innovation ecosystem.</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🌱</div>
+        <div class="why-title">Community-Driven</div>
+        <div class="why-desc">Problems originate directly from real citizen needs across all 24 districts.</div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">📷</div>
+        <div class="why-title">Evidence-Based</div>
+        <div class="why-desc">Every report includes photos, geo-location data, and verified descriptions.</div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">🤖</div>
+        <div class="why-title">AI-Assisted</div>
+        <div class="why-desc">Groq AI categorizes, estimates priority, and detects duplicate submissions.</div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">🤝</div>
+        <div class="why-title">Collaborative</div>
+        <div class="why-desc">Quadruple-helix network connects Government, Universities, Students, and Industry.</div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">👁️</div>
+        <div class="why-title">Transparent & Accountable</div>
+        <div class="why-desc">Citizens can track progress status at every stage of the lifecycle.</div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">🔒</div>
+        <div class="why-title">Role-Based Security</div>
+        <div class="why-desc">JWT authentication, audit-friendly logs, and strict RBAC authorization controls.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 10: FINAL CALL TO ACTION BANNER -->
+  <section class="content-block" id="cta">
+    <div class="final-cta-banner">
+      <h2 class="cta-h2" data-i18n="cta.h2">Have a Problem Worth Solving?</h2>
+      <p class="cta-p" data-i18n="cta.p">Your local challenge could become the next research project, university capstone, or deployed solution for Jharkhand.</p>
+
+      <div class="cta-btn-row">
+        <a href="report-problem.html" class="btn btn-primary btn-lg" onclick="handleReportProblemClick(); return false;" data-i18n="cta.reportBtn">📄 Report a Community Problem</a>
+        <a href="challenges.html" class="btn btn-secondary btn-lg" style="background: transparent; color: white; border-color: rgba(255,255,255,0.4);" data-i18n="cta.exploreBtn">🔍 Explore Challenges</a>
+      </div>
+
+      <div class="role-links-row">
+        <span>Quick Access:</span>
+        <a href="login.html" class="role-link-item">👥 Citizen Portal</a>
+        <span>•</span>
+        <a href="login.html" class="role-link-item">🎓 University Portal</a>
+        <span>•</span>
+        <a href="login.html" class="role-link-item">🏭 Industry Portal</a>
+        <span>•</span>
+        <a href="login.html" class="role-link-item">🏛️ Government Command Center</a>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="civic-footer">
     <div style="font-weight: 800; font-size: 14px; color: var(--primary-dark); margin-bottom: 4px;" data-i18n="footer.copy">
@@ -449,7 +977,7 @@
     const I18N = {
       en: {
         pageTitle: 'SamadhanSetu — Jharkhand Societal Innovation Platform | SIH26043',
-        nav: { subtitle: 'JHARKHAND SOCIETAL INNOVATION PLATFORM • SIH26043', signIn: 'Login', register: 'Register', dashboard: 'Dashboard' },
+        nav: { subtitle: 'JHARKHAND SOCIETAL INNOVATION PLATFORM • SIH26043', signIn: 'Login', register: 'Register', dashboard: 'Dashboard', problem: 'The Problem', workflow: 'How It Works', stakeholders: 'Stakeholders', categories: 'Categories', trust: 'Trust & Impact' },
         hero: {
           badge: 'JHARKHAND • SIH 2026',
           title: 'Your Problem<br>Can Become<br>a Solution.',
@@ -478,7 +1006,7 @@
           citizens: 'Citizens Engaged', unis: 'Universities', ind: 'Industry Partners'
         },
         wf: {
-          title: 'How SamadhanSetu Works',
+          title: 'From Problem to Impact',
           s1: 'Report', s1d: 'Submit a problem from your area',
           s2: 'AI Triage', s2d: 'AI analyzes and prioritizes it',
           s3: 'Government', s3d: 'Reviews and validates',
@@ -489,6 +1017,67 @@
           s8: 'Deploy', s8d: 'Solutions are tested and deployed',
           s9: 'Impact', s9d: 'Measure real social impact'
         },
+        sec1: {
+          tag: 'THE CHALLENGE GAP',
+          h2: 'From Community Problems to Real Solutions',
+          p: 'Across Jharkhand, citizens face local challenges every day in water, healthcare, education, and infrastructure. SamadhanSetu bridges the gap between grassroots problem identification and structured academic-industry solution delivery.',
+          leftH3: 'Why Traditional Grievance Systems Fall Short',
+          leftP: 'Standard complaint portals register issues but lack the research, technical expertise, and commercial partnerships required to solve complex societal problems. SamadhanSetu transforms citizen reports into research challenges for universities and implementation opportunities for industry.',
+          learnBtn: 'Learn More About SIH26043 →',
+          b1Title: '1. Community Identifies Challenge',
+          b1Desc: 'Citizens report local issues with geo-tags, images, and descriptions.',
+          b2Title: '2. Traditional Gap Resolved',
+          b2Desc: 'Instead of sitting idle, verified problems are converted into structured innovation briefs.',
+          b3Title: '3. Quadruple-Helix Collaboration',
+          b3Desc: 'Government, Universities, Students, and Industry collaborate on deployable solutions.'
+        },
+        sec2: {
+          tag: 'INNOVATION PIPELINE',
+          p: 'A transparent, 9-step lifecycle taking community needs from grassroots submission to field deployment.'
+        },
+        sec3: {
+          tag: 'ECOSYSTEM FORCES',
+          h2: 'One Platform. Four Forces. One Common Goal.',
+          p: 'Empowering citizens, government officials, academic researchers, and industry leaders to collaborate on a single unified platform.',
+          c1Desc: 'Report real problems from your village, ward, or city and track real-time progress as solutions are built.',
+          c2Desc: 'Review AI-prioritized challenges, validate public needs across all 24 districts, and monitor solution deployment.',
+          c3Desc: 'Turn societal challenges into faculty research projects, student capstones, and innovative prototypes.',
+          c4Desc: 'Provide technology mentorship, CSR funding, pilot testing, and pathways to commercialize scalable solutions.'
+        },
+        sec4: {
+          tag: 'TRANSPARENT LIFECYCLE',
+          h2: 'What Happens to Your Report?',
+          p: 'Every submission is tracked transparently from initial entry through AI triage, government validation, and university matching.',
+          disclaimer: 'ℹ️ Eligible and validated challenges can progress through the complete innovation lifecycle based on urgency and feasibility.'
+        },
+        sec5: {
+          h3: 'Smart Triage. Better Matching.',
+          p: 'Powered by Groq LLM intelligence, SamadhanSetu assists government officers by automatically classifying problem domains, detecting duplicate entries, and recommending expert academic partners.'
+        },
+        sec6: {
+          h3: 'From Academic Ideas to Scalable Solutions',
+          p: 'Bridging academic research labs with corporate technology & CSR funding to ensure field-tested solutions reach community adoption.'
+        },
+        sec7: {
+          tag: 'THEMATIC AREAS',
+          h2: 'Challenges We Can Solve Together',
+          p: 'Explore problem domains crowdsourced from citizens across Jharkhand\'s 24 administrative districts.'
+        },
+        sec8: {
+          title: 'See How One Challenge Becomes a Deployed Solution',
+          p: 'Walk through an example lifecycle of a water quality challenge reported in a rural panchayat.'
+        },
+        sec9: {
+          tag: 'PLATFORM PRINCIPLES',
+          h2: 'Why SamadhanSetu?',
+          p: 'Designed specifically for Jharkhand\'s governance and innovation ecosystem.'
+        },
+        cta: {
+          h2: 'Have a Problem Worth Solving?',
+          p: 'Your local challenge could become the next research project, university capstone, or deployed solution for Jharkhand.',
+          reportBtn: '📄 Report a Community Problem',
+          exploreBtn: '🔍 Explore Challenges'
+        },
         footer: {
           copy: '© 2026 SamadhanSetu — Government of Jharkhand & SIH26043 Innovation Platform',
           tagline: 'Rural-First • Low-Bandwidth Optimized • Accessible Technology'
@@ -496,7 +1085,7 @@
       },
       hi: {
         pageTitle: 'समाधानसेतु — झारखंड सामाजिक नवाचार मंच | SIH26043',
-        nav: { subtitle: 'झारखंड सामाजिक नवाचार मंच • SIH26043', signIn: 'लॉगिन', register: 'पंजीकरण', dashboard: 'डैशबोर्ड' },
+        nav: { subtitle: 'झारखंड सामाजिक नवाचार मंच • SIH26043', signIn: 'लॉगिन', register: 'पंजीकरण', dashboard: 'डैशबोर्ड', problem: 'समस्या', workflow: 'कार्यप्रणाली', stakeholders: 'भागीदार', categories: 'श्रेणियां', trust: 'विश्वास और प्रभाव' },
         hero: {
           badge: 'झारखंड • SIH 2026',
           title: 'आपकी समस्या<br>समाधान बन सकती है।',
@@ -525,7 +1114,7 @@
           citizens: 'जुड़े नागरिक', unis: 'विश्वविद्यालय', ind: 'उद्योग भागीदार'
         },
         wf: {
-          title: 'समाधानसेतु कैसे काम करता है',
+          title: 'समस्या से प्रभाव तक',
           s1: 'रिपोर्ट', s1d: 'अपने क्षेत्र की समस्या प्रस्तुत करें',
           s2: 'एआई वर्गीकरण', s2d: 'एआई विश्लेषण और प्राथमिकता देता है',
           s3: 'सरकार', s3d: 'समीक्षा और सत्यापन करता है',
@@ -535,6 +1124,67 @@
           s7: 'निर्माण', s7d: 'नवाचारी समाधानों पर काम करते हैं',
           s8: 'तैनाती', s8d: 'समाधानों का परीक्षण और तैनाती की जाती है',
           s9: 'प्रभाव', s9d: 'वास्तविक सामाजिक प्रभाव मापते हैं'
+        },
+        sec1: {
+          tag: 'चुनौती का अंतर',
+          h2: 'सामुदायिक समस्याओं से वास्तविक समाधान तक',
+          p: 'पूरे झारखंड में, नागरिकों को प्रतिदिन पानी, स्वास्थ्य, शिक्षा और बुनियादी ढांचे में चुनौतियों का सामना करना पड़ता है। समाधानसेतु जमीनी समस्या पहचान और अकादमिक-उद्योग समाधान वितरण के बीच के अंतर को पाटता है।',
+          leftH3: 'पारंपरिक शिकायत प्रणालियां क्यों पिछड़ जाती हैं',
+          leftP: 'मानक शिकायत पोर्टल मुद्दों को पंजीकृत करते हैं लेकिन जटिल सामाजिक समस्याओं को हल करने के लिए आवश्यक अनुसंधान, तकनीकी विशेषज्ञता और वाणिज्यिक भागीदारी का अभाव होता है।',
+          learnBtn: 'SIH26043 के बारे में और जानें →',
+          b1Title: '1. समुदाय समस्या की पहचान करता है',
+          b1Desc: 'नागरिक जियो-टैग, छवियों और विवरणों के साथ स्थानीय मुद्दों की रिपोर्ट करते हैं।',
+          b2Title: '2. पारंपरिक अंतर हल',
+          b2Desc: 'सत्यापित समस्याओं को संरचित नवाचार संक्षेपों में परिवर्तित किया जाता है।',
+          b3Title: '3. चतुर्भुज सहयोग',
+          b3Desc: 'सरकार, विश्वविद्यालय, छात्र और उद्योग लागू करने योग्य समाधानों पर सहयोग करते हैं।'
+        },
+        sec2: {
+          tag: 'नवाचार पाइपलाइन',
+          p: 'एक पारदर्शी, 9-चरणीय जीवन चक्र जो जमीनी स्तर से समाधान तैनाती तक जाता है।'
+        },
+        sec3: {
+          tag: 'पारिस्थितिकी तंत्र की शक्तियाँ',
+          h2: 'एक मंच। चार शक्तियाँ। एक साझा लक्ष्य।',
+          p: 'एक ही एकीकृत मंच पर सहयोग करने के लिए नागरिकों, सरकारी अधिकारियों, शोधकर्ताओं और उद्योगपतियों को सशक्त बनाना।',
+          c1Desc: 'अपने गांव या शहर से समस्याओं की रिपोर्ट करें और प्रगति को ट्रैक करें।',
+          c2Desc: 'एआई-प्राथमिकता वाली चुनौतियों की समीक्षा करें और 24 जिलों में सत्यापन करें।',
+          c3Desc: 'सामाजिक चुनौतियों को संकाय अनुसंधान परियोजनाओं और छात्र नवाचारों में बदलें।',
+          c4Desc: 'प्रौद्योगिकी मार्गदर्शन, सीएसआर वित्तपोषण और समाधानों को आगे बढ़ाने का मार्ग प्रदान करें।'
+        },
+        sec4: {
+          tag: 'पारदर्शी जीवन चक्र',
+          h2: 'आपकी रिपोर्ट का क्या होता है?',
+          p: 'प्रारंभिक प्रविष्टि से लेकर एआई वर्गीकरण, सरकारी सत्यापन और विश्वविद्यालय मिलान तक हर रिपोर्ट को ट्रैक किया जाता है।',
+          disclaimer: 'ℹ️ पात्र और सत्यापित चुनौतियाँ तात्कालिकता के आधार पर पूर्ण नवाचार चक्र के माध्यम से आगे बढ़ सकती हैं।'
+        },
+        sec5: {
+          h3: 'स्मार्ट वर्गीकरण। बेहतर मिलान।',
+          p: 'Groq LLM बुद्धिमत्ता द्वारा संचालित, समाधानसेतु स्वचालित रूप से समस्या क्षेत्रों का वर्गीकरण करता है और डुप्लिकेट प्रविष्टियों का पता लगाता है।'
+        },
+        sec6: {
+          h3: 'अकादमिक विचारों से लागू समाधानों तक',
+          p: 'अनुसंधान प्रयोगशालाओं को कॉर्पोरेट तकनीक और सीएसआर फंडिंग से जोड़ना।'
+        },
+        sec7: {
+          tag: 'विषयगत क्षेत्र',
+          h2: 'चुनौतियां जिन्हें हम मिलकर हल कर सकते हैं',
+          p: 'झारखंड के 24 जिलों के नागरिकों द्वारा प्रस्तुत समस्या क्षेत्रों का अन्वेषण करें।'
+        },
+        sec8: {
+          title: 'देखें कि एक समस्या लागू समाधान कैसे बनती है',
+          p: 'एक ग्रामीण पंचायत में रिपोर्ट की गई जल गुणवत्ता चुनौती का उदाहरण देखें।'
+        },
+        sec9: {
+          tag: 'मंच के सिद्धांत',
+          h2: 'समाधानसेतु क्यों?',
+          p: 'विशेष रूप से झारखंड के शासन और नवाचार पारिस्थितिकी तंत्र के लिए डिज़ाइन किया गया।'
+        },
+        cta: {
+          h2: 'क्या आपके पास हल करने योग्य समस्या है?',
+          p: 'आपकी स्थानीय चुनौती झारखंड के लिए अगला शोध प्रोजेक्ट या लागू समाधान बन सकती है।',
+          reportBtn: '📄 समस्या दर्ज करें',
+          exploreBtn: '🔍 चुनौतियां देखें'
         },
         footer: {
           copy: '© 2026 समाधानसेतु — झारखंड सरकार एवं SIH26043 नवाचार मंच',
