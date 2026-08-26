@@ -15,6 +15,7 @@ const ALLOWED_PROJECT_FIELDS = [
   'team',
   'facultyMentor',
   'status',
+  'stage',
   'objectives',
   'technologies',
   'startDate',
@@ -34,7 +35,7 @@ const canUserAccessProject = async (project, user) => {
   const userIdStr = String(user._id || user.id);
   if (project.createdBy && String(project.createdBy) === userIdStr) return true;
   if (project.facultyMentor && String(project.facultyMentor) === userIdStr) return true;
-  if (['university', 'faculty'].includes(user.role)) return true;
+  if (['university', 'faculty', 'industry'].includes(user.role)) return true;
 
   if (user.role === 'university' && project.university) {
     const uni = await University.findById(project.university);
@@ -137,18 +138,19 @@ const updateProject = async (req, res) => {
       'team',
       'facultyMentor',
       'status',
+      'stage',
       'objectives',
       'technologies',
       'startDate',
       'expectedEndDate',
       'actualEndDate',
       'budget',
-    'documents',
-    'innovation',
-    'testingDetails',
-    'pilotDetails',
-    'deploymentDetails'
-  ];
+      'documents',
+      'innovation',
+      'testingDetails',
+      'pilotDetails',
+      'deploymentDetails'
+    ];
 
     const updates = {};
     updatableFields.forEach((field) => {
@@ -156,6 +158,15 @@ const updateProject = async (req, res) => {
         updates[field] = req.body[field];
       }
     });
+
+    if (req.body.stage && !updates.status) {
+      const stageLower = String(req.body.stage).toLowerCase();
+      if (['in_progress', 'testing', 'deployed', 'completed', 'planning', 'prototype', 'pilot'].includes(stageLower)) {
+        updates.status = stageLower;
+      } else {
+        updates.status = req.body.stage;
+      }
+    }
 
     const fileDocs = extractUploadedFiles(req, 'documents', req.body.documents);
     if (fileDocs.length > 0) {

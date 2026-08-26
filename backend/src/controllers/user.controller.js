@@ -1,6 +1,20 @@
 const User = require('../models/User');
 const { successResponse, errorResponse } = require('../utils/response');
 
+const getUsers = async (req, res) => {
+  try {
+    const filter = {};
+    if (req.query.role) filter.role = req.query.role;
+    if (req.query.district) filter['location.district'] = req.query.district;
+
+    const users = await User.find(filter).select('-password').sort({ createdAt: -1 });
+
+    return successResponse(res, users, 'Users retrieved successfully', 200);
+  } catch (error) {
+    return errorResponse(res, error.message, 500);
+  }
+};
+
 const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
@@ -59,6 +73,7 @@ const updateUser = async (req, res) => {
 };
 
 module.exports = {
+  getUsers,
   getUser,
   updateUser
 };

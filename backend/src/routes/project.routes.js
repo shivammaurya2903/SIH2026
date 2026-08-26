@@ -35,6 +35,13 @@ router.put(
   updateProject
 );
 router.patch(
+  '/:id/status',
+  protect,
+  authorize('government', 'admin', 'university', 'faculty', 'industry'),
+  validateObjectId('id'),
+  updateProject
+);
+router.patch(
   '/:id',
   protect,
   authorize('government', 'admin', 'university', 'faculty', 'industry'),
