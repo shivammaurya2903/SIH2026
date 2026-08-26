@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 
 export const SpeechInput = ({ value, onChange, placeholder = '', rows = 4 }) => {
@@ -6,9 +6,15 @@ export const SpeechInput = ({ value, onChange, placeholder = '', rows = 4 }) => 
   const isHi = language === 'hi';
 
   const [isListening, setIsListening] = useState(false);
-  const [recognition, setRecognition] = useState(null);
   const [statusMsg, setStatusMsg] = useState('');
   const [supported, setSupported] = useState(true);
+
+  const recognitionRef = useRef(null);
+  const valueRef = useRef(value);
+
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -25,7 +31,8 @@ export const SpeechInput = ({ value, onChange, placeholder = '', rows = 4 }) => 
       rec.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         if (transcript) {
-          const updatedValue = value ? `${value} ${transcript}` : transcript;
+          const currentVal = valueRef.current || '';
+          const updatedValue = currentVal ? `${currentVal} ${transcript}` : transcript;
           onChange(updatedValue);
           setStatusMsg(isHi ? 'वाक् विवरण में जोड़ा गया ✓' : 'Speech added to description ✓');
         }
@@ -44,11 +51,11 @@ export const SpeechInput = ({ value, onChange, placeholder = '', rows = 4 }) => 
         setIsListening(false);
       };
 
-      setRecognition(rec);
+      recognitionRef.current = rec;
     } else {
       setSupported(false);
     }
-  }, [value, onChange, isHi]);
+  }, [onChange, isHi]);
 
   const toggleListening = () => {
     if (!supported) {
@@ -56,14 +63,19 @@ export const SpeechInput = ({ value, onChange, placeholder = '', rows = 4 }) => 
       return;
     }
 
-    if (!recognition) return;
+    const rec = recognitionRef.current;
+    if (!rec) return;
 
     if (isListening) {
-      recognition.stop();
+      rec.stop();
       setIsListening(false);
     } else {
-      recognition.lang = isHi ? 'hi-IN' : 'en-IN';
-      recognition.start();
+      rec.lang = isHi ? 'hi-IN' : 'en-IN';
+      try {
+        rec.start();
+      } catch (err) {
+        console.warn('Speech recognition start error:', err);
+      }
     }
   };
 
@@ -87,7 +99,7 @@ export const SpeechInput = ({ value, onChange, placeholder = '', rows = 4 }) => 
         }}
       />
 
-      {/* Floating Microphone Action Button */}
+      {/* Speech Button */}
       <button
         type="button"
         onClick={toggleListening}

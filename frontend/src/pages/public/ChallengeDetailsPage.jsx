@@ -7,6 +7,7 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import { useAuth } from '../../auth/AuthContext';
 import { ChallengeApi } from '../../api/challenge.api';
 import { ProposalForm } from '../../components/proposal/ProposalForm';
+import { ChallengeStatusTracker } from '../../components/citizen/ChallengeStatusTracker';
 
 export const ChallengeDetailsPage = () => {
   const { id } = useParams();
@@ -207,8 +208,13 @@ export const ChallengeDetailsPage = () => {
             )}
           </div>
 
-          {/* Sidebar Info & AI Triage */}
+          {/* Sidebar Info & Status Tracker */}
           <div>
+            {/* Live 10-Stage Resolution Lifecycle Tracker */}
+            <div style={{ marginBottom: '24px' }}>
+              <ChallengeStatusTracker status={challenge.status} currentStage={challenge.currentStage} />
+            </div>
+
             {/* AI Analysis Card */}
             <div style={{ background: 'linear-gradient(135deg, #0F172A, #1E293B)', padding: '24px', borderRadius: '16px', color: '#FFFFFF', marginBottom: '24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
