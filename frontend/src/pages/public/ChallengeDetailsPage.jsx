@@ -6,6 +6,7 @@ import { PriorityBadge } from '../../components/common/PriorityBadge';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useAuth } from '../../auth/AuthContext';
 import { ChallengeApi } from '../../api/challenge.api';
+import { ProposalForm } from '../../components/proposal/ProposalForm';
 
 export const ChallengeDetailsPage = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ export const ChallengeDetailsPage = () => {
   const [faced, setFaced] = useState(false);
   const [facedCount, setFacedCount] = useState(0);
   const [submittingFaced, setSubmittingFaced] = useState(false);
+  const [showProposalForm, setShowProposalForm] = useState(false);
 
   useEffect(() => {
     const loadDetails = async () => {
@@ -65,7 +67,7 @@ export const ChallengeDetailsPage = () => {
         setFacedCount(res.data.facedCount);
       }
     } catch (err) {
-      alert(err.message || 'Failed to record action');
+      alert(err.message || (isHi ? 'कार्रवाई दर्ज करने में विफल' : 'Failed to record action'));
     } finally {
       setSubmittingFaced(false);
     }
@@ -93,6 +95,8 @@ export const ChallengeDetailsPage = () => {
       </PageContainer>
     );
   }
+
+  const isEligibleForProposal = user && ['university', 'faculty', 'student'].includes(user.role);
 
   return (
     <PageContainer>
@@ -163,6 +167,44 @@ export const ChallengeDetailsPage = () => {
                   : (isHi ? '✋ मुझे भी यह समस्या है' : '✋ I Faced This Problem')}
               </button>
             </div>
+
+            {/* University / Faculty / Student R&D Proposal CTA Card */}
+            {isEligibleForProposal && (
+              <div style={{ marginBottom: '24px' }}>
+                {!showProposalForm ? (
+                  <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', padding: '24px', borderRadius: '16px' }}>
+                    <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '900', color: '#1E4ED8' }}>
+                      🎓 {isHi ? 'क्या आपका विश्वविद्यालय इस समस्या को हल कर सकता है?' : 'Can your University or R&D team solve this problem?'}
+                    </h3>
+                    <p style={{ fontSize: '14px', color: '#3B82F6', marginBottom: '16px' }}>
+                      {isHi ? 'सरकारी कमांड सेंटर की समीक्षा के लिए एक संरचित आरएंडडी प्रस्ताव सबमिट करें।' : 'Submit a structured R&D solution proposal for Government Command Center review & project authorization.'}
+                    </p>
+                    <button
+                      onClick={() => setShowProposalForm(true)}
+                      style={{
+                        padding: '12px 24px',
+                        background: '#1D4ED8',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        borderRadius: '10px',
+                        fontWeight: '800',
+                        fontSize: '15px',
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 14px rgba(29, 78, 216, 0.3)'
+                      }}
+                    >
+                      🚀 {isHi ? 'आरएंडडी प्रस्ताव सबमिट करें' : 'Submit R&D Proposal'}
+                    </button>
+                  </div>
+                ) : (
+                  <ProposalForm
+                    challengeId={id}
+                    challengeTitle={challenge.title}
+                    onCancel={() => setShowProposalForm(false)}
+                  />
+                )}
+              </div>
+            )}
           </div>
 
           {/* Sidebar Info & AI Triage */}
@@ -191,7 +233,7 @@ export const ChallengeDetailsPage = () => {
               </div>
             </div>
 
-            {/* Truthful University R&D Matches (P1 Audit Remediation Fix) */}
+            {/* University R&D Matches */}
             <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
               <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '800', color: '#0F172A' }}>
                 🎓 {isHi ? 'विश्वविद्यालय आरएंडडी मैच' : 'University R&D Matches'}

@@ -5,6 +5,7 @@ import { ProjectLifecycleTracker } from '../../components/project/ProjectLifecyc
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { ProjectApi } from '../../api/project.api';
+import { MilestoneApi } from '../../api/milestone.api';
 
 export const ProjectWorkspacePage = () => {
   const { id } = useParams();
@@ -16,6 +17,14 @@ export const ProjectWorkspacePage = () => {
   const [loading, setLoading] = useState(true);
   const [updatingStage, setUpdatingStage] = useState(false);
 
+  // Milestone state
+  const [milestones, setMilestones] = useState([]);
+  const [showMilestoneForm, setShowMilestoneForm] = useState(false);
+  const [milestoneTitle, setMilestoneTitle] = useState('');
+  const [milestoneDescription, setMilestoneDescription] = useState('');
+  const [milestoneDueDate, setMilestoneDueDate] = useState('');
+  const [creatingMilestone, setCreatingMilestone] = useState(false);
+
   useEffect(() => {
     const fetchProjectDetails = async () => {
       setLoading(true);
@@ -23,6 +32,11 @@ export const ProjectWorkspacePage = () => {
         const res = await ProjectApi.getById(id);
         if (res.success && res.data) {
           setProject(res.data);
+        }
+
+        const msRes = await MilestoneApi.getAll({ project: id });
+        if (msRes.success && msRes.data) {
+          setMilestones(msRes.data);
         }
       } catch (err) {
         console.error('Failed to load Project Workspace:', err.message);
@@ -45,6 +59,41 @@ export const ProjectWorkspacePage = () => {
       alert(err.message || 'Stage update failed');
     } finally {
       setUpdatingStage(false);
+    }
+  };
+
+  const handleCreateMilestone = async (e) => {
+    e.preventDefault();
+    setCreatingMilestone(true);
+    try {
+      const res = await MilestoneApi.create({
+        project: id,
+        title: milestoneTitle,
+        description: milestoneDescription,
+        dueDate: milestoneDueDate
+      });
+      if (res.success && res.data) {
+        setMilestones([res.data, ...milestones]);
+        setMilestoneTitle('');
+        setMilestoneDescription('');
+        setMilestoneDueDate('');
+        setShowMilestoneForm(false);
+      }
+    } catch (err) {
+      alert(err.message || 'Failed to create milestone');
+    } finally {
+      setCreatingMilestone(false);
+    }
+  };
+
+  const handleCompleteMilestone = async (msId) => {
+    try {
+      const res = await MilestoneApi.updateStatus(msId, 'completed');
+      if (res.success && res.data) {
+        setMilestones(milestones.map(m => (m._id === msId || m.id === msId) ? res.data : m));
+      }
+    } catch (err) {
+      alert(err.message || 'Failed to update milestone status');
     }
   };
 
@@ -100,7 +149,96 @@ export const ProjectWorkspacePage = () => {
         </div>
 
         {/* Dynamic 7-Stage Lifecycle Tracker */}
-        <ProjectLifecycleTracker currentStage={project.stage || 'IN_PROGRESS'} />
+        <div style={{ marginBottom: '30px' }}>
+          <ProjectLifecycleTracker currentStage={project.stage || 'IN_PROGRESS'} />
+        </div>
+
+        {/* Milestone Management Section */}
+        <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '16px', border: '1px solid #E2E8F0', marginBottom: '30px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#0F172A' }}>
+              {isHi ? 'आरएंडडी माइलस्टोन' : 'R&D Milestones'}
+            </h3>
+            <button 
+              onClick={() => setShowMilestoneForm(!showMilestoneForm)}
+              style={{ padding: '8px 16px', background: '#1D4ED8', color: '#FFF', borderRadius: '8px', border: 'none', fontWeight: '700', cursor: 'pointer' }}
+            >
+              {showMilestoneForm ? (isHi ? 'रद्द करें' : 'Cancel') : (isHi ? 'माइलस्टोन जोड़ें' : 'Add Milestone')}
+            </button>
+          </div>
+
+          {showMilestoneForm && (
+            <form onSubmit={handleCreateMilestone} style={{ background: '#F8FAFC', padding: '16px', borderRadius: '12px', border: '1px solid #E2E8F0', marginBottom: '20px' }}>
+              <div style={{ marginBottom: '12px' }}>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', fontWeight: '700', color: '#0F172A' }}>Title</label>
+                <input 
+                  type="text" 
+                  value={milestoneTitle} 
+                  onChange={e => setMilestoneTitle(e.target.value)} 
+                  required
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}
+                />
+              </div>
+              <div style={{ marginBottom: '12px' }}>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', fontWeight: '700', color: '#0F172A' }}>Description</label>
+                <textarea 
+                  value={milestoneDescription} 
+                  onChange={e => setMilestoneDescription(e.target.value)} 
+                  required
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0', minHeight: '60px' }}
+                />
+              </div>
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', fontWeight: '700', color: '#0F172A' }}>Due Date</label>
+                <input 
+                  type="date" 
+                  value={milestoneDueDate} 
+                  onChange={e => setMilestoneDueDate(e.target.value)} 
+                  required
+                  style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #E2E8F0' }}
+                />
+              </div>
+              <button 
+                type="submit" 
+                disabled={creatingMilestone}
+                style={{ padding: '10px 20px', background: '#10B981', color: '#FFF', borderRadius: '8px', border: 'none', fontWeight: '700', cursor: 'pointer', width: '100%' }}
+              >
+                {creatingMilestone ? 'Creating...' : 'Submit Milestone'}
+              </button>
+            </form>
+          )}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {milestones.length === 0 ? (
+              <p style={{ textAlign: 'center', color: '#64748B', fontSize: '14px', padding: '20px' }}>
+                No milestones yet — create the first R&D milestone
+              </p>
+            ) : (
+              milestones.map((ms) => (
+                <div key={ms._id || ms.id} style={{ padding: '16px', border: '1px solid #E2E8F0', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
+                      <h4 style={{ margin: 0, fontSize: '15px', fontWeight: '700', color: '#0F172A' }}>{ms.title}</h4>
+                      <StatusBadge status={ms.status || 'pending'} />
+                    </div>
+                    <p style={{ margin: '0 0 8px 0', fontSize: '13px', color: '#475569' }}>{ms.description}</p>
+                    <span style={{ fontSize: '12px', color: '#64748B', fontWeight: '600' }}>
+                      📅 Due: {new Date(ms.dueDate).toLocaleDateString()}
+                    </span>
+                  </div>
+                  {ms.status !== 'completed' && (
+                    <button 
+                      onClick={() => handleCompleteMilestone(ms._id || ms.id)}
+                      style={{ padding: '8px 16px', background: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap', marginLeft: '16px' }}
+                    >
+                      ✓ Mark Complete
+                    </button>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
 
         {/* Stage Advancement Control Bar */}
         <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '14px', border: '1px solid #E2E8F0', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>

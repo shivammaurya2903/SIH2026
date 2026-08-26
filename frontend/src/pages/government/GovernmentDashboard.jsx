@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { PageContainer } from '../../components/layout/PageContainer';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { PriorityBadge } from '../../components/common/PriorityBadge';
@@ -16,6 +16,7 @@ export const GovernmentDashboard = () => {
   const [challenges, setChallenges] = useState([]);
   const [stats, setStats] = useState({ total: 0, pending: 0, validated: 0, matched: 0 });
   const [loading, setLoading] = useState(true);
+  const [analyzingId, setAnalyzingId] = useState(null);
 
   // Filters
   const [district, setDistrict] = useState('');
@@ -61,6 +62,20 @@ export const GovernmentDashboard = () => {
       }
     } catch (err) {
       alert(err.message || 'Status update failed');
+    }
+  };
+
+  const handleAnalyze = async (id) => {
+    setAnalyzingId(id);
+    try {
+      const res = await ChallengeApi.analyze(id);
+      if (res.success && res.data) {
+        setChallenges(prev => prev.map(c => (c._id === id || c.id === id) ? { ...c, ...res.data } : c));
+      }
+    } catch (err) {
+      alert(err.message || 'Analysis failed');
+    } finally {
+      setAnalyzingId(null);
     }
   };
 
@@ -171,6 +186,15 @@ export const GovernmentDashboard = () => {
                           >
                             ✓ Validate
                           </button>
+                          {(c.status === 'submitted' || c.status === 'under_review') && (
+                            <button
+                              onClick={() => handleAnalyze(c._id || c.id)}
+                              disabled={analyzingId === (c._id || c.id)}
+                              style={{ padding: '6px 12px', background: '#EFF6FF', color: '#1D4ED8', border: '1px solid #BFDBFE', borderRadius: '6px', fontWeight: '800', cursor: analyzingId === (c._id || c.id) ? 'not-allowed' : 'pointer', fontSize: '12px', opacity: analyzingId === (c._id || c.id) ? 0.7 : 1 }}
+                            >
+                              {analyzingId === (c._id || c.id) ? '⏳ Analyzing...' : '🧠 AI Analyze'}
+                            </button>
+                          )}
                           <button
                             onClick={() => handleUpdateStatus(c._id || c.id, 'rejected')}
                             style={{ padding: '6px 12px', background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA', borderRadius: '6px', fontWeight: '800', cursor: 'pointer', fontSize: '12px' }}
