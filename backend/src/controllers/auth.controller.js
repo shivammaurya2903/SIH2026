@@ -76,6 +76,51 @@ const register = async (req, res) => {
   }
 };
 
+const registerGovernmentRequest = async (req, res) => {
+  try {
+    const { name, email, password, phone, department, designation, district, organization, officialContact } = req.body;
+
+    if (!name || !email || !password) {
+      return errorResponse(res, 'Name, official email and password are required', 400);
+    }
+
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (existingUser) {
+      return errorResponse(res, 'An account or request already exists with this official email', 409);
+    }
+
+    const user = await User.create({
+      name,
+      email: email.toLowerCase(),
+      password,
+      phone: phone || officialContact,
+      role: 'government',
+      organization: organization || `${department || 'Govt Dept'} - ${designation || 'Officer'}`,
+      location: { district: district || 'Ranchi', state: 'Jharkhand' },
+      isActive: false
+    });
+
+    return successResponse(
+      res,
+      {
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          organization: user.organization,
+          isActive: false
+        },
+        isPending: true
+      },
+      'Government account verification request submitted successfully. Awaiting state administration approval.',
+      201
+    );
+  } catch (error) {
+    return errorResponse(res, error.message, 500);
+  }
+};
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -91,7 +136,11 @@ const login = async (req, res) => {
     }
 
     if (!user.isActive) {
-      return errorResponse(res, 'User account is inactive. Please contact support.', 403);
+      return res.status(403).json({
+        success: false,
+        isPending: true,
+        message: 'Your account is pending verification by administration. Access will be enabled upon approval.'
+      });
     }
 
     const isMatch = await user.comparePassword(password);
@@ -132,6 +181,7 @@ const getMe = async (req, res) => {
 
 module.exports = {
   register,
+  registerGovernmentRequest,
   login,
   getMe
 };

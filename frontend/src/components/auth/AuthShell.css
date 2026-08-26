@@ -1,0 +1,115 @@
+/* SamadhanSetu Auth Shell Styling */
+.auth-page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #F8FAFC;
+}
+
+.auth-viewport {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Center Radial Glow Background Accent */
+.auth-viewport-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Master Auth Card Shell */
+.auth-shell {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 1140px;
+  min-height: 640px;
+  background: #FFFFFF;
+  border-radius: 24px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 20px 50px rgba(15, 39, 71, 0.10);
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Side Placement Rules */
+.auth-shell.login-mode .auth-visual {
+  order: 1;
+}
+
+.auth-shell.login-mode .auth-form {
+  order: 2;
+}
+
+.auth-shell.register-mode .auth-visual {
+  order: 2;
+}
+
+.auth-shell.register-mode .auth-form {
+  order: 1;
+}
+
+/* Primary Sections */
+.auth-visual {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: order 0.6s ease;
+}
+
+.auth-form {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #FFFFFF;
+  box-sizing: border-box;
+  height: 100%;
+  position: relative;
+  transition: order 0.6s ease;
+}
+
+/* Responsive Grid Stack for Mobile Screens */
+@media (max-width: 840px) {
+  .auth-viewport {
+    padding: 20px 12px;
+  }
+
+  .auth-shell {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    border-radius: 16px;
+  }
+
+  .auth-shell.login-mode .auth-visual,
+  .auth-shell.register-mode .auth-visual {
+    order: 1;
+    padding: 28px 24px;
+    min-height: auto;
+  }
+
+  .auth-shell.login-mode .auth-form,
+  .auth-shell.register-mode .auth-form {
+    order: 2;
+    padding: 28px 20px;
+  }
+}

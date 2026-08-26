@@ -33,10 +33,12 @@ const frontendUrlsEnv = process.env.FRONTEND_URLS || '';
 const envOrigins = [clientUrl, frontendUrl, ...frontendUrlsEnv.split(',')].map(u => u.trim()).filter(Boolean);
 
 const defaultAllowedOrigins = [
+  'http://localhost:5173',
   'http://localhost:3000',
   'http://localhost:5000',
   'http://localhost:5500',
   'http://localhost:8080',
+  'http://127.0.0.1:5173',
   'http://127.0.0.1:3000',
   'http://127.0.0.1:5000',
   'http://127.0.0.1:5500',
@@ -56,7 +58,13 @@ app.use(
       if (
         allowedOrigins.includes(origin) ||
         origin === 'https://smadhansetu.netlify.app' ||
-        (process.env.NODE_ENV === 'development' && (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')))
+        (process.env.NODE_ENV === 'development' && (
+          origin.startsWith('http://localhost:') ||
+          origin.startsWith('http://127.0.0.1:') ||
+          origin.startsWith('http://192.168.') ||
+          origin.startsWith('http://10.') ||
+          origin.startsWith('http://172.')
+        ))
       ) {
         return callback(null, true);
       }
@@ -116,9 +124,23 @@ app.use('/api/impact', impactRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/milestones', milestoneRoutes);
 
-// Serve Frontend Static Files
+// Serve Frontend React Vite Build Static Files
+const distPath = path.join(__dirname, '../../frontend/dist');
 const frontendPath = path.join(__dirname, '../../frontend');
-app.use(express.static(frontendPath));
+const staticPath = require('fs').existsSync(distPath) ? distPath : frontendPath;
+
+app.use(express.static(staticPath));
+
+app.use((req, res, next) => {
+  if (req.method !== 'GET' || req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
+    return next();
+  }
+  const indexPath = path.join(staticPath, 'index.html');
+  if (require('fs').existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  }
+  next();
+});
 
 app.use(notFound);
 app.use(errorHandler);
